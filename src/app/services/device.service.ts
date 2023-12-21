@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -14,6 +14,14 @@ export class DeviceService {
 
   getAllDevices() {
     return this.http.get("http://localhost:8080/devices");
+  }
+
+  getDeviceById(id:string) {
+    return this.http.get("http://localhost:8080/devices/" + id);
+  }
+
+  getDailyHistory(id:string) {
+    return this.http.get("http://localhost:8080/history/daily/" + id);
   }
 
 }

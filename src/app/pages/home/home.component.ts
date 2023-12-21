@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, type OnInit } from '@angular/core';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { circleMarker, latLng, marker, tileLayer } from 'leaflet';
+import { circleMarker, latLng, tileLayer } from 'leaflet';
 import { Device } from 'src/app/interfaces/device';
 import { DeviceService } from 'src/app/services/device.service';
 
@@ -11,6 +11,7 @@ import { DeviceService } from 'src/app/services/device.service';
   imports: [CommonModule, LeafletModule],
   template: `
     <div class="container mt-4">
+      <h2 class="my-3">Le nostre stazioni meteo</h2>
       <div *ngIf="options" class="map" leaflet [leafletOptions]="options">
         <div *ngIf="layers" [leafletLayers]="layers"></div>
       </div>
