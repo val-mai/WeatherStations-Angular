@@ -6,6 +6,11 @@ import { StationComponent } from './pages/station/station.component';
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'stations/:id', component: StationComponent },
+  {
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full'
+  }
 ];
 
 @NgModule({

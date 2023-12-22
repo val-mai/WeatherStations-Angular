@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, type OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, type OnInit } from '@angular/core';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { ActivatedRoute } from '@angular/router';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -10,7 +11,6 @@ import { MetricCardComponent } from 'src/app/components/metric-card/metric-card.
 import { SpinnerComponent } from 'src/app/components/spinner/spinner.component';
 import { Metric } from 'src/app/interfaces/metric';
 import { DeviceService } from 'src/app/services/device.service';
-import {MatExpansionModule} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-station',
@@ -25,7 +25,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
       <h2>{{name}}</h2>
       @if (options) {
           <p>Last update: {{ time | date : 'medium' }}</p>
-    
+
           <div class="cards mb-3">
             <app-metric-card
               *ngFor="let metric of metrics"
@@ -40,16 +40,17 @@ import {MatExpansionModule} from '@angular/material/expansion';
               <mat-panel-title>
                 Tabella Ultime 24h
               </mat-panel-title>
-          </mat-expansion-panel-header>
-          <app-history-table *ngIf="tableData" [dataSource]="tableData"></app-history-table>
-        </mat-expansion-panel>
+            </mat-expansion-panel-header>
+            <app-history-table *ngIf="tableData" [dataSource]="tableData"></app-history-table>
+          </mat-expansion-panel>
       } @else {
         <app-spinner></app-spinner>
       }
     </div>
 
   `,
-  styleUrl: './station.component.scss'
+  styleUrl: './station.component.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class StationComponent implements OnInit {
 
@@ -64,7 +65,7 @@ export class StationComponent implements OnInit {
     this.options = {
       layers: [
         tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 18,
+          maxZoom: 15,
           attribution: '...',
         }),
       ],
@@ -72,7 +73,7 @@ export class StationComponent implements OnInit {
       center: latLng(latitude, longitude),
     };
 
-    this.layer = circleMarker([latitude, longitude], { radius: 25 });
+    this.layer = circleMarker([latitude, longitude], {radius:20})
   }
 
   deviceId!: any;
@@ -94,7 +95,7 @@ export class StationComponent implements OnInit {
       this.metrics.push({
         title: 'Temperatura',
         value: resp.weatherData.temperature.value,
-        unit: resp.weatherData.temperature.unit,
+        unit: "°C",
         device: resp.name,
         icon: faTemperatureHalf,
         last_update: new Date(resp.weatherData.temperature.time),
