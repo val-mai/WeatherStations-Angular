@@ -23,6 +23,7 @@ import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
   template: `
     <div class="main">
       <app-toolbar [transparent]="true"></app-toolbar>
+      <div class="main-content">
       <section id="main-section" class="container">
         <div class="hero">
           <img class="logo mb-3" src="assets/logo.png" alt="">
@@ -50,6 +51,7 @@ import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
           }
         </div>
       </section>
+      </div>
       <app-footer></app-footer>
     </div>
   `,

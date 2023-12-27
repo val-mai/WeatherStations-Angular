@@ -34,7 +34,7 @@ import { DeviceService } from 'src/app/services/device.service';
 })
 export class MapPageComponent implements OnInit {
   devices!: any[];
-  mapHeight = '600px';
+  mapHeight = '80vh';
 
   constructor(private service: DeviceService) {}
 

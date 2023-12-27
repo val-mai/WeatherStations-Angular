@@ -11,6 +11,13 @@ body {
   color: #ccc;
 }
 
+.main-content{
+  display: flex;
+  flex-direction: column;
+  height: 90%;
+  justify-content: space-around;
+}
+
 .card-container {
   display: flex;
   justify-content: space-evenly;
