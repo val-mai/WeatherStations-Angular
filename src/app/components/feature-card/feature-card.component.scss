@@ -1,0 +1,19 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 250px;
+  height: 280px;
+  border-radius: 10px;
+  background-color: hsla(0, 0%, 100%, 0.8);
+}
+
+.icon {
+  color: #00897b;
+}
+
+h4 {
+  font-weight: bold;
+}
+
+

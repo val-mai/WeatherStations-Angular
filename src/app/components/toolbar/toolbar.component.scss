@@ -1,0 +1,26 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transparent {
+  background-color: transparent;
+  color: #ccc;
+}
+
+.logo {
+  display: flex;
+}
+
+.active {
+  color: yellow !important;
+}
+
+img {
+  width: 30px;
+}

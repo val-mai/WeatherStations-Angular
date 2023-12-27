@@ -1,10 +1,30 @@
-.cards {
+body {
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.main {
+  background-image: url("../../../assets/Monte_Velino.jpg");
+  background-size: cover;
+  height: 100vh;
+  color: #ccc;
+}
+
+.card-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 
-.map {
-  height: 600px;
+.logo {
+  width: 85px;
 }
 
-
+.hero {
+  text-align: center;
+  padding: 2em;
+  color: #ccc;
+  p {
+    font-size: 1.3em;
+  }
+}

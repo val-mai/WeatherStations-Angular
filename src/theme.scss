@@ -1,0 +1,21 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$my-primary: mat.define-palette(mat.$teal-palette, 600);
+$my-accent: mat.define-palette(mat.$amber-palette,A400);
+
+$my-typography: mat.define-typography-config(
+    $font-family: 'Poppins',
+  );
+
+$my-dark-theme: mat.define-dark-theme((
+ color: (
+   primary: $my-primary,
+   accent: $my-accent,
+ ),
+ typography: $my-typography,
+));
+
+@include mat.typography-hierarchy($my-typography);
+@include mat.all-component-themes($my-dark-theme);

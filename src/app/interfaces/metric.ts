@@ -3,6 +3,6 @@ export interface Metric {
     unit:string,
     value:string,
     device: string,
-    last_update: Date,
+    last_update?: Date,
     icon?:any
 }

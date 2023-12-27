@@ -1,7 +1,8 @@
 export interface Device {
   id: string;
   name: string;
-  mac: string;
+  mac?: string;
+  stationId?:string;
   type: number;
   dateZoneId: string;
   createTime: Date;

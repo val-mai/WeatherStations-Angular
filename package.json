@@ -23,6 +23,7 @@
     "@asymmetrik/ngx-leaflet": "^17.0.0",
     "@fortawesome/angular-fontawesome": "^0.14.0",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-brands-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@ng-bootstrap/ng-bootstrap": "^16.0.0-rc.2",
     "@popperjs/core": "^2.11.8",

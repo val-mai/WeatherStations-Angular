@@ -9,7 +9,7 @@ import { DeviceService } from 'src/app/services/device.service';
   standalone: true,
   imports: [CommonModule, LeafletModule],
   template: `
-    <div
+    <div class="map"
       [style.height]="height"
       *ngIf="options"
       leaflet
@@ -21,6 +21,7 @@ import { DeviceService } from 'src/app/services/device.service';
   styleUrl: './temperature-map.component.scss',
 })
 export class TemperatureMapComponent implements OnInit {
+
   @Input() devices!: any[];
   @Input() height!: any;
 
@@ -38,11 +39,11 @@ export class TemperatureMapComponent implements OnInit {
       layers: [
         tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 18,
-          attribution: '...',
+          attribution: 'MeteoMarso',
         }),
       ],
       zoom: 11,
-      center: latLng(42.069968, 13.253143),
+      center: latLng(42.102442, 13.395158),
     };
 
     this.layers = [];
@@ -53,7 +54,7 @@ export class TemperatureMapComponent implements OnInit {
           iconSize: [25, 25],
           html: `<div style="${this.getMarkerStyle(
             parseFloat(info.weatherData.temperature.value)
-          )}">${info.weatherData.temperature.value}</div>`,
+          )}"><b>${info.weatherData.temperature.value}</b></div>`,
           iconAnchor: [12, 12],
         });
 
@@ -83,6 +84,7 @@ export class TemperatureMapComponent implements OnInit {
     const backgroundColor = `hsl(${hue}, 100%, 50%)`;
 
     return `background-color: ${backgroundColor}; border-radius: 50%; color: black;
-    line-height:25px; text-align:center;`;
+    line-height:24px; text-align:center;
+    border: 1px solid black`;
   }
 }
