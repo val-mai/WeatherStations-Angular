@@ -1,8 +1,8 @@
 export interface Metric {
-    title:string,
+    title?:string,
     unit:string,
     value:string,
-    device: string,
+    device?: string,
     last_update?: Date,
     icon?:any
 }

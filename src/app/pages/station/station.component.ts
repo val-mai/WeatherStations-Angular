@@ -4,19 +4,14 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { ActivatedRoute } from '@angular/router';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {
-  faCloud,
-  faDroplet,
-  faTemperatureHalf,
-  faWind,
-} from '@fortawesome/free-solid-svg-icons';
 import { circleMarker, latLng, tileLayer } from 'leaflet';
+import { AnonymousSubject } from 'rxjs/internal/Subject';
+import { ChartComponent } from 'src/app/components/chart/chart.component';
 import { FooterComponent } from 'src/app/components/footer/footer.component';
 import { HistoryTableComponent } from 'src/app/components/history-table/history-table.component';
-import { MetricCardComponent } from 'src/app/components/metric-card/metric-card.component';
+import { MetricWidgetComponent } from 'src/app/components/metric-widget/metric-widget.component';
 import { SpinnerComponent } from 'src/app/components/spinner/spinner.component';
 import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
-import { WindIndicatorComponent } from 'src/app/components/wind-indicator/wind-indicator.component';
 import { Metric } from 'src/app/interfaces/metric';
 import { DeviceService } from 'src/app/services/device.service';
 
@@ -25,7 +20,6 @@ import { DeviceService } from 'src/app/services/device.service';
   standalone: true,
   imports: [
     CommonModule,
-    MetricCardComponent,
     LeafletModule,
     FontAwesomeModule,
     SpinnerComponent,
@@ -33,7 +27,8 @@ import { DeviceService } from 'src/app/services/device.service';
     MatExpansionModule,
     FooterComponent,
     ToolbarComponent,
-    WindIndicatorComponent
+    MetricWidgetComponent,
+    ChartComponent
   ],
   template: `
     <div class="main mat-app-background">
@@ -42,23 +37,29 @@ import { DeviceService } from 'src/app/services/device.service';
         <h2>{{ name }}</h2>
         @if (options) {
         <p>Last update: {{ time | date : 'medium' }}</p>
-        <div class="cards mb-3">
-          <app-metric-card
-          *ngFor="let metric of metrics"
-          [metric]="metric"
-          ></app-metric-card>
+        <div class="row">
+          <app-metric-widget class="col-md-4" [metric]="metrics"></app-metric-widget>
+          <div class="col-md-4 map" leaflet [leafletOptions]="options">
+            <div *ngIf="layer" [leafletLayer]="layer"></div>
+          </div>
+          <div class="image col-md-4">
+            <img src="https://www.stradadeiparchi.it/wp-content/uploads/2017/09/tagliacozzo.jpeg" alt="">
+          </div>
+          <!-- <app-metric-widget class="col-md-4" [metric]="metrics"></app-metric-widget> -->
         </div>
-        <div class="map" leaflet [leafletOptions]="options">
-          <div *ngIf="layer" [leafletLayer]="layer"></div>
-        </div>
-        <!--           <mat-expansion-panel class="my-3">
+
+        <!-- <div class="chart mt-3">
+          <app-chart *ngIf="chartData" [data]="chartData"></app-chart>
+        </div> -->
+
+                   <mat-expansion-panel class="mt-3 mb-4">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 Tabella Ultime 24h
               </mat-panel-title>
             </mat-expansion-panel-header>
             <app-history-table *ngIf="tableData" [dataSource]="tableData"></app-history-table>
-          </mat-expansion-panel> -->
+          </mat-expansion-panel>
         } @else {
         <app-spinner></app-spinner>
         }
@@ -76,6 +77,7 @@ export class StationComponent implements OnInit {
   name!: string;
   time!: any;
   tableData!: any;
+  chartData!:any;
 
   initMap(latitude: number, longitude: number) {
     this.options = {
@@ -94,7 +96,7 @@ export class StationComponent implements OnInit {
 
   deviceId!: any;
 
-  constructor(private service: DeviceService, private route: ActivatedRoute) {}
+  constructor(private service: DeviceService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.deviceId = this.route.snapshot.paramMap.get('id');
@@ -109,41 +111,11 @@ export class StationComponent implements OnInit {
       this.time = new Date(resp.weatherData.time);
       const latitude = resp.latitude;
       const longitude = resp.longitude;
-      this.metrics = [];
-      this.metrics.push({
-        title: 'Temperatura',
-        value: resp.weatherData.temperature.value,
-        unit: '°C',
-        device: resp.name,
-        icon: faTemperatureHalf
-      });
-      this.metrics.push({
-        title: 'Pressione',
-        value: resp.weatherData.pressure.value,
-        unit: resp.weatherData.pressure.unit,
-        device: resp.name,
-        icon: faCloud
-      });
-      this.metrics.push({
-        title: 'Umidità',
-        value: resp.weatherData.humidity.value,
-        unit: resp.weatherData.humidity.unit,
-        device: resp.name,
-        icon: faDroplet
-      });
-      this.metrics.push({
-        title: 'Vento',
-        value: resp.weatherData.windSpeed.value,
-        unit: resp.weatherData.windSpeed.unit,
-        device: resp.name,
-        icon: faWind
-      });
-
+      this.metrics = resp.weatherData;
       this.initMap(latitude, longitude);
     });
 
     this.service.getDailyHistory(id).subscribe((data: any) => {
-      console.log(data);
       this.tableData = data.temperature.data.map((entry: any) => ({
         time: entry.time,
         temperature: entry.value,
@@ -155,7 +127,14 @@ export class StationComponent implements OnInit {
           .value,
       }));
 
-      console.log(this.tableData);
+      this.chartData = this.tableData.map((entry: any) => ({
+        temperature: entry.temperature,
+        time: entry.time
+      }));
+
+      console.log(this.tableData)
+      console.log(this.chartData)
+
     });
   }
 }

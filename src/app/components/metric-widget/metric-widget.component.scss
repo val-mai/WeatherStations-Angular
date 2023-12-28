@@ -1,0 +1,36 @@
+mat-card {
+  padding: 2rem;
+  border-radius: 10px;
+  gap: 2rem;
+
+  mat-card-title {
+    display: flex;
+    align-items: center;
+
+    fa-icon {
+      width: 3.5rem;
+      text-align: center;
+      margin-right: 5px;
+      color: #00897b;
+    }
+
+    h3 {
+      margin: 0 10px;
+      width: 8rem;
+    }
+
+    p {
+      margin: 0;
+      color: white;
+
+      span {
+        color: #ccc;
+        font-size: smaller
+      }
+
+      ;
+    }
+
+    color: #ccc;
+  }
+}

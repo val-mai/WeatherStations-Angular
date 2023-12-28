@@ -23,7 +23,7 @@ import { RouterModule } from '@angular/router';
           Mappa Live
         </button>
         <button mat-button class="example-icon favorite-icon">
-          Elenco Stazioni
+          Statistiche
         </button>
         <button mat-button class="example-icon">
           Chi siamo
