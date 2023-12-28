@@ -43,7 +43,7 @@ import { DeviceService } from 'src/app/services/device.service';
             <div *ngIf="layer" [leafletLayer]="layer"></div>
           </div>
           <div class="image col-md-4">
-            <img src="https://www.stradadeiparchi.it/wp-content/uploads/2017/09/tagliacozzo.jpeg" alt="">
+            <img src={{image}} alt="">
           </div>
           <!-- <app-metric-widget class="col-md-4" [metric]="metrics"></app-metric-widget> -->
         </div>
@@ -75,9 +75,10 @@ export class StationComponent implements OnInit {
   options!: any;
   layer!: any;
   name!: string;
+  image!: string;
   time!: any;
   tableData!: any;
-  chartData!:any;
+  chartData!: any;
 
   initMap(latitude: number, longitude: number) {
     this.options = {
@@ -106,7 +107,10 @@ export class StationComponent implements OnInit {
   private getData(id: string): void {
     this.service
       .getDeviceById(id)
-      .subscribe((resp: any) => (this.name = resp.name));
+      .subscribe((resp: any) => {
+        this.image = resp.image;
+        this.name = resp.name;
+      })
     this.service.getDevicesInfo(id).subscribe((resp: any) => {
       this.time = new Date(resp.weatherData.time);
       const latitude = resp.latitude;
