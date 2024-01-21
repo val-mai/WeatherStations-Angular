@@ -50,7 +50,7 @@ import {
               <fa-icon class="mx-2" [icon]="faIgloo"></fa-icon>
               HOME
             </ng-template>
-            <div class="row inserted">
+            <div class="row inserted my-2">
               <app-metric-widget
                 class="col-md-6"
                 [metric]="metrics"
