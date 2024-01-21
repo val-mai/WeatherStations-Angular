@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { circleMarker, latLng, tileLayer } from 'leaflet';
-import { AnonymousSubject } from 'rxjs/internal/Subject';
 import { ChartComponent } from 'src/app/components/chart/chart.component';
 import { FooterComponent } from 'src/app/components/footer/footer.component';
 import { HistoryTableComponent } from 'src/app/components/history-table/history-table.component';
@@ -14,6 +13,13 @@ import { SpinnerComponent } from 'src/app/components/spinner/spinner.component';
 import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
 import { Metric } from 'src/app/interfaces/metric';
 import { DeviceService } from 'src/app/services/device.service';
+import { MatTabsModule } from '@angular/material/tabs';
+import {
+  faIgloo,
+  faTemperatureLow,
+  faChartLine,
+  faCircleInfo,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-station',
@@ -28,38 +34,71 @@ import { DeviceService } from 'src/app/services/device.service';
     FooterComponent,
     ToolbarComponent,
     MetricWidgetComponent,
-    ChartComponent
+    ChartComponent,
+    MatTabsModule,
   ],
   template: `
     <div class="main mat-app-background">
-    <app-toolbar></app-toolbar>
+      <app-toolbar></app-toolbar>
       <div class="container mt-4">
         <h2>{{ name }}</h2>
         @if (options) {
         <p>Last update: {{ time | date : 'medium' }}</p>
-        <div class="row">
-          <app-metric-widget class="col-md-4" [metric]="metrics"></app-metric-widget>
-          <div class="col-md-4 map" leaflet [leafletOptions]="options">
-            <div *ngIf="layer" [leafletLayer]="layer"></div>
-          </div>
-          <div class="image col-md-4">
-            <img src={{image}} alt="">
-          </div>
-          <!-- <app-metric-widget class="col-md-4" [metric]="metrics"></app-metric-widget> -->
-        </div>
+        <mat-tab-group color="accent">
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <fa-icon class="mx-2" [icon]="faIgloo"></fa-icon>
+              HOME
+            </ng-template>
+            <div class="row inserted">
+              <app-metric-widget
+                class="col-md-6"
+                [metric]="metrics"
+              ></app-metric-widget>
+              <!-- <div class="col-md-4 map" leaflet [leafletOptions]="options">
+                <div *ngIf="layer" [leafletLayer]="layer"></div>
+              </div> -->
+              <div class="image col-md-6">
+                <img src="{{ image }}" alt="" />
+              </div>
+              <!-- <app-metric-widget class="col-md-4" [metric]="metrics"></app-metric-widget> -->
+            </div>
+          </mat-tab>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <fa-icon class="mx-2" [icon]="faTemperatureLow"></fa-icon>
+              DATI
+            </ng-template>
+          </mat-tab>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <fa-icon class="mx-2" [icon]="faChartLine"></fa-icon>
+              STORICO
+            </ng-template>
+
+          </mat-tab>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <fa-icon class="mx-2" [icon]="faCircleInfo"></fa-icon>
+              INFO STAZIONE
+            </ng-template>
+
+          </mat-tab>
+        </mat-tab-group>
 
         <!-- <div class="chart mt-3">
           <app-chart *ngIf="chartData" [data]="chartData"></app-chart>
         </div> -->
 
-                   <mat-expansion-panel class="mt-3 mb-4">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Tabella Ultime 24h
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <app-history-table *ngIf="tableData" [dataSource]="tableData"></app-history-table>
-          </mat-expansion-panel>
+        <!-- <mat-expansion-panel class="mt-3 mb-4">
+          <mat-expansion-panel-header>
+            <mat-panel-title> Tabella Ultime 24h </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-history-table
+            *ngIf="tableData"
+            [dataSource]="tableData"
+          ></app-history-table>
+        </mat-expansion-panel> -->
         } @else {
         <app-spinner></app-spinner>
         }
@@ -79,6 +118,10 @@ export class StationComponent implements OnInit {
   time!: any;
   tableData!: any;
   chartData!: any;
+  faIgloo = faIgloo;
+  faTemperatureLow = faTemperatureLow;
+  faChartLine = faChartLine;
+  faCircleInfo = faCircleInfo;
 
   initMap(latitude: number, longitude: number) {
     this.options = {
@@ -97,7 +140,7 @@ export class StationComponent implements OnInit {
 
   deviceId!: any;
 
-  constructor(private service: DeviceService, private route: ActivatedRoute) { }
+  constructor(private service: DeviceService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.deviceId = this.route.snapshot.paramMap.get('id');
@@ -105,12 +148,10 @@ export class StationComponent implements OnInit {
   }
 
   private getData(id: string): void {
-    this.service
-      .getDeviceById(id)
-      .subscribe((resp: any) => {
-        this.image = resp.image;
-        this.name = resp.name;
-      })
+    this.service.getDeviceById(id).subscribe((resp: any) => {
+      this.image = resp.image;
+      this.name = resp.name;
+    });
     this.service.getDevicesInfo(id).subscribe((resp: any) => {
       this.time = new Date(resp.weatherData.time);
       const latitude = resp.latitude;
@@ -133,12 +174,11 @@ export class StationComponent implements OnInit {
 
       this.chartData = this.tableData.map((entry: any) => ({
         temperature: entry.temperature,
-        time: entry.time
+        time: entry.time,
       }));
 
-      console.log(this.tableData)
-      console.log(this.chartData)
-
+      console.log(this.tableData);
+      console.log(this.chartData);
     });
   }
 }

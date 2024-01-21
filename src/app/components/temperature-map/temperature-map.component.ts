@@ -85,6 +85,7 @@ export class TemperatureMapComponent implements OnInit {
 
     return `background-color: ${backgroundColor}; border-radius: 50%; color: black;
     line-height:24px; text-align:center;
+    color: white;
     border: 1px solid black`;
   }
 }
