@@ -19,6 +19,7 @@ import { StationInfoComponent } from 'src/app/components/station-info/station-in
 import { Metric } from 'src/app/interfaces/metric';
 import { DeviceService } from 'src/app/services/device.service';
 import { circleMarker, latLng, tileLayer } from 'leaflet';
+import { HistoryTableComponent } from 'src/app/components/history-table/history-table.component';
 
 @Component({
   selector: 'app-station',
@@ -31,6 +32,7 @@ import { circleMarker, latLng, tileLayer } from 'leaflet';
     MatExpansionModule,
     FooterComponent,
     ToolbarComponent,
+    HistoryTableComponent,
     MetricWidgetComponent,
     MatTabsModule,
     StationInfoComponent
@@ -73,6 +75,10 @@ import { circleMarker, latLng, tileLayer } from 'leaflet';
               <fa-icon class="mx-2" [icon]="faChartLine"></fa-icon>
               STORICO
             </ng-template>
+            <div class="my-4 row inserted">
+            <h3>Osservazioni Ultime 24h</h3>
+            <app-history-table class="mb-3" *ngIf="tableData" [dataSource]="tableData"></app-history-table>
+            </div>
           </mat-tab>
           <mat-tab>
             <ng-template mat-tab-label>
@@ -93,10 +99,7 @@ import { circleMarker, latLng, tileLayer } from 'leaflet';
           <mat-expansion-panel-header>
             <mat-panel-title> Tabella Ultime 24h </mat-panel-title>
           </mat-expansion-panel-header>
-          <app-history-table
-            *ngIf="tableData"
-            [dataSource]="tableData"
-          ></app-history-table>
+          
         </mat-expansion-panel> -->
         } @else {
         <app-spinner></app-spinner>
@@ -116,7 +119,7 @@ export class StationComponent implements OnInit {
   time!: any;
   tableData!: any;
   chartData!: any;
-  infoData!:any;
+  infoData!: any;
   faIgloo = faIgloo;
   faTemperatureLow = faTemperatureLow;
   faChartLine = faChartLine;
@@ -144,7 +147,7 @@ export class StationComponent implements OnInit {
 
   deviceId!: any;
 
-  constructor(private service: DeviceService, private route: ActivatedRoute) {}
+  constructor(private service: DeviceService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.deviceId = this.route.snapshot.paramMap.get('id');
