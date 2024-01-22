@@ -1,12 +1,17 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { RouterModule } from '@angular/router';
-import { faMagnifyingGlassChart, faRss, faVideo } from '@fortawesome/free-solid-svg-icons';
-import { FeatureCardComponent } from 'src/app/components/feature-card/feature-card.component';
-import { FooterComponent } from 'src/app/components/footer/footer.component';
-import { TemperatureMapComponent } from 'src/app/components/temperature-map/temperature-map.component';
-import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
+import { CommonModule } from "@angular/common";
+import { Component } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
+import { RouterModule } from "@angular/router";
+import { FeatureCardComponent } from "src/app/components/feature-card/feature-card.component";
+import { FooterComponent } from "src/app/components/footer/footer.component";
+import { TemperatureMapComponent } from "src/app/components/temperature-map/temperature-map.component";
+import { ToolbarComponent } from "src/app/components/toolbar/toolbar.component";
+import {
+  faRss,
+  faVideo,
+  faMagnifyingGlassChart
+} from '@fortawesome/free-solid-svg-icons';
+
 
 @Component({
   selector: 'app-home',
