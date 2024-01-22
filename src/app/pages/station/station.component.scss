@@ -12,15 +12,13 @@
   };
 }
 
-.chart {
-  border-radius: 10px;
-}
-
 .main {
   min-height: 100vh;
 }
 
 .inserted {
-  margin: 20 auto;
-  width: 98%;
+  display: flex;
+  margin: 0;
+  justify-content: space-around;
+  min-height: 70vh;
 }
