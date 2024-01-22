@@ -49,7 +49,7 @@ import {
         </div>
       </section>
       <section id="feature-section" class="container">
-        <h3><b> Caratteristiche Principali </b></h3>
+        <h3 class="subtitle"><b> Caratteristiche Principali </b></h3>
         <div class="card-container">
           @for (item of featureList; track $index) {
             <app-feature-card [content]="item"></app-feature-card>

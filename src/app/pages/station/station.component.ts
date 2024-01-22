@@ -41,7 +41,7 @@ import { HistoryTableComponent } from 'src/app/components/history-table/history-
     <div class="main mat-app-background">
       <app-toolbar></app-toolbar>
       <div class="container mt-4">
-        <h2>{{ name }}</h2>
+        <h2>{{name}}</h2>
         @if (options) {
         <p>Last update: {{ time | date : 'medium' }}</p>
         <mat-tab-group color="accent">
@@ -52,7 +52,6 @@ import { HistoryTableComponent } from 'src/app/components/history-table/history-
             </ng-template>
             <div class="row inserted my-2">
               <app-metric-widget
-
                 class="col-md-4"
                 [metric]="metrics"
               ></app-metric-widget>
@@ -60,7 +59,7 @@ import { HistoryTableComponent } from 'src/app/components/history-table/history-
                 <div *ngIf="layer" [leafletLayer]="layer"></div>
               </div>
               <div class="image col-md-4">
-                <img src="{{ image }}" alt="" />
+                <img src="{{image}}" alt="" />
               </div>
             </div>
           </mat-tab>

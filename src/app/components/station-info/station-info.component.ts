@@ -10,10 +10,10 @@ import { Component, Input } from '@angular/core';
   template: `
   <h2 class="mt-4" color="accent">Dettagli Stazione</h2>
   <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-6 details">
     <p><b>ID stazione meteo Wunderground:</b> {{infoData.stationId}}</p>
     <p><b>Nome della stazione:</b> {{infoData.name}} </p>
-    <p><b>Latitudine / longitudine:</b> {{infoData.latitude}}° N, {{infoData.longitude}}° E </p>
+    <p><b>Latitudine / longitudine:</b> {{infoData.latitude | number}}° N, {{infoData.longitude | number}}° E </p>
     <p><b>Elevazione:</b> {{infoData.elevation}} metri s.l.m. </p>
     <p><b>Città:</b> {{infoData.city}} </p>
     <p><b>Regione:</b> {{infoData.region}} </p>

@@ -51,11 +51,11 @@ export class TemperatureMapComponent implements OnInit {
       this.deviceService.getDevicesInfo(d.id).subscribe((info: any) => {
         const customIcon = divIcon({
           className: 'custom-marker',
-          iconSize: [25, 25],
+          iconSize: [30, 30],
           html: `<div style="${this.getMarkerStyle(
             parseFloat(info.weatherData.temperature.value)
           )}"><b>${info.weatherData.temperature.value}</b></div>`,
-          iconAnchor: [12, 12],
+          iconAnchor: [15, 15],
         });
 
         const customMarker = marker([info.latitude, info.longitude], {
@@ -83,9 +83,12 @@ export class TemperatureMapComponent implements OnInit {
     const hue = (1 - normalizedTemperature) * 240;
     const backgroundColor = `hsl(${hue}, 100%, 50%)`;
 
-    return `background-color: ${backgroundColor}; border-radius: 50%; color: black;
-    line-height:24px; text-align:center;
+    return `background-color: ${backgroundColor}; 
+    border-radius: 50%; 
+    line-height:30px;
+    text-align:center;
     color: white;
+    mix-blend-mode: difference;
     border: 1px solid black`;
   }
 }
