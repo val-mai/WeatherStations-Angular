@@ -48,7 +48,7 @@ import { DeviceService } from 'src/app/services/device.service';
               <fa-icon class="mx-2" [icon]="faIgloo"></fa-icon>
               HOME
             </ng-template>
-            <div class="row inserted my-2 g-2">
+            <div class="row inserted mt-2 mb-4 g-2">
               <app-metric-widget
                 class="col-md-4"
                 [metric]="metrics"
