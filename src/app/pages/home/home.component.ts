@@ -29,7 +29,7 @@ import {
     <div class="main">
       <app-toolbar [transparent]="true"></app-toolbar>
       <div class="main-content">
-      <section id="main-section" class="container">
+      <section id="main-section" class="container mt-4">
         <div class="hero">
           <img class="logo mb-3" src="assets/logo.png" alt="">
           <p>
@@ -49,10 +49,10 @@ import {
         </div>
       </section>
       <section id="feature-section" class="container">
-        <h3 class="subtitle"><b> Caratteristiche Principali </b></h3>
-        <div class="card-container">
+        <h3 class="subtitle">Caratteristiche Principali</h3>
+        <div class="card-container row mb-5">
           @for (item of featureList; track $index) {
-            <app-feature-card [content]="item"></app-feature-card>
+            <app-feature-card class="col-md-4 g-2" [content]="item"></app-feature-card>
           }
         </div>
       </section>

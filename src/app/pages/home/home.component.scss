@@ -7,13 +7,12 @@ body {
 .main {
   background-image: url("../../../assets/Monte_Velino.jpg");
   background-size: cover;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .main-content{
   display: flex;
   flex-direction: column;
-  height: 90%;
   justify-content: space-around;
 }
 
@@ -33,4 +32,10 @@ body {
   p {
     font-size: 1.3em;
   }
+}
+
+.subtitle {
+  color: white;
+  margin-top: 4rem;
+  text-align: center;
 }

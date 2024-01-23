@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, type OnInit } from '@angular/core';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -11,15 +10,15 @@ import {
   faIgloo,
   faTemperatureLow,
 } from '@fortawesome/free-solid-svg-icons';
+import { circleMarker, latLng, tileLayer } from 'leaflet';
 import { FooterComponent } from 'src/app/components/footer/footer.component';
+import { HistoryTableComponent } from 'src/app/components/history-table/history-table.component';
 import { MetricWidgetComponent } from 'src/app/components/metric-widget/metric-widget.component';
 import { SpinnerComponent } from 'src/app/components/spinner/spinner.component';
-import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
 import { StationInfoComponent } from 'src/app/components/station-info/station-info.component';
+import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
 import { Metric } from 'src/app/interfaces/metric';
 import { DeviceService } from 'src/app/services/device.service';
-import { circleMarker, latLng, tileLayer } from 'leaflet';
-import { HistoryTableComponent } from 'src/app/components/history-table/history-table.component';
 
 @Component({
   selector: 'app-station',
@@ -29,7 +28,6 @@ import { HistoryTableComponent } from 'src/app/components/history-table/history-
     LeafletModule,
     FontAwesomeModule,
     SpinnerComponent,
-    MatExpansionModule,
     FooterComponent,
     ToolbarComponent,
     HistoryTableComponent,
@@ -50,7 +48,7 @@ import { HistoryTableComponent } from 'src/app/components/history-table/history-
               <fa-icon class="mx-2" [icon]="faIgloo"></fa-icon>
               HOME
             </ng-template>
-            <div class="row inserted my-2">
+            <div class="row inserted my-2 g-2">
               <app-metric-widget
                 class="col-md-4"
                 [metric]="metrics"
@@ -94,12 +92,6 @@ import { HistoryTableComponent } from 'src/app/components/history-table/history-
           <app-chart *ngIf="chartData" [data]="chartData"></app-chart>
         </div> -->
 
-        <!-- <mat-expansion-panel class="mt-3 mb-4">
-          <mat-expansion-panel-header>
-            <mat-panel-title> Tabella Ultime 24h </mat-panel-title>
-          </mat-expansion-panel-header>
-          
-        </mat-expansion-panel> -->
         } @else {
         <app-spinner></app-spinner>
         }

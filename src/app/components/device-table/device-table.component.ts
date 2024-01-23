@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
+import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCircleCheck, faTrashCan, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
@@ -9,7 +10,7 @@ import { faCircleCheck, faTrashCan, faPenToSquare } from '@fortawesome/free-soli
   selector: 'app-device-table',
   standalone: true,
   imports: [
-    CommonModule, MatTableModule, FontAwesomeModule, MatButtonModule
+    CommonModule, MatTableModule, FontAwesomeModule, MatButtonModule, RouterModule
   ],
   template: `
   
@@ -51,7 +52,7 @@ import { faCircleCheck, faTrashCan, faPenToSquare } from '@fortawesome/free-soli
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let row"> 
-      <button  mat-icon-button color="accent" >
+      <button routerLink="/admin/{{row.id}}" routerLinkActive="router-link-active"  mat-icon-button color="accent" >
         <fa-icon [fixedWidth]="true" [icon]="faPenToSquare" ></fa-icon>
       </button>
       <button mat-icon-button color="warn">

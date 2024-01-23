@@ -4,11 +4,13 @@ import { HomeComponent } from './pages/home/home.component';
 import { StationComponent } from './pages/station/station.component';
 import { MapPageComponent } from './pages/map-page/map-page.component';
 import { AdminComponent } from './pages/admin/admin.component';
+import { AdminDeviceComponent } from './pages/admin-device/admin-device.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'map', component: MapPageComponent },
   { path: 'admin', component: AdminComponent },
+  { path: 'admin/:id', component: AdminDeviceComponent },
   { path: 'stations/:id', component: StationComponent },
   {
     path: '',

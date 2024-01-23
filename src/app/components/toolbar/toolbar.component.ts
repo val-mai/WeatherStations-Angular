@@ -1,8 +1,9 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
+import { AfterViewInit, Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -19,23 +20,33 @@ import { RouterModule } from '@angular/router';
           </div>
         </button>
         <span class="example-spacer"></span>
-        <button routerLink="/map" routerLinkActive="active" mat-button class="example-icon">
-          Mappa Live
-        </button>
-        <button mat-button class="example-icon favorite-icon">
-          Statistiche
-        </button>
-        <button mat-button class="example-icon">
-          Chi siamo
-        </button>
+        <div *ngIf="mobile==false">
+          <button routerLink="/map" routerLinkActive="active" mat-button class="example-icon">
+            Mappa Live
+          </button>
+          <button mat-button class="example-icon favorite-icon">
+            Statistiche
+          </button>
+          <button mat-button class="example-icon">
+            Chi siamo
+          </button>
+        </div>
       </div>
     </mat-toolbar>
   `,
-  styleUrl: './toolbar.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './toolbar.component.scss'
 })
-export class ToolbarComponent {
+export class ToolbarComponent implements AfterViewInit {
+
+  constructor(private responsive: BreakpointObserver) { }
 
   @Input() transparent = false;
+  mobile = false;
+
+  ngAfterViewInit(): void {
+    this.responsive.observe([Breakpoints.Medium, Breakpoints.Small, Breakpoints.XSmall]).subscribe((result) => {
+      this.mobile = (result.matches) ? true : false;
+    });
+  }
 
 }

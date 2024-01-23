@@ -9,7 +9,7 @@ import { Component, Input } from '@angular/core';
   ],
   template: `
   <h2 class="mt-4" color="accent">Dettagli Stazione</h2>
-  <div class="row">
+  <div class="row g-3">
   <div class="col-md-6 details">
     <p><b>ID stazione meteo Wunderground:</b> {{infoData.stationId}}</p>
     <p><b>Nome della stazione:</b> {{infoData.name}} </p>
@@ -28,7 +28,7 @@ import { Component, Input } from '@angular/core';
   </div>
   <div>
     <h2 class="mt-4" color="accent">Descrizione morfologica e climatologica della località</h2>
-    <p class="description">
+    <p class="description mb-4">
       {{infoData.description}}
     </p>
   </div>
