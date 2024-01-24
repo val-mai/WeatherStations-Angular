@@ -5,8 +5,9 @@ import { StationComponent } from './pages/station/station.component';
 import { MapPageComponent } from './pages/map-page/map-page.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { AdminDeviceComponent } from './pages/admin-device/admin-device.component';
+import { environment } from 'src/app/environments/environment';
 
-const routes: Routes = [
+let routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'map', component: MapPageComponent },
   { path: 'admin', component: AdminComponent },
@@ -18,6 +19,19 @@ const routes: Routes = [
     pathMatch: 'full'
   }
 ];
+
+const comingSoonRoutes: Routes = [
+  { path: 'home', component: HomeComponent },
+  {
+    path: '**',
+    redirectTo: '/home',
+    pathMatch: 'full'
+  }
+]
+
+if (environment.comingSoon) {
+  routes = comingSoonRoutes;
+}
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

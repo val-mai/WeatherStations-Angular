@@ -11,6 +11,7 @@ import {
   faVideo,
   faMagnifyingGlassChart
 } from '@fortawesome/free-solid-svg-icons';
+import { environment } from "src/app/environments/environment";
 
 
 @Component({
@@ -36,16 +37,26 @@ import {
             Benvenuto su MeteoMarso, la tua porta d'accesso alle informazioni
             meteorologiche più avanzate della regione.
           </p>
-          <p class="mb-3">
-            Esplora la nostra rete di stazioni meteo professionali e webcam
-            sempre aggiornate in tempo reale.
-          </p>
-          <div class="d-md-flex justify-content-center">
-            <button class="m-3 p-4" mat-raised-button color="primary" routerLink="/map" >
-              Mappa live
-            </button>
-            <button class="m-3 p-4" mat-raised-button>Contattaci</button>
-          </div>
+          @if (!comingSoon) {
+            <p class="mb-3">
+              Esplora la nostra rete di stazioni meteo professionali e webcam
+              sempre aggiornate in tempo reale.
+            </p>
+            <div class="d-md-flex justify-content-center">
+              <button class="m-3 p-4" mat-raised-button color="primary" routerLink="/map" >
+                Mappa live
+              </button>
+              <button class="m-3 p-4" mat-raised-button>Contattaci</button>
+            </div>
+          } @else {
+            <div class="coming-box my-4">
+              <img class="my-4" style="width: 250px;" src="../../../assets/coming-soon.png" alt="">
+              <p>
+                La piattaforma è attulamente in sviluppo 👨‍💻 ma saremo online a breve!
+              </p>
+              <p>❄️ STAY TUNED! ❄️</p>
+            </div>
+          }
         </div>
       </section>
       <section id="feature-section" class="container">
@@ -63,6 +74,8 @@ import {
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
+
+  comingSoon = environment.comingSoon;
 
   featureList = [
     {

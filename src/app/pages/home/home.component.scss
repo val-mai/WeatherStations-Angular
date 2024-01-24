@@ -35,6 +35,15 @@ body {
 }
 
 .subtitle {
-  color: white;
+  color: black;
   text-align: center;
+}
+
+.coming-box {
+  color: black;
+  padding: 1.5rem;
+  border-radius: 10px;
+  max-width: 550px;
+  margin: 0 auto;
+  background-color: hsla(0, 0%, 100%, 0.8);
 }

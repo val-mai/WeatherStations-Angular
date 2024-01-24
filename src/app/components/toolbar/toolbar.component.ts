@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
+import { environment } from 'src/app/environments/environment';
 
 @Component({
   selector: 'app-toolbar',
@@ -20,7 +21,7 @@ import { RouterModule } from '@angular/router';
           </div>
         </button>
         <span class="example-spacer"></span>
-        <div *ngIf="mobile==false">
+        <div *ngIf="mobile==false && comingSoon==false">
           <button routerLink="/map" routerLinkActive="active" mat-button class="example-icon">
             Mappa Live
           </button>
@@ -42,6 +43,8 @@ export class ToolbarComponent implements AfterViewInit {
 
   @Input() transparent = false;
   mobile = false;
+  comingSoon = environment.comingSoon;
+
 
   ngAfterViewInit(): void {
     this.responsive.observe([Breakpoints.Medium, Breakpoints.Small, Breakpoints.XSmall]).subscribe((result) => {
