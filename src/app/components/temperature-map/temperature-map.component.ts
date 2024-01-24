@@ -79,15 +79,15 @@ export class TemperatureMapComponent implements OnInit {
 
   getMarkerStyle(temperature: number) {
 
-    const normalizedTemperature = (temperature + 15) / 50;
+    const normalizedTemperature = (temperature + 10) / 50;
 
     const hue = (1 - normalizedTemperature) * 240;
-    
-    const backgroundColor = `hsl(${hue}, 100%, 50%)`;
-    const textColor = (temperature<-5 || temperature>25) ? "white" : "black"; 
 
-    return `background-color: ${backgroundColor}; 
-    border-radius: 50%; 
+    const backgroundColor = `hsl(${hue}, 100%, 50%)`;
+    const textColor = (temperature < 1 || temperature > 25) ? "white" : "black";
+
+    return `background-color: ${backgroundColor};
+    border-radius: 50%;
     line-height:24px;
     text-align:center;
     color: ${textColor};

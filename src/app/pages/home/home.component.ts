@@ -29,7 +29,7 @@ import {
     <div class="main">
       <app-toolbar [transparent]="true"></app-toolbar>
       <div class="main-content">
-      <section id="main-section" class="container mt-4">
+      <section id="main-section" class="container mt-3">
         <div class="hero">
           <img class="logo mb-3" src="assets/logo.png" alt="">
           <p>

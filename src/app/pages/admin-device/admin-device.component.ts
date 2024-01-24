@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AdminToolbarComponent } from 'src/app/components/admin-toolbar/admin-toolbar.component';
 import { DeviceService } from 'src/app/services/device.service';
@@ -11,9 +11,9 @@ import { DeviceService } from 'src/app/services/device.service';
     CommonModule, AdminToolbarComponent
   ],
   template: `
-  
+
   <app-admin-toolbar></app-admin-toolbar>
-  <section *ngIf="deviceInfo" id="main-section" class="container my-4">
+  <section id="main-section" class="container my-4">
     <h2>{{deviceInfo.name}}</h2>
   </section>
 
@@ -21,7 +21,7 @@ import { DeviceService } from 'src/app/services/device.service';
   styleUrl: './admin-device.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdminDeviceComponent {
+export class AdminDeviceComponent implements OnInit {
 
   deviceId!: any;
   deviceInfo!:any;

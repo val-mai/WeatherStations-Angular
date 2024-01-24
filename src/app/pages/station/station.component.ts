@@ -175,9 +175,6 @@ export class StationComponent implements OnInit {
         temperature: entry.temperature,
         time: entry.time,
       }));
-
-      console.log(this.tableData);
-      console.log(this.chartData);
     });
   }
 }
