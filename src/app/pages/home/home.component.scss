@@ -23,6 +23,7 @@ body {
 
 .logo {
   width: 100px;
+  margin: 1.5rem auto;
 }
 
 .hero {
@@ -31,6 +32,24 @@ body {
   color: white;
   p {
     font-size: 1.3em;
+  }
+}
+
+.hero-mobile {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2em;
+  color: white;
+  p {
+    font-size: 1.3em;
+  }
+  .logo {
+    width: 100px;
+    margin: 0 0 2.5rem 0;
   }
 }
 

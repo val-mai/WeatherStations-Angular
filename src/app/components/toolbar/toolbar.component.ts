@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, Input } from '@angular/core';
+import { AfterViewInit, Component, HostListener, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -12,7 +12,7 @@ import { environment } from 'src/app/environments/environment';
   standalone: true,
   imports: [CommonModule, RouterModule, MatToolbarModule, MatIconModule, MatButtonModule],
   template: `
-    <mat-toolbar color="primary" [class.transparent]="transparent">
+    <mat-toolbar color="primary" [class.transparent]="transparent" [ngClass]="{'scrolled': isScrolled}">
       <div class="container">
         <button mat-button routerLink="/home">
           <div class="logo">
@@ -50,6 +50,16 @@ export class ToolbarComponent implements AfterViewInit {
     this.responsive.observe([Breakpoints.Medium, Breakpoints.Small, Breakpoints.XSmall]).subscribe((result) => {
       this.mobile = (result.matches) ? true : false;
     });
+  }
+
+  isScrolled: boolean = false;
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.isScrolled = window.scrollY > 50;
+        if (this.isScrolled) {
+          this.transparent = false;
+        }
   }
 
 }
