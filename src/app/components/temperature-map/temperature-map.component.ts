@@ -51,7 +51,7 @@ export class TemperatureMapComponent implements OnInit {
       this.deviceService.getDevicesInfo(d.id).subscribe((info: any) => {
         const customIcon = divIcon({
           className: 'custom-marker',
-          iconSize: [25, 25],
+          iconSize: [24, 24],
           html: `<div style="${this.getMarkerStyle(
             parseFloat(info.weatherData.temperature.value)
           )}"><b>${info.weatherData.temperature.value}</b></div>`,
@@ -78,14 +78,20 @@ export class TemperatureMapComponent implements OnInit {
   }
 
   getMarkerStyle(temperature: number) {
+
     const normalizedTemperature = (temperature + 10) / 50;
 
     const hue = (1 - normalizedTemperature) * 240;
-    const backgroundColor = `hsl(${hue}, 100%, 50%)`;
 
-    return `background-color: ${backgroundColor}; border-radius: 50%; color: black;
-    line-height:24px; text-align:center;
-    color: white;
+    const backgroundColor = `hsl(${hue}, 100%, 50%)`;
+    const textColor = (temperature < 1 || temperature > 25) ? "white" : "black";
+
+    return `background-color: ${backgroundColor};
+    border-radius: 50%;
+    line-height:24px;
+    text-align:center;
+    color: ${textColor};
+    mix-blend-mode: difference;
     border: 1px solid black`;
   }
 }

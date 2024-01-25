@@ -1,12 +1,19 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { RouterModule } from '@angular/router';
-import { faMagnifyingGlassChart, faRss, faVideo } from '@fortawesome/free-solid-svg-icons';
-import { FeatureCardComponent } from 'src/app/components/feature-card/feature-card.component';
-import { FooterComponent } from 'src/app/components/footer/footer.component';
-import { TemperatureMapComponent } from 'src/app/components/temperature-map/temperature-map.component';
-import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
+import { CommonModule } from "@angular/common";
+import { Component } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
+import { RouterModule } from "@angular/router";
+import { FeatureCardComponent } from "src/app/components/feature-card/feature-card.component";
+import { FooterComponent } from "src/app/components/footer/footer.component";
+import { TemperatureMapComponent } from "src/app/components/temperature-map/temperature-map.component";
+import { ToolbarComponent } from "src/app/components/toolbar/toolbar.component";
+import {
+  faRss,
+  faVideo,
+  faMagnifyingGlassChart
+} from '@fortawesome/free-solid-svg-icons';
+import { environment } from "src/app/environments/environment";
+import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
+
 
 @Component({
   selector: 'app-home',
@@ -24,33 +31,43 @@ import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
     <div class="main">
       <app-toolbar [transparent]="true"></app-toolbar>
       <div class="main-content">
-      <section id="main-section" class="container">
-        <div class="hero">
-          <img class="logo mb-3" src="assets/logo.png" alt="">
-          <p>
-            Benvenuto su MeteoMarso, la tua porta d'accesso alle informazioni
-            meteorologiche più avanzate della regione.
-          </p>
-          <p class="mb-3">
-            Esplora la nostra rete di stazioni meteo professionali e webcam
-            sempre aggiornate in tempo reale.
-          </p>
-          <div class="d-md-flex justify-content-center">
-            <button class="m-3 p-4" mat-raised-button color="primary" routerLink="/map" >
-              Mappa live
-            </button>
-            <button class="m-3 p-4" mat-raised-button>Contattaci</button>
+        <section id="main-section stretch" class="container">
+          <div [ngClass]="mobile == true ? 'hero-mobile' : 'hero'">
+            <img class="logo" src="assets/logo.png" alt="">
+            <p>
+              Benvenuto su MeteoMarso, la tua porta d'accesso alle informazioni
+              meteorologiche più avanzate della regione.
+            </p>
+            @if (!comingSoon) {
+              <p class="mb-3">
+                Esplora la nostra rete di stazioni meteo professionali e webcam
+                sempre aggiornate in tempo reale.
+              </p>
+              <div class="d-md-flex justify-content-center">
+                <button class="m-3 p-4" mat-raised-button color="primary" routerLink="/map" >
+                  Mappa live
+                </button>
+                <button class="m-3 p-4" mat-raised-button>Contattaci</button>
+              </div>
+            } @else {
+              <div class="coming-box">
+                <img class="my-4" style="width: 250px;" src="../../../assets/coming-soon.png" alt="">
+                <p>
+                  La piattaforma è attulamente in sviluppo 👨‍💻 ma saremo online a breve!
+                </p>
+                <p>❄️ STAY TUNED! ❄️</p>
+              </div>
+            }
           </div>
-        </div>
-      </section>
-      <section id="feature-section" class="container">
-        <h3><b> Caratteristiche Principali </b></h3>
-        <div class="card-container">
-          @for (item of featureList; track $index) {
-            <app-feature-card [content]="item"></app-feature-card>
-          }
-        </div>
-      </section>
+        </section>
+        <section id="feature-section" class="container">
+          <h3 class="subtitle">Caratteristiche Principali</h3>
+          <div class="card-container row mb-4">
+            @for (item of featureList; track $index) {
+              <app-feature-card class="col-md-4 g-2" [content]="item"></app-feature-card>
+            }
+          </div>
+        </section>
       </div>
       <app-footer></app-footer>
     </div>
@@ -58,6 +75,18 @@ import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
+
+  comingSoon = environment.comingSoon;
+
+  constructor(private responsive: BreakpointObserver) { }
+
+  mobile = false;
+
+  ngAfterViewInit(): void {
+    this.responsive.observe([Breakpoints.Medium, Breakpoints.Small, Breakpoints.XSmall]).subscribe((result) => {
+      this.mobile = (result.matches) ? true : false;
+    });
+  }
 
   featureList = [
     {

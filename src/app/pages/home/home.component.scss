@@ -7,14 +7,12 @@ body {
 .main {
   background-image: url("../../../assets/Monte_Velino.jpg");
   background-size: cover;
-  height: 100vh;
-  color: #ccc;
+  min-height: 100vh;
 }
 
 .main-content{
   display: flex;
   flex-direction: column;
-  height: 90%;
   justify-content: space-around;
 }
 
@@ -24,14 +22,47 @@ body {
 }
 
 .logo {
-  width: 85px;
+  width: 100px;
+  margin: 1.5rem auto;
 }
 
 .hero {
   text-align: center;
   padding: 2em;
-  color: #ccc;
+  color: white;
   p {
     font-size: 1.3em;
   }
+}
+
+.hero-mobile {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2em;
+  color: white;
+  p {
+    font-size: 1.3em;
+  }
+  .logo {
+    width: 100px;
+    margin: 0 0 2.5rem 0;
+  }
+}
+
+.subtitle {
+  color: black;
+  text-align: center;
+}
+
+.coming-box {
+  color: black;
+  padding: 1.5rem;
+  border-radius: 10px;
+  max-width: 550px;
+  margin: 0 auto;
+  background-color: hsla(0, 0%, 100%, 0.8);
 }
