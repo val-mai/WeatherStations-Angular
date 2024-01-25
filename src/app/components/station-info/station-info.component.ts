@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { CarouselComponent } from '../carousel/carousel.component';
 
 @Component({
   selector: 'app-station-info',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CarouselComponent],
   template: `
     <h2 class="mt-4" color="accent">Dettagli Stazione</h2>
     <div class="row g-3">
@@ -24,7 +25,8 @@ import { Component, Input } from '@angular/core';
         <p><b>Tipo di installazione:</b> {{ infoData.installation }}</p>
       </div>
       <div class="col-md-6">
-        <img src="{{ infoData.stationImage }}" alt="" />
+        <app-carousel [images]="infoData.stationImages"></app-carousel>
+        <!-- <img src="{{ infoData.stationImages[0] }}" alt="" /> -->
       </div>
     </div>
     <div>
