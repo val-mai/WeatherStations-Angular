@@ -24,9 +24,11 @@ export class TemperatureMapComponent implements OnInit {
 
   @Input() devices!: any[];
   @Input() height!: any;
+  @Input() zoomLevel!:number;
 
   options!: any;
   layers!: any;
+  mobile = false;
 
   constructor(private deviceService: DeviceService) {}
 
@@ -42,7 +44,7 @@ export class TemperatureMapComponent implements OnInit {
           attribution: 'MeteoMarso',
         }),
       ],
-      zoom: 11,
+      zoom: this.zoomLevel,
       center: latLng(42.102442, 13.395158),
     };
 

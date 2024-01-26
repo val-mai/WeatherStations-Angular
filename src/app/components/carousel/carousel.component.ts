@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -23,12 +23,8 @@ import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
   styleUrl: './carousel.component.scss',
 })
 
-export class CarouselComponent implements OnInit { 
+export class CarouselComponent {
 
-  @Input() images!:any[];
-
-  ngOnInit(): void {
-      console.log(this.images);
-  }
+  @Input() images!: any[];
 
 }
