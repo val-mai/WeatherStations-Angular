@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, type OnInit } from '@angular/core';
+import { Component, OnDestroy, type OnInit } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -11,6 +11,7 @@ import {
   faTemperatureLow,
 } from '@fortawesome/free-solid-svg-icons';
 import { circleMarker, latLng, tileLayer } from 'leaflet';
+import { ChartComponent } from 'src/app/components/chart/chart.component';
 import { FooterComponent } from 'src/app/components/footer/footer.component';
 import { HistoryTableComponent } from 'src/app/components/history-table/history-table.component';
 import { MetricWidgetComponent } from 'src/app/components/metric-widget/metric-widget.component';
@@ -19,6 +20,7 @@ import { StationInfoComponent } from 'src/app/components/station-info/station-in
 import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
 import { Metric } from 'src/app/interfaces/metric';
 import { DeviceService } from 'src/app/services/device.service';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-station',
@@ -33,16 +35,18 @@ import { DeviceService } from 'src/app/services/device.service';
     HistoryTableComponent,
     MetricWidgetComponent,
     MatTabsModule,
-    StationInfoComponent
+    StationInfoComponent,
+    ChartComponent,
+    MatExpansionModule
   ],
   template: `
     <div class="main mat-app-background">
       <app-toolbar></app-toolbar>
       <div class="container mt-4">
-        <h2>{{name}}</h2>
+        <h2>{{infoData.name}}</h2>
         @if (options) {
         <p>Last update: {{ time | date : 'medium' }}</p>
-        <mat-tab-group color="accent">
+        <mat-tab-group color="accent" [selectedIndex]="selectedTabIndex" (selectedIndexChange)="tabChanged($event)">
           <mat-tab>
             <ng-template mat-tab-label>
               <fa-icon class="mx-2" [icon]="faIgloo"></fa-icon>
@@ -57,24 +61,35 @@ import { DeviceService } from 'src/app/services/device.service';
                 <div *ngIf="layer" [leafletLayer]="layer"></div>
               </div>
               <div class="image col-md-4">
-                <img src="{{image}}" alt="" />
+                <img src="{{infoData.image}}" alt="" />
               </div>
             </div>
           </mat-tab>
-          <mat-tab>
+<!--           <mat-tab>
             <ng-template mat-tab-label>
               <fa-icon class="mx-2" [icon]="faTemperatureLow"></fa-icon>
               DATI
             </ng-template>
-          </mat-tab>
-          <mat-tab>
+          </mat-tab> -->
+          <mat-tab *ngIf="infoData.mac">
             <ng-template mat-tab-label>
               <fa-icon class="mx-2" [icon]="faChartLine"></fa-icon>
               STORICO
             </ng-template>
-            <div class="my-4 row inserted">
-            <h3>Osservazioni Ultime 24h</h3>
-            <app-history-table class="mb-3" *ngIf="tableData" [dataSource]="tableData"></app-history-table>
+            <div class="my-3 row inserted">
+            <div class="my-3">
+              <app-chart class="chart" *ngIf="tableData" [height]="'60vh'" [data]="tableData"></app-chart>
+            </div>
+            <div class="mb-3">
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Tabella osservazioni
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <app-history-table class="mb-3" *ngIf="tableData" [dataSource]="tableData"></app-history-table>
+              </mat-expansion-panel>
+            </div>
             </div>
           </mat-tab>
           <mat-tab>
@@ -88,10 +103,6 @@ import { DeviceService } from 'src/app/services/device.service';
           </mat-tab>
         </mat-tab-group>
 
-        <!-- <div class="chart mt-3">
-          <app-chart *ngIf="chartData" [data]="chartData"></app-chart>
-        </div> -->
-
         } @else {
         <app-spinner></app-spinner>
         }
@@ -101,12 +112,10 @@ import { DeviceService } from 'src/app/services/device.service';
   `,
   styleUrl: './station.component.scss'
 })
-export class StationComponent implements OnInit {
+export class StationComponent implements OnInit, OnDestroy {
   metrics!: Metric[];
   options!: any;
   layer!: any;
-  name!: string;
-  image!: string;
   time!: any;
   tableData!: any;
   chartData!: any;
@@ -115,6 +124,62 @@ export class StationComponent implements OnInit {
   faTemperatureLow = faTemperatureLow;
   faChartLine = faChartLine;
   faCircleInfo = faCircleInfo;
+  selectedTabIndex!: number;
+
+  deviceId!: any;
+
+  constructor(private service: DeviceService, private route: ActivatedRoute) { }
+
+  ngOnInit(): void {
+    this.getTab();
+    this.deviceId = this.route.snapshot.paramMap.get('id');
+    this.getData(this.deviceId);
+  }
+
+  ngOnDestroy(): void {
+    localStorage.removeItem('selectedTabIndex');
+  }
+
+  private getData(id: string): void {
+    this.service.getDeviceById(id).subscribe((resp: any) => {
+      this.infoData = resp;
+    });
+    this.getDeviceInfo(id);
+    this.getHistoryData(id);
+  }
+
+  tabChanged(event: any) {
+    this.selectedTabIndex = event;
+    localStorage.setItem('selectedTabIndex', event);
+  }
+
+  getTab() {
+    const savedTabIndex = localStorage.getItem('selectedTabIndex');
+    this.selectedTabIndex = savedTabIndex != null ? parseInt(savedTabIndex, 10) : 0;
+  }
+
+  private getDeviceInfo(id:string){
+    this.service.getDevicesInfo(id).subscribe((resp: any) => {
+      this.time = new Date(resp.weatherData.time);
+      this.metrics = resp.weatherData;
+      this.initMap(resp.latitude, resp.longitude);
+    });
+  }
+
+  private getHistoryData(id:string) {
+    this.service.getDailyHistory(id).subscribe((data: any) => {
+      this.tableData = data.temperature.data.map((entry: any) => ({
+        time: entry.time,
+        temperature: entry.value,
+        pressure: data.pressure.data.find((p: any) => p.time === entry.time)
+          .value,
+        humidity: data.humidity.data.find((p: any) => p.time === entry.time)
+          .value,
+        windSpeed: data.windSpeed.data.find((w: any) => w.time === entry.time)
+          .value,
+      }));
+    });
+  }
 
   initMap(latitude: number, longitude: number) {
     this.options = {
@@ -133,48 +198,7 @@ export class StationComponent implements OnInit {
       window.dispatchEvent(
         new Event('resize')
       );
-    }, 100);
+    }, 200);
   }
 
-  deviceId!: any;
-
-  constructor(private service: DeviceService, private route: ActivatedRoute) { }
-
-  ngOnInit(): void {
-    this.deviceId = this.route.snapshot.paramMap.get('id');
-    this.getData(this.deviceId);
-  }
-
-  private getData(id: string): void {
-    this.service.getDeviceById(id).subscribe((resp: any) => {
-      this.infoData = resp;
-      this.image = resp.image;
-      this.name = resp.name;
-    });
-    this.service.getDevicesInfo(id).subscribe((resp: any) => {
-      this.time = new Date(resp.weatherData.time);
-      const latitude = resp.latitude;
-      const longitude = resp.longitude;
-      this.metrics = resp.weatherData;
-      this.initMap(latitude, longitude);
-    });
-
-    this.service.getDailyHistory(id).subscribe((data: any) => {
-      this.tableData = data.temperature.data.map((entry: any) => ({
-        time: entry.time,
-        temperature: entry.value,
-        pressure: data.pressure.data.find((p: any) => p.time === entry.time)
-          .value,
-        humidity: data.humidity.data.find((p: any) => p.time === entry.time)
-          .value,
-        windSpeed: data.windSpeed.data.find((w: any) => w.time === entry.time)
-          .value,
-      }));
-
-      this.chartData = this.tableData.map((entry: any) => ({
-        temperature: entry.temperature,
-        time: entry.time,
-      }));
-    });
-  }
 }

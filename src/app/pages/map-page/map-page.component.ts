@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { LeafletModule } from "@asymmetrik/ngx-leaflet";
@@ -30,9 +31,10 @@ import { DeviceService } from "src/app/services/device.service";
           [height]="mapHeight"
           *ngIf="devices"
           [devices]="devices"
+          [zoomLevel]="zoomLevel"
         ></app-temperature-map>
         } @else {
-            <app-spinner></app-spinner>
+          <app-spinner></app-spinner>
         }
       </div>
       <app-footer></app-footer>
@@ -43,10 +45,16 @@ import { DeviceService } from "src/app/services/device.service";
 export class MapPageComponent implements OnInit {
   devices!: any[];
   mapHeight = '80vh';
+  mobile = false;
+  zoomLevel!:number;
 
-  constructor(private service: DeviceService) { }
+  constructor(private service: DeviceService, private responsive: BreakpointObserver) { }
 
   ngOnInit(): void {
+    this.responsive.observe([Breakpoints.Medium, Breakpoints.Small, Breakpoints.XSmall]).subscribe((result) => {
+      this.mobile = (result.matches) ? true : false;
+      this.zoomLevel = this.mobile ? 10 : 11;
+    });
     this.service.getAllDevices().subscribe((data: any) => {
       this.devices = data;
     });
