@@ -51,12 +51,13 @@ export class TemperatureMapComponent implements OnInit {
     this.layers = [];
     devices.forEach((d: any) => {
       this.deviceService.getDevicesInfo(d.id).subscribe((info: any) => {
+        const temp = info.weatherData.temperature.value;
         const customIcon = divIcon({
           className: 'custom-marker',
           iconSize: [24, 24],
           html: `<div style="${this.getMarkerStyle(
-            parseFloat(info.weatherData.temperature.value)
-          )}"><b>${info.weatherData.temperature.value}</b></div>`,
+            parseFloat(temp)
+          )}"><b>${temp.toFixed(0)==0 ? "0" : temp.toFixed(0)}</b></div>`,
           iconAnchor: [12, 12],
         });
 
@@ -68,7 +69,7 @@ export class TemperatureMapComponent implements OnInit {
         const popupContent = `
         <div class="mt-2">
           <h3><a href="stations/${d.id}"><strong>${info.name}</strong></a></h3>
-          <p class="mt-2">Temperatura: ${info.weatherData.temperature.value}°C </p>
+          <p class="mt-2">Temperatura: ${temp.toFixed(0)==0 ? "0" : temp.toFixed(0)}°C </p>
           <p>Umidità: ${info.weatherData.humidity.value}% </p>
         </div>
         `;
