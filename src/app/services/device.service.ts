@@ -7,24 +7,16 @@ import { environment } from '../environments/environment';
 })
 export class DeviceService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  private apiUrl:String = environment.apiURL;
-
-  getDevicesInfo(id:string) {
-  return this.http.get(`${this.apiUrl}/info/${id}`);
-  }
+  private apiUrl: String = environment.apiURL;
 
   getAllDevices() {
     return this.http.get(`${this.apiUrl}/devices`);
   }
 
-  getDeviceById(id:string) {
+  getDeviceById(id: string) {
     return this.http.get(`${this.apiUrl}/devices/${id}`);
-  }
-
-  getDailyHistory(id:string) {
-    return this.http.get(`${this.apiUrl}/history/daily/${id}`);
   }
 
 }
