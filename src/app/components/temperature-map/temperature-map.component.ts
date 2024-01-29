@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { divIcon, latLng, marker, tileLayer } from 'leaflet';
+import { DataService } from 'src/app/services/data.service';
 import { DeviceService } from 'src/app/services/device.service';
 
 @Component({
@@ -30,7 +31,7 @@ export class TemperatureMapComponent implements OnInit {
   layers!: any;
   mobile = false;
 
-  constructor(private deviceService: DeviceService) {}
+  constructor(private deviceService: DeviceService, private dataService: DataService) {}
 
   ngOnInit(): void {
     this.initMap(this.devices);
@@ -50,8 +51,8 @@ export class TemperatureMapComponent implements OnInit {
 
     this.layers = [];
     devices.forEach((d: any) => {
-      this.deviceService.getDevicesInfo(d.id).subscribe((info: any) => {
-        const temp = info.weatherData.temperature.value;
+      this.dataService.getRealtimeData(d.id).subscribe((data: any) => {
+        const temp = data.temperature.value;
         const customIcon = divIcon({
           className: 'custom-marker',
           iconSize: [24, 24],
@@ -61,16 +62,16 @@ export class TemperatureMapComponent implements OnInit {
           iconAnchor: [12, 12],
         });
 
-        const customMarker = marker([info.latitude, info.longitude], {
+        const customMarker = marker([d.latitude, d.longitude], {
           icon: customIcon,
-          title: info.name,
+          title: d.name,
         });
 
         const popupContent = `
         <div class="mt-2">
-          <h3><a href="stations/${d.id}"><strong>${info.name}</strong></a></h3>
+          <h3><a href="stations/${d.id}"><strong>${d.name}</strong></a></h3>
           <p class="mt-2">Temperatura: ${temp.toFixed(0)==0 ? "0" : temp.toFixed(0)}°C </p>
-          <p>Umidità: ${info.weatherData.humidity.value}% </p>
+          <p>Umidità: ${data.humidity.value}% </p>
         </div>
         `;
 

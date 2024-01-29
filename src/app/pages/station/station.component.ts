@@ -21,6 +21,7 @@ import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
 import { Metric } from 'src/app/interfaces/metric';
 import { DeviceService } from 'src/app/services/device.service';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-station',
@@ -128,7 +129,7 @@ export class StationComponent implements OnInit, OnDestroy {
 
   deviceId!: any;
 
-  constructor(private service: DeviceService, private route: ActivatedRoute) { }
+  constructor(private deviceService: DeviceService, private dataService: DataService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.getTab();
@@ -141,7 +142,7 @@ export class StationComponent implements OnInit, OnDestroy {
   }
 
   private getData(id: string): void {
-    this.service.getDeviceById(id).subscribe((resp: any) => {
+    this.deviceService.getDeviceById(id).subscribe((resp: any) => {
       this.infoData = resp;
     });
     this.getDeviceInfo(id);
@@ -158,16 +159,16 @@ export class StationComponent implements OnInit, OnDestroy {
     this.selectedTabIndex = savedTabIndex != null ? parseInt(savedTabIndex, 10) : 0;
   }
 
-  private getDeviceInfo(id:string){
-    this.service.getDevicesInfo(id).subscribe((resp: any) => {
-      this.time = new Date(resp.weatherData.time);
-      this.metrics = resp.weatherData;
-      this.initMap(resp.latitude, resp.longitude);
+  private getDeviceInfo(id: string) {
+    this.dataService.getRealtimeData(id).subscribe((resp: any) => {
+      this.time = new Date(resp.time);
+      this.metrics = resp;
+      this.initMap(this.infoData.latitude, this.infoData.longitude);
     });
   }
 
-  private getHistoryData(id:string) {
-    this.service.getDailyHistory(id).subscribe((data: any) => {
+  private getHistoryData(id: string) {
+    this.dataService.getDailyHistory(id).subscribe((data: any) => {
       this.tableData = data.temperature.data.map((entry: any) => ({
         time: entry.time,
         temperature: entry.value,
