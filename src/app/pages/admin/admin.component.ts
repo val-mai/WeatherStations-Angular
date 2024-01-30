@@ -31,7 +31,6 @@ export class AdminComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.service.getAllDevices().subscribe((resp: any) => {
       this.deviceList = resp;
-      console.log(this.deviceList);
     });
     
   }

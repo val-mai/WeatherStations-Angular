@@ -44,9 +44,9 @@ import { DataService } from 'src/app/services/data.service';
     <div class="main mat-app-background">
       <app-toolbar></app-toolbar>
       <div class="container mt-4">
-        <h2>{{infoData.name}}</h2>
+        <h2 *ngIf="infoData">{{infoData.name}}</h2>
         @if (options) {
-        <p>Last update: {{ time | date : 'medium' }}</p>
+        <p *ngIf="metrics">Ultimo aggiornamento: {{ time | date:"MMM dd, yyyy 'alle' HH:mm:ss" }}</p>
         <mat-tab-group color="accent" [selectedIndex]="selectedTabIndex" (selectedIndexChange)="tabChanged($event)">
           <mat-tab>
             <ng-template mat-tab-label>
@@ -161,7 +161,7 @@ export class StationComponent implements OnInit, OnDestroy {
 
   private getDeviceInfo(id: string) {
     this.dataService.getRealtimeData(id).subscribe((resp: any) => {
-      this.time = new Date(resp.time);
+      this.time = new Date(resp.time * 1000);
       this.metrics = resp;
       this.initMap(this.infoData.latitude, this.infoData.longitude);
     });
@@ -170,7 +170,7 @@ export class StationComponent implements OnInit, OnDestroy {
   private getHistoryData(id: string) {
     this.dataService.getDailyHistory(id).subscribe((data: any) => {
       this.tableData = data.temperature.data.map((entry: any) => ({
-        time: entry.time,
+        time: entry.time * 1000,
         temperature: entry.value,
         pressure: data.pressure.data.find((p: any) => p.time === entry.time)
           .value,

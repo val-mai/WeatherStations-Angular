@@ -131,15 +131,17 @@ export class AdminDeviceComponent implements OnInit {
     this.getData(this.deviceId);
     this.deviceForm = this.formBuilder.group({
       id: [''],
-      stationId: [''],
+      name: ['', Validators.required],
       type: [''],
+      stationId: ['', Validators.required],
       mac: [''],
-      city: [''],
+      city: ['', Validators.required],
+      region: ['', Validators.required],
       dateZoneId: [''],
       createTime: [''],
-      note: [''],
-      region: [''],
-      elevation: [''],
+      elevation: ['', Validators.required],
+      latitude: [Validators.required],
+      longitude: [Validators.required],
       image: [''],
       stationImages: [''],
       stationType: [''],
@@ -147,17 +149,14 @@ export class AdminDeviceComponent implements OnInit {
       gateway: [''],
       shielding: [''],
       installation: [''],
-      latitude: [],
-      longitude: [Validators.required],
-      name: ['', Validators.required],
       description: [''],
+      note: [''],
     });
   }
 
   getData(id: string): void {
     this.service.getDeviceById(id).subscribe((resp: any) => {
       this.deviceInfo = resp;
-      console.log(this.deviceInfo);
       this.deviceForm.setValue(this.deviceInfo);
     });
   }
