@@ -13,7 +13,7 @@ import { faCircleCheck, faTrashCan, faPenToSquare } from '@fortawesome/free-soli
     CommonModule, MatTableModule, FontAwesomeModule, MatButtonModule, RouterModule
   ],
   template: `
-  
+
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
   <!-- Name Column -->
@@ -21,7 +21,7 @@ import { faCircleCheck, faTrashCan, faPenToSquare } from '@fortawesome/free-soli
     <th mat-header-cell *matHeaderCellDef> Nome stazione </th>
     <td mat-cell *matCellDef="let row"> {{row.name}} </td>
   </ng-container>
-  
+
   <!-- StationID Column -->
   <ng-container matColumnDef="stationId">
     <th mat-header-cell *matHeaderCellDef> ID Stazione </th>
@@ -43,20 +43,20 @@ import { faCircleCheck, faTrashCan, faPenToSquare } from '@fortawesome/free-soli
   <!-- Status Column -->
   <ng-container matColumnDef="status">
     <th mat-header-cell *matHeaderCellDef> Status </th>
-    <td mat-cell *matCellDef="let row"> 
-      <fa-icon [icon]="faCircleCheck" style="color: green; font-size:1.3rem"></fa-icon> 
+    <td mat-cell *matCellDef="let row">
+      <fa-icon [icon]="faCircleCheck" style="color: green; font-size:1.3rem"></fa-icon>
     </td>
   </ng-container>
 
   <!-- Actions Column -->
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let row"> 
-      <button routerLink="/admin/{{row.id}}" routerLinkActive="router-link-active"  mat-icon-button color="accent" >
-        <fa-icon [fixedWidth]="true" [icon]="faPenToSquare" ></fa-icon>
+    <td mat-cell *matCellDef="let row" class="actions">
+      <button routerLink="/edit/{{row.id}}" routerLinkActive="router-link-active"  mat-button color="accent" >
+        <fa-icon size="lg" [icon]="faPenToSquare" ></fa-icon>
       </button>
-      <button mat-icon-button color="warn">
-            <fa-icon [fixedWidth]="true" [icon]="faTrashCan" style="font-size:0.8rem"></fa-icon>
+      <button mat-button color="warn">
+            <fa-icon size="lg" [icon]="faTrashCan"></fa-icon>
       </button>
     </td>
   </ng-container>
