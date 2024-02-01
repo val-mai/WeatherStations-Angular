@@ -117,7 +117,6 @@ export class AdminDeviceComponent implements OnInit {
   deviceId!: any;
   deviceInfo!: any;
   deviceForm!: FormGroup;
-  favoriteColorControl = new FormControl('');
 
   constructor(
     private service: DeviceService,

@@ -68,7 +68,6 @@ export class AuthService {
   logout() {
     this.autSubject.next(null);
     localStorage.removeItem(`${environment.localStorage}`);
-    localStorage.removeItem("profileImage");
-    this.router.navigate(['/login']);
+    this.router.navigate(['/home']);
   }
 }
