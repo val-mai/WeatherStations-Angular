@@ -19,4 +19,8 @@ export class DeviceService {
     return this.http.get(`${this.apiUrl}/devices/${id}`);
   }
 
+  updateDevice(id: string, device:any) {
+    return this.http.put(`${this.apiUrl}/devices/${id}`, device);
+  }
+
 }

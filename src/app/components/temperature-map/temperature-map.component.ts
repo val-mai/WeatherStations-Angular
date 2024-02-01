@@ -3,7 +3,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { divIcon, latLng, marker, tileLayer } from 'leaflet';
 import { DataService } from 'src/app/services/data.service';
-import { DeviceService } from 'src/app/services/device.service';
 
 @Component({
   selector: 'app-temperature-map',
@@ -30,14 +29,19 @@ export class TemperatureMapComponent implements OnInit {
   options!: any;
   layers!: any;
   mobile = false;
+  center = {
+    lat:0,
+    lon:0
+  };
 
-  constructor(private deviceService: DeviceService, private dataService: DataService) {}
+  constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
     this.initMap(this.devices);
   }
 
   initMap(devices: any) {
+    this.setCenter();
     this.options = {
       layers: [
         tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -46,7 +50,7 @@ export class TemperatureMapComponent implements OnInit {
         }),
       ],
       zoom: this.zoomLevel,
-      center: latLng(42.102442, 13.395158),
+      center: latLng(this.center.lat, this.center.lon),
     };
 
     this.layers = [];
@@ -97,5 +101,16 @@ export class TemperatureMapComponent implements OnInit {
     color: ${textColor};
     mix-blend-mode: difference;
     border: 1px solid black`;
+  }
+
+  setCenter() {
+    let latArray:number[] = [];
+    let lonArray:number[] = [];
+    this.devices.forEach(d => {
+      latArray.push(d.latitude);
+      lonArray.push(d.longitude);
+    });
+    this.center.lat = (Math.max(...latArray)+Math.min(...latArray)) / 2;
+    this.center.lon = (Math.max(...lonArray)+Math.min(...lonArray)) / 2;
   }
 }

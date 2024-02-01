@@ -1,3 +1,10 @@
-:host {
-  display: block;
+.text-area {
+  height: 300px;
+  width: 100%;
+  text-align: justify;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
 }
