@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { MatButtonModule } from '@angular/material/button';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,7 @@ import { MatButtonModule } from '@angular/material/button';
   ],
   template: `
   <div class="main">
-    <div [formGroup]="loginForm" class="form">
+    <form [formGroup]="loginForm" class="form">
       <img class="my-3" src="../../assets/logo.png" style="width: 60px;" alt="">
       <h3>Email:</h3>
       <mat-form-field class="col-md-3" color="accent" appearance="outline">
@@ -34,8 +35,8 @@ import { MatButtonModule } from '@angular/material/button';
       <mat-form-field class="col-md-3" color="accent" appearance="outline">
         <input type="password" matInput formControlName="password" />
       </mat-form-field>
-      <button mat-raised-button color="primary" (click)="login()">Login</button>
-    </div>
+      <button class="my-3" mat-raised-button color="primary" (click)="login()">Login</button>
+    </form>
   </div>
   `,
   styleUrl: './login.component.scss',
@@ -46,8 +47,9 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private snackBar: SnackbarService
+  ) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -59,9 +61,12 @@ export class LoginComponent implements OnInit {
   login() {
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
+        this.snackBar.success("Login effettuato", "Chiudi");
         this.router.navigateByUrl("/admin");
       },
-      error: () => console.log('Error'),
-    });
+      error: (e) => {
+        this.snackBar.warning(e.error.message, "Chiudi");
+      }
+    })
   }
 }

@@ -41,7 +41,7 @@ export class AuthService {
   }
 
   login(user: IUser) {
-    return this.http.post<IAuthData>(`${environment.apiURL}/api/v1/auth/login`, user).pipe(
+    return this.http.post<IAuthData>(`${environment.apiURL}/auth/login`, user).pipe(
       tap((data) => {
         this.autSubject.next(data);
         localStorage.setItem(`${environment.localStorage}`, JSON.stringify(data));
@@ -50,11 +50,11 @@ export class AuthService {
   }
 
   getUser(username:string) {
-    return this.http.get<IUser>(`${environment.apiURL}/api/v1/auth/users/` + username, {'headers': this.getHeaders()});
+    return this.http.get<IUser>(`${environment.apiURL}/auth/users/` + username, {'headers': this.getHeaders()});
   }
 
   signUpUser(user:any) {
-    return this.http.post<IAuthData>(`${environment.apiURL}/api/v1/auth/register`, user);
+    return this.http.post<IAuthData>(`${environment.apiURL}/auth/register`, user);
   }
 
   getJwtToken() {

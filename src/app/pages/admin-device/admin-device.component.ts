@@ -2,10 +2,9 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   ReactiveFormsModule,
-  Validators,
+  Validators
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,6 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AutosizeModule } from 'ngx-autosize';
 import { AdminToolbarComponent } from 'src/app/components/admin-toolbar/admin-toolbar.component';
 import { DeviceService } from 'src/app/services/device.service';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-admin-device',
@@ -122,14 +122,16 @@ export class AdminDeviceComponent implements OnInit {
     private service: DeviceService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private router: Router
-  ) {}
+    private router: Router,
+    private snackBar: SnackbarService
+  ) { }
 
   ngOnInit(): void {
     this.deviceId = this.route.snapshot.paramMap.get('id');
     this.getData(this.deviceId);
     this.deviceForm = this.formBuilder.group({
       id: [''],
+      online: [''],
       name: ['', Validators.required],
       type: [''],
       stationId: ['', Validators.required],
@@ -166,12 +168,18 @@ export class AdminDeviceComponent implements OnInit {
     if (this.deviceForm.valid) {
       this.service
         .updateDevice(this.deviceId, this.deviceForm.value)
-        .subscribe((resp: any) => {
-          console.log('Aggiornato con successo');
-          this.router.navigateByUrl('/admin');
-        });
+        .subscribe({
+          next: (resp: any) => {
+            this.snackBar.success(resp.stationId + " aggiornato", "OK")
+            this.router.navigateByUrl('/admin');
+          },
+          error: (e) => {
+            console.log(e);
+            this.snackBar.warning(e.error.message, "Chiudi")
+          }
+        })
     } else {
-      console.log('Compilare tutti i campi');
+      this.snackBar.warning("Controlla i dati inseriti", "Chiudi");
     }
   }
 }
