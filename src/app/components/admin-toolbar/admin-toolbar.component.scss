@@ -20,6 +20,9 @@ mat-toolbar {
 
 .logo {
   display: flex;
+  h4 {
+    font-size: medium;
+  }
 }
 
 .active {

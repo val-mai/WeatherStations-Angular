@@ -1,16 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faCircleCheck, faTrashCan, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faCircleExclamation, faPenToSquare, faTrashCan, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-device-table',
   standalone: true,
   imports: [
-    CommonModule, MatTableModule, FontAwesomeModule, MatButtonModule, RouterModule
+    CommonModule, MatTableModule, FontAwesomeModule, MatButtonModule, RouterModule, MatMenuModule
   ],
   template: `
 
@@ -44,20 +45,31 @@ import { faCircleCheck, faTrashCan, faPenToSquare } from '@fortawesome/free-soli
   <ng-container matColumnDef="status">
     <th mat-header-cell *matHeaderCellDef> Status </th>
     <td mat-cell *matCellDef="let row">
-      <fa-icon [icon]="faCircleCheck" style="color: green; font-size:1.3rem"></fa-icon>
+      @if (row.online) {
+        <fa-icon size="xl" [icon]="faCircleCheck" style="color: green"></fa-icon>
+      } @else {
+        <fa-icon size="xl" [icon]="faCircleExclamation" style="color: yellow"></fa-icon>
+      }
     </td>
   </ng-container>
 
   <!-- Actions Column -->
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let row" class="actions">
-      <button routerLink="/edit/{{row.id}}" routerLinkActive="router-link-active"  mat-button color="accent" >
-        <fa-icon size="lg" [icon]="faPenToSquare" ></fa-icon>
+    <td mat-cell *matCellDef="let row">
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <fa-icon size="lg" [icon]="faEllipsisVertical" style="color: grey"></fa-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item routerLink="/edit/{{row.id}}" routerLinkActive="router-link-active">
+        <fa-icon size="lg" [icon]="faPenToSquare" style="color:cadetblue"></fa-icon>
+        <span class="mx-2">Modifica Info</span>
       </button>
-      <button mat-button color="warn">
-            <fa-icon size="lg" [icon]="faTrashCan"></fa-icon>
+      <button mat-menu-item disabled>
+      <fa-icon size="lg" [icon]="faTrashCan" style="color: red;"></fa-icon>
+        <span class="mx-2">Elimina</span>
       </button>
+    </mat-menu>
     </td>
   </ng-container>
 
@@ -74,11 +86,9 @@ export class DeviceTableComponent {
   displayedColumns: string[] = ['name', 'stationId', 'mac', 'city', 'status', 'actions'];
 
   faCircleCheck = faCircleCheck;
+  faCircleExclamation = faCircleExclamation;
   faPenToSquare = faPenToSquare;
   faTrashCan = faTrashCan;
-
-  checkOnline() {
-
-  }
+  faEllipsisVertical = faEllipsisVertical;
 
 }

@@ -3,5 +3,36 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+.success-snackbar.mat-mdc-snack-bar-container {
+    .mdc-snackbar__surface {
+        background: #00897B;
+        .mat-mdc-button {
+            color: white !important;
+        }
+    }
+
+    .mat-mdc-snack-bar-label.mdc-snackbar__label {
+        color: white;
+        font-weight: 500;
+        white-space: pre-wrap
+    }
+}
+
+.error-snackbar.mat-mdc-snack-bar-container {
+    .mdc-snackbar__surface {
+        background: #F44336;
+
+        .mat-mdc-button {
+            color: white !important;
+        }
+    }
+
+    .mat-mdc-snack-bar-label.mdc-snackbar__label {
+        color: white;
+        font-weight: 500;
+        white-space: pre-wrap
+    }
+}
+
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
