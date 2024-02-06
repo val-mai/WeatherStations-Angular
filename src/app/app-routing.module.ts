@@ -4,7 +4,6 @@ import { HomeComponent } from './pages/home/home.component';
 import { StationComponent } from './pages/station/station.component';
 import { MapPageComponent } from './pages/map-page/map-page.component';
 import { AdminComponent } from './pages/admin/admin.component';
-import { AdminDeviceComponent } from './pages/admin-device/admin-device.component';
 import { environment } from 'src/app/environments/environment';
 import { AuthGuard } from './auth/auth.guard';
 import { LoginComponent } from './auth/login/login.component';
@@ -13,11 +12,10 @@ let routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'map', component: MapPageComponent },
   { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
-  { path: 'edit/:id', component: AdminDeviceComponent, canActivate: [AuthGuard] },
   { path: 'stations/:id', component: StationComponent },
   { path: 'login', component: LoginComponent },
   {
-    path: '',
+    path: '**',
     redirectTo: '/home',
     pathMatch: 'full'
   }

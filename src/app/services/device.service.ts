@@ -4,11 +4,10 @@ import { environment } from '../environments/environment';
 import { AuthService } from '../auth/auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DeviceService {
-
-  constructor(private http: HttpClient, private auth:AuthService) { }
+  constructor(private http: HttpClient, private auth: AuthService) {}
 
   private apiUrl: String = environment.apiURL;
 
@@ -20,8 +19,21 @@ export class DeviceService {
     return this.http.get(`${this.apiUrl}/devices/${id}`);
   }
 
-  updateDevice(id: string, device:any) {
-    return this.http.put(`${this.apiUrl}/devices/${id}`, device, {'headers': this.auth.getHeaders()});
+  updateDevice(id: string, device: any) {
+    return this.http.put(`${this.apiUrl}/devices/${id}`, device, {
+      headers: this.auth.getHeaders(),
+    });
   }
 
+  insertDevice(device: any) {
+    return this.http.post(`${this.apiUrl}/devices`, device, {
+      headers: this.auth.getHeaders(),
+    });
+  }
+
+  deleteDevice(id: string) {
+    return this.http.delete(`${this.apiUrl}/devices/${id}`, {
+      headers: this.auth.getHeaders(),
+    });
+  }
 }

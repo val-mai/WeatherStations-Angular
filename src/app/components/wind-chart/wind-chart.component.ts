@@ -2,80 +2,72 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
+import windbarb from 'highcharts/modules/windbarb';
 import HC_exporting from 'highcharts/modules/exporting';
 
 HC_exporting(Highcharts);
+windbarb(Highcharts);
 
 @Component({
-  selector: 'app-chart',
+  selector: 'app-wind-chart',
   standalone: true,
   imports: [CommonModule, HighchartsChartModule],
-  template: `
-    <highcharts-chart
-      *ngIf="data"
-      [Highcharts]="Highcharts"
-      [options]="chartOptions"
-      style="width: 100%; height: {{
-        height
-      }}; display: block; border-radius: 10px"
-    >
-    </highcharts-chart>
-  `,
-  styleUrl: './chart.component.scss',
+  template: ` <highcharts-chart
+    *ngIf="data"
+    [Highcharts]="Highcharts"
+    [options]="chartOptions"
+    style="width: 100%; height: {{
+      height
+    }}; display: block; border-radius: 10px"
+  >
+  </highcharts-chart>`,
+  styleUrl: './wind-chart.component.scss',
 })
-export class ChartComponent implements OnInit {
+export class WindChartComponent implements OnInit {
   Highcharts = Highcharts;
   chartOptions = {};
 
   @Input() data = [];
   @Input() height: string = '400px';
 
+  filterData(data: number[], numberOfPointsToShow: number) {
+    const step = Math.ceil(data.length / numberOfPointsToShow);
+    const filteredData = [];
+    for (let i = 0; i < data.length; i += step) {
+      filteredData.push(data[i]);
+    }
+
+    return filteredData;
+  }
+
   ngOnInit(): void {
-    const temperatureData: any[] = [];
-    const pressureData: any[] = [];
+    const windSpeed: any[] = [];
+    const windDirection: any[] = [];
     const timeZoneOffset = 60;
     this.data.forEach((element: any) => {
       const adjustedTimestamp =
         new Date(element.time).getTime() + timeZoneOffset * 60000;
-      temperatureData.push([adjustedTimestamp, element.temperature]);
-      pressureData.push([adjustedTimestamp, element.pressure]);
+      windSpeed.push([adjustedTimestamp, element.windSpeed]);
+      const speed = Math.round((element.windSpeed * 1000) / 3600);
+      windDirection.push([adjustedTimestamp, speed, element.windDirection]);
     });
     this.chartOptions = {
       title: {
-        text: 'Ultime 24h',
-      },
-      chart: {
-        alignThresholds: true,
-        plotShadow: true,
+        text: 'Vento',
       },
       xAxis: {
         type: 'datetime',
-        gapGridLineWidth: 0,
+        offset: 40,
       },
       yAxis: [
         {
-          title: {
-            text: 'Temperatura',
-          },
-        },
-        {
-          title: {
-            text: 'Pressione',
-          },
-          labels: {
-            format: '{value} hPa',
-          },
-          opposite: true,
-        },
-        /*         {
           title: {
             text: 'Velocità del vento',
           },
           labels: {
             format: '{value} km/h',
           },
-          opposite: true,
-        }, */
+        },
       ],
       credits: {
         text: 'MeteoMarso',
@@ -83,33 +75,22 @@ export class ChartComponent implements OnInit {
       accessibility: {
         enabled: false,
       },
-      tooltip: {
-        shared: true,
-      },
       series: [
         {
-          name: 'Temperatura',
-          data: temperatureData,
-          type: 'area',
-          yAxis: 0,
-          marker: {
-            enabled: false,
-          },
+          name: 'Velocità',
+          data: windSpeed,
+          type: 'spline',
           tooltip: {
-            valueSuffix: ' °C',
+            valueSuffix: ' km/h',
           },
         },
         {
-          name: 'Pressione',
-          type: 'spline',
-          yAxis: 1,
-          data: pressureData,
-          marker: {
-            enabled: false,
-          },
-          dashStyle: 'shortdot',
+          name: 'Vento',
+          data: this.filterData(windDirection, 24),
+          type: 'windbarb',
+          showInLegend: false,
           tooltip: {
-            valueSuffix: ' hPa',
+            valueSuffix: ' m/s',
           },
         },
       ],
