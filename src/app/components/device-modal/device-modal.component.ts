@@ -1,53 +1,52 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
-  Validators
+  Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, Router } from '@angular/router';
 import { AutosizeModule } from 'ngx-autosize';
-import { AdminToolbarComponent } from 'src/app/components/admin-toolbar/admin-toolbar.component';
 import { DeviceService } from 'src/app/services/device.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
-  selector: 'app-admin-device',
+  selector: 'app-device-modal',
   standalone: true,
   imports: [
     CommonModule,
-    AdminToolbarComponent,
-    ReactiveFormsModule,
+    MatDialogModule,
+    MatButtonModule,
     MatFormFieldModule,
+    ReactiveFormsModule,
     MatInputModule,
     AutosizeModule,
-    MatButtonModule,
   ],
   template: `
-    <app-admin-toolbar></app-admin-toolbar>
-    <section id="main-section" class="container my-4">
-      <div class="header mb-4 mt-2">
-        <h2>Modifica dati stazione</h2>
-        <button mat-raised-button color="primary" (click)="updateDevice()">
-          AGGIORNA
-        </button>
-      </div>
+    <h2 mat-dialog-title>Dati Stazione</h2>
+    <mat-dialog-content class="mat-typography">
       <div [formGroup]="deviceForm">
         <div class="row">
-          <h3 class="col-md">Nome:</h3>
-          <mat-form-field class="col-md-3" color="accent" appearance="outline">
+          <h3>Nome:</h3>
+          <mat-form-field color="accent" appearance="outline">
             <input type="text" matInput formControlName="name" />
           </mat-form-field>
+        </div>
+        <div class="row">
           <h3 class="col-md">Regione:</h3>
-          <mat-form-field class="col-md-3" color="accent" appearance="outline">
+          <mat-form-field class="col-md-4" color="accent" appearance="outline">
             <input type="text" matInput formControlName="region" />
           </mat-form-field>
           <h3 class="col-md">Località:</h3>
-          <mat-form-field class="col-md-3" color="accent" appearance="outline">
+          <mat-form-field class="col-md-4" color="accent" appearance="outline">
             <input type="text" matInput formControlName="city" />
           </mat-form-field>
         </div>
@@ -108,27 +107,29 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
           </mat-form-field>
         </div>
       </div>
-    </section>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Cancel</button>
+      <button mat-button cdkFocusInitial color="primary" (click)="makeAction()">
+        {{ action }}
+      </button>
+    </mat-dialog-actions>
   `,
-  styleUrl: './admin-device.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './device-modal.component.scss',
 })
-export class AdminDeviceComponent implements OnInit {
-  deviceId!: any;
-  deviceInfo!: any;
+export class DeviceModalComponent implements OnInit {
   deviceForm!: FormGroup;
+  action = 'Aggiungi';
 
   constructor(
-    private service: DeviceService,
-    private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private router: Router,
-    private snackBar: SnackbarService
-  ) { }
+    private service: DeviceService,
+    private snackBar: SnackbarService,
+    private dialogRef: MatDialogRef<DeviceModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public editData: any
+  ) {}
 
   ngOnInit(): void {
-    this.deviceId = this.route.snapshot.paramMap.get('id');
-    this.getData(this.deviceId);
     this.deviceForm = this.formBuilder.group({
       id: [''],
       online: [''],
@@ -140,8 +141,9 @@ export class AdminDeviceComponent implements OnInit {
       region: ['', Validators.required],
       dateZoneId: [''],
       createTime: [''],
+      lastUpdate: [''],
       elevation: ['', Validators.required],
-      latitude: [Validators.required],
+      latitude: ['', Validators.required],
       longitude: [Validators.required],
       image: [''],
       stationImages: [''],
@@ -153,33 +155,48 @@ export class AdminDeviceComponent implements OnInit {
       description: [''],
       note: [''],
     });
+    if (this.editData) {
+      this.deviceForm.setValue(this.editData);
+      this.action = 'Aggiorna';
+    }
   }
 
-  getData(id: string): void {
-    this.service.getDeviceById(id).subscribe((resp: any) => {
-      this.deviceInfo = resp;
-      this.deviceForm.setValue(this.deviceInfo);
-    });
+  makeAction() {
+    this.editData ? this.updateDevice(this.editData.id) : this.addDevice();
   }
 
-  updateDevice() {
-    const request = this.deviceForm.value;
-    console.log(request);
+  updateDevice(id: string) {
     if (this.deviceForm.valid) {
-      this.service
-        .updateDevice(this.deviceId, this.deviceForm.value)
-        .subscribe({
-          next: (resp: any) => {
-            this.snackBar.success(resp.stationId + " aggiornato", "OK")
-            this.router.navigateByUrl('/admin');
-          },
-          error: (e) => {
-            console.log(e);
-            this.snackBar.warning(e.error.message, "Chiudi")
-          }
-        })
+      this.service.updateDevice(id, this.deviceForm.value).subscribe({
+        next: (resp: any) => {
+          this.snackBar.success(resp.stationId + ' aggiornato', 'OK');
+          this.dialogRef.close();
+        },
+        error: (e) => {
+          console.log(e);
+          this.snackBar.warning(e.error.message, 'Chiudi');
+        },
+      });
     } else {
-      this.snackBar.warning("Controlla i dati inseriti", "Chiudi");
+      this.snackBar.warning('Controlla i dati inseriti', 'Chiudi');
+    }
+  }
+
+  addDevice() {
+    if (this.deviceForm.valid) {
+      console.log(this.deviceForm.value);
+      this.service.insertDevice(this.deviceForm.value).subscribe({
+        next: (resp: any) => {
+          this.snackBar.success(resp.stationId + ' aggiunto', 'OK');
+          this.dialogRef.close();
+        },
+        error: (e) => {
+          console.log(e);
+          this.snackBar.warning(e.error.message, 'Chiudi');
+        },
+      });
+    } else {
+      this.snackBar.warning('Controlla i dati inseriti', 'Chiudi');
     }
   }
 }

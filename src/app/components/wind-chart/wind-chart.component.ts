@@ -2,34 +2,31 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
-import HC_exporting from 'highcharts/modules/exporting';
 import windbarb from 'highcharts/modules/windbarb';
+import HC_exporting from 'highcharts/modules/exporting';
 
 HC_exporting(Highcharts);
 windbarb(Highcharts);
 
 @Component({
-  selector: 'app-chart',
+  selector: 'app-wind-chart',
   standalone: true,
   imports: [CommonModule, HighchartsChartModule],
-  template: `
-    <highcharts-chart
-      *ngIf="data"
-      [Highcharts]="Highcharts"
-      [options]="chartOptions"
-      style="width: 100%; height: {{
-        height
-      }}; display: block; border-radius: 10px"
-    >
-    </highcharts-chart>
-  `,
-  styleUrl: './chart.component.scss',
+  template: ` <highcharts-chart
+    *ngIf="data"
+    [Highcharts]="Highcharts"
+    [options]="chartOptions"
+    style="width: 100%; height: {{
+      height
+    }}; display: block; border-radius: 10px"
+  >
+  </highcharts-chart>`,
+  styleUrl: './wind-chart.component.scss',
 })
-export class ChartComponent implements OnInit {
+export class WindChartComponent implements OnInit {
   Highcharts = Highcharts;
   chartOptions = {};
 
-  @Input() title!: string;
   @Input() data = [];
   @Input() height: string = '400px';
 
@@ -43,43 +40,33 @@ export class ChartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const temperatureData: any[] = [];
-    const pressureData: any[] = [];
-    const windData: any[] = [];
+    const windSpeed: any[] = [];
+    const windDirection: any[] = [];
+    const timeZoneOffset = 3600;
     this.data.forEach((element: any) => {
-      const adjustedTimestamp = new Date(element.time * 1000).getTime();
-      temperatureData.push([adjustedTimestamp, element.temperature]);
-      pressureData.push([adjustedTimestamp, element.pressure]);
+      const adjustedTimestamp = new Date(
+        (element.time + timeZoneOffset) * 1000
+      ).getTime();
+      windSpeed.push([adjustedTimestamp, element.windGust]);
       const speed = Math.round((element.windGust * 1000) / 3600);
-      windData.push([adjustedTimestamp, speed, element.windDirection]);
+      windDirection.push([adjustedTimestamp, speed, element.windDirection]);
     });
     this.chartOptions = {
       title: {
-        text: this.title,
-      },
-      chart: {
-        alignThresholds: true,
-        plotShadow: true,
+        text: 'Vento',
       },
       xAxis: {
         type: 'datetime',
         offset: 40,
-        gapGridLineWidth: 0,
       },
       yAxis: [
         {
           title: {
-            text: 'Temperatura',
-          },
-        },
-        {
-          title: {
-            text: 'Pressione',
+            text: 'Velocità del vento',
           },
           labels: {
-            format: '{value} hPa',
+            format: '{value} km/h',
           },
-          opposite: true,
         },
       ],
       credits: {
@@ -88,39 +75,20 @@ export class ChartComponent implements OnInit {
       accessibility: {
         enabled: false,
       },
-      tooltip: {
-        shared: true,
-      },
       series: [
         {
-          name: 'Temperatura',
-          data: temperatureData,
-          type: 'area',
-          yAxis: 0,
-          marker: {
-            enabled: false,
-          },
+          name: 'Velocità',
+          data: windSpeed,
+          type: 'column',
           tooltip: {
-            valueSuffix: ' °C',
-          },
-        },
-        {
-          name: 'Pressione',
-          type: 'spline',
-          yAxis: 1,
-          data: pressureData,
-          marker: {
-            enabled: false,
-          },
-          dashStyle: 'shortdot',
-          tooltip: {
-            valueSuffix: ' hPa',
+            valueSuffix: ' km/h',
           },
         },
         {
           name: 'Vento',
-          data: this.filterData(windData, 24),
+          data: this.filterData(windDirection, 24),
           type: 'windbarb',
+          showInLegend: false,
           tooltip: {
             valueSuffix: ' m/s',
           },

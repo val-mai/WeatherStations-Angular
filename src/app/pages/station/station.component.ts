@@ -22,6 +22,7 @@ import { Metric } from 'src/app/interfaces/metric';
 import { DeviceService } from 'src/app/services/device.service';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DataService } from 'src/app/services/data.service';
+import { WindChartComponent } from 'src/app/components/wind-chart/wind-chart.component';
 
 @Component({
   selector: 'app-station',
@@ -38,16 +39,24 @@ import { DataService } from 'src/app/services/data.service';
     MatTabsModule,
     StationInfoComponent,
     ChartComponent,
-    MatExpansionModule
+    MatExpansionModule,
+    WindChartComponent,
   ],
   template: `
     <div class="main mat-app-background">
       <app-toolbar></app-toolbar>
       <div class="container mt-4">
-        <h2 *ngIf="infoData">{{infoData.name}}</h2>
+        <h2 *ngIf="infoData">{{ infoData.name }}</h2>
         @if (options) {
-        <p *ngIf="metrics">Ultimo aggiornamento: {{ time | date:"MMM dd, yyyy 'alle' HH:mm:ss" }}</p>
-        <mat-tab-group color="accent" [selectedIndex]="selectedTabIndex" (selectedIndexChange)="tabChanged($event)">
+        <p *ngIf="metrics">
+          Ultimo aggiornamento:
+          {{ time | date : "MMM dd, yyyy 'alle' HH:mm:ss" }}
+        </p>
+        <mat-tab-group
+          color="accent"
+          [selectedIndex]="selectedTabIndex"
+          (selectedIndexChange)="tabChanged($event)"
+        >
           <mat-tab>
             <ng-template mat-tab-label>
               <fa-icon class="mx-2" [icon]="faIgloo"></fa-icon>
@@ -62,35 +71,43 @@ import { DataService } from 'src/app/services/data.service';
                 <div *ngIf="layer" [leafletLayer]="layer"></div>
               </div>
               <div class="image col-md-4">
-                <img src="{{infoData.image}}" alt="" />
+                <img src="{{ infoData.image }}" alt="" />
               </div>
             </div>
           </mat-tab>
-<!--           <mat-tab>
+          <!--           <mat-tab>
             <ng-template mat-tab-label>
               <fa-icon class="mx-2" [icon]="faTemperatureLow"></fa-icon>
               DATI
             </ng-template>
           </mat-tab> -->
-          <mat-tab *ngIf="infoData.mac">
+          <mat-tab>
             <ng-template mat-tab-label>
               <fa-icon class="mx-2" [icon]="faChartLine"></fa-icon>
               STORICO
             </ng-template>
             <div class="my-3 row inserted">
-            <div class="my-3">
-              <app-chart class="chart" *ngIf="tableData" [height]="'60vh'" [data]="tableData"></app-chart>
-            </div>
-            <div class="mb-3">
-              <mat-expansion-panel>
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    Tabella osservazioni
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <app-history-table class="mb-3" *ngIf="tableData" [dataSource]="tableData"></app-history-table>
-              </mat-expansion-panel>
-            </div>
+              <div>
+                <app-chart
+                  [title]="chartTitle"
+                  class="chart my-3"
+                  *ngIf="tableData"
+                  [height]="'60vh'"
+                  [data]="tableData"
+                ></app-chart>
+              </div>
+              <div class="mb-3">
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title> Tabella osservazioni </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <app-history-table
+                    class="mb-3"
+                    *ngIf="tableData"
+                    [dataSource]="tableData"
+                  ></app-history-table>
+                </mat-expansion-panel>
+              </div>
             </div>
           </mat-tab>
           <mat-tab>
@@ -111,7 +128,7 @@ import { DataService } from 'src/app/services/data.service';
       <app-footer></app-footer>
     </div>
   `,
-  styleUrl: './station.component.scss'
+  styleUrl: './station.component.scss',
 })
 export class StationComponent implements OnInit, OnDestroy {
   metrics!: Metric[];
@@ -128,8 +145,13 @@ export class StationComponent implements OnInit, OnDestroy {
   selectedTabIndex!: number;
 
   deviceId!: any;
+  chartTitle!: string;
 
-  constructor(private deviceService: DeviceService, private dataService: DataService, private route: ActivatedRoute) { }
+  constructor(
+    private deviceService: DeviceService,
+    private dataService: DataService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.getTab();
@@ -144,9 +166,10 @@ export class StationComponent implements OnInit, OnDestroy {
   private getData(id: string): void {
     this.deviceService.getDeviceById(id).subscribe((resp: any) => {
       this.infoData = resp;
+      this.getDeviceInfo(id);
+      this.getHistoryData(id);
+      this.chartTitle = this.infoData.mac ? 'Ultime 24h' : 'Oggi';
     });
-    this.getDeviceInfo(id);
-    this.getHistoryData(id);
   }
 
   tabChanged(event: any) {
@@ -156,7 +179,8 @@ export class StationComponent implements OnInit, OnDestroy {
 
   getTab() {
     const savedTabIndex = localStorage.getItem('selectedTabIndex');
-    this.selectedTabIndex = savedTabIndex != null ? parseInt(savedTabIndex, 10) : 0;
+    this.selectedTabIndex =
+      savedTabIndex != null ? parseInt(savedTabIndex, 10) : 0;
   }
 
   private getDeviceInfo(id: string) {
@@ -169,16 +193,7 @@ export class StationComponent implements OnInit, OnDestroy {
 
   private getHistoryData(id: string) {
     this.dataService.getDailyHistory(id).subscribe((data: any) => {
-      this.tableData = data.temperature.data.map((entry: any) => ({
-        time: entry.time * 1000,
-        temperature: entry.value,
-        pressure: data.pressure.data.find((p: any) => p.time === entry.time)
-          .value,
-        humidity: data.humidity.data.find((p: any) => p.time === entry.time)
-          .value,
-        windSpeed: data.windSpeed.data.find((w: any) => w.time === entry.time)
-          .value,
-      }));
+      this.tableData = data.observations;
     });
   }
 
@@ -187,7 +202,7 @@ export class StationComponent implements OnInit, OnDestroy {
       layers: [
         tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 15,
-          attribution: 'MeteoMarso'
+          attribution: 'MeteoMarso',
         }),
       ],
       zoom: 12,
@@ -196,10 +211,7 @@ export class StationComponent implements OnInit, OnDestroy {
 
     this.layer = circleMarker([latitude, longitude], { radius: 20 });
     setTimeout(() => {
-      window.dispatchEvent(
-        new Event('resize')
-      );
+      window.dispatchEvent(new Event('resize'));
     }, 200);
   }
-
 }
