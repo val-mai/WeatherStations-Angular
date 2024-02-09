@@ -95,6 +95,12 @@ import { WindChartComponent } from 'src/app/components/wind-chart/wind-chart.com
                   [height]="'60vh'"
                   [data]="tableData"
                 ></app-chart>
+                <!--                 <app-wind-chart
+                  *ngIf="tableData"
+                  [height]="'60vh'"
+                  [data]="tableData"
+                >
+                </app-wind-chart> -->
               </div>
               <div class="mb-3">
                 <mat-expansion-panel>

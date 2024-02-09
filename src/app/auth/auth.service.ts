@@ -32,7 +32,7 @@ export class AuthService {
     if (json) {
       const user = JSON.parse(json);
       if (this.helper.isTokenExpired(user.token)) {
-        this.router.navigate(['/login']);
+        this.logout();
         return
       } else {
         this.autSubject.next(user);

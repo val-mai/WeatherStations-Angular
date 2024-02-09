@@ -4,9 +4,11 @@ import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import HC_exporting from 'highcharts/modules/exporting';
 import windbarb from 'highcharts/modules/windbarb';
+import theme from 'highcharts/themes/grid-light';
 
 HC_exporting(Highcharts);
 windbarb(Highcharts);
+theme(Highcharts);
 
 @Component({
   selector: 'app-chart',
@@ -33,25 +35,18 @@ export class ChartComponent implements OnInit {
   @Input() data = [];
   @Input() height: string = '400px';
 
-  filterData(data: number[], numberOfPointsToShow: number) {
-    const step = Math.ceil(data.length / numberOfPointsToShow);
-    const filteredData = [];
-    for (let i = 0; i < data.length; i += step) {
-      filteredData.push(data[i]);
-    }
-    return filteredData;
-  }
-
   ngOnInit(): void {
     const temperatureData: any[] = [];
     const pressureData: any[] = [];
     const windData: any[] = [];
-    this.data.forEach((element: any) => {
+    this.data.forEach((element: any, i: number) => {
       const adjustedTimestamp = new Date(element.time * 1000).getTime();
       temperatureData.push([adjustedTimestamp, element.temperature]);
       pressureData.push([adjustedTimestamp, element.pressure]);
       const speed = Math.round((element.windGust * 1000) / 3600);
-      windData.push([adjustedTimestamp, speed, element.windDirection]);
+      if (i % 12 === 0) {
+        windData.push([adjustedTimestamp, speed, element.windDirection]);
+      }
     });
     this.chartOptions = {
       title: {
@@ -69,15 +64,22 @@ export class ChartComponent implements OnInit {
       yAxis: [
         {
           title: {
-            text: 'Temperatura',
+            text: null,
+          },
+          labels: {
+            format: '{value}°',
+            style: {
+              fontSize: '10px',
+            },
+            x: -3,
           },
         },
         {
           title: {
-            text: 'Pressione',
+            text: '',
           },
           labels: {
-            format: '{value} hPa',
+            enabled: false,
           },
           opposite: true,
         },
@@ -119,7 +121,7 @@ export class ChartComponent implements OnInit {
         },
         {
           name: 'Vento',
-          data: this.filterData(windData, 24),
+          data: windData,
           type: 'windbarb',
           tooltip: {
             valueSuffix: ' m/s',

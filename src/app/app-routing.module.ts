@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './pages/home/home.component';
-import { StationComponent } from './pages/station/station.component';
-import { MapPageComponent } from './pages/map-page/map-page.component';
-import { AdminComponent } from './pages/admin/admin.component';
 import { environment } from 'src/app/environments/environment';
 import { AuthGuard } from './auth/auth.guard';
 import { LoginComponent } from './auth/login/login.component';
+import { AdminComponent } from './pages/admin/admin.component';
+import { HomeComponent } from './pages/home/home.component';
+import { MapPageComponent } from './pages/map-page/map-page.component';
+import { StationComponent } from './pages/station/station.component';
 
 let routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -15,7 +15,7 @@ let routes: Routes = [
   { path: 'stations/:id', component: StationComponent },
   { path: 'login', component: LoginComponent },
   {
-    path: '**',
+    path: '',
     redirectTo: '/home',
     pathMatch: 'full'
   }
