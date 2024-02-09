@@ -4,9 +4,11 @@ import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import windbarb from 'highcharts/modules/windbarb';
 import HC_exporting from 'highcharts/modules/exporting';
+import theme from 'highcharts/themes/grid-light';
 
 HC_exporting(Highcharts);
 windbarb(Highcharts);
+theme(Highcharts);
 
 @Component({
   selector: 'app-wind-chart',
@@ -42,11 +44,9 @@ export class WindChartComponent implements OnInit {
   ngOnInit(): void {
     const windSpeed: any[] = [];
     const windDirection: any[] = [];
-    const timeZoneOffset = 3600;
+    console.log(this.data);
     this.data.forEach((element: any) => {
-      const adjustedTimestamp = new Date(
-        (element.time + timeZoneOffset) * 1000
-      ).getTime();
+      const adjustedTimestamp = new Date(element.time * 1000).getTime();
       windSpeed.push([adjustedTimestamp, element.windGust]);
       const speed = Math.round((element.windGust * 1000) / 3600);
       windDirection.push([adjustedTimestamp, speed, element.windDirection]);
@@ -62,10 +62,14 @@ export class WindChartComponent implements OnInit {
       yAxis: [
         {
           title: {
-            text: 'Velocità del vento',
+            text: null,
           },
           labels: {
             format: '{value} km/h',
+            style: {
+              fontSize: '10px',
+            },
+            x: -3,
           },
         },
       ],
@@ -77,7 +81,7 @@ export class WindChartComponent implements OnInit {
       },
       series: [
         {
-          name: 'Velocità',
+          name: 'Raffica',
           data: windSpeed,
           type: 'column',
           tooltip: {
