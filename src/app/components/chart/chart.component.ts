@@ -4,9 +4,11 @@ import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import HC_exporting from 'highcharts/modules/exporting';
 import windbarb from 'highcharts/modules/windbarb';
+import theme from 'highcharts/themes/grid-light';
 
 HC_exporting(Highcharts);
 windbarb(Highcharts);
+theme(Highcharts);
 
 @Component({
   selector: 'app-chart',
