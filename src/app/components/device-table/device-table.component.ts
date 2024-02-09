@@ -16,6 +16,7 @@ import {
 import { DeviceModalComponent } from '../device-modal/device-modal.component';
 import { DeviceService } from 'src/app/services/device.service';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   ConfirmDialogModel,
   ConfirmModalComponent,
@@ -33,6 +34,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
     RouterModule,
     MatMenuModule,
     MatIconModule,
+    MatTooltipModule,
   ],
   template: `
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -63,7 +65,11 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
       <!-- Status Column -->
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef>Status</th>
-        <td mat-cell *matCellDef="let row">
+        <td
+          mat-cell
+          *matCellDef="let row"
+          matTooltip="{{ getLastUpdate(row.lastUpdate) }}"
+        >
           @if (row.online) {
           <fa-icon
             size="xl"
@@ -209,5 +215,10 @@ export class DeviceTableComponent {
       .subscribe(() => {
         this.entryModified.emit();
       });
+  }
+
+  getLastUpdate(timestamp: number): string {
+    const date = new Date(timestamp * 1000).toLocaleString();
+    return `Ultimo aggiornamento:${date}`;
   }
 }

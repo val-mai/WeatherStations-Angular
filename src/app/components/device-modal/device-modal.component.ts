@@ -141,6 +141,7 @@ export class DeviceModalComponent implements OnInit {
       region: ['', Validators.required],
       dateZoneId: [''],
       createTime: [''],
+      lastUpdate: [''],
       elevation: ['', Validators.required],
       latitude: ['', Validators.required],
       longitude: [Validators.required],
