@@ -3,8 +3,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import HC_exporting from 'highcharts/modules/exporting';
+import windbarb from 'highcharts/modules/windbarb';
 
 HC_exporting(Highcharts);
+windbarb(Highcharts);
 
 @Component({
   selector: 'app-chart',
@@ -27,22 +29,33 @@ export class ChartComponent implements OnInit {
   Highcharts = Highcharts;
   chartOptions = {};
 
+  @Input() title!: string;
   @Input() data = [];
   @Input() height: string = '400px';
+
+  filterData(data: number[], numberOfPointsToShow: number) {
+    const step = Math.ceil(data.length / numberOfPointsToShow);
+    const filteredData = [];
+    for (let i = 0; i < data.length; i += step) {
+      filteredData.push(data[i]);
+    }
+    return filteredData;
+  }
 
   ngOnInit(): void {
     const temperatureData: any[] = [];
     const pressureData: any[] = [];
-    const timeZoneOffset = 60;
+    const windData: any[] = [];
     this.data.forEach((element: any) => {
-      const adjustedTimestamp =
-        new Date(element.time).getTime() + timeZoneOffset * 60000;
+      const adjustedTimestamp = new Date(element.time * 1000).getTime();
       temperatureData.push([adjustedTimestamp, element.temperature]);
       pressureData.push([adjustedTimestamp, element.pressure]);
+      const speed = Math.round((element.windGust * 1000) / 3600);
+      windData.push([adjustedTimestamp, speed, element.windDirection]);
     });
     this.chartOptions = {
       title: {
-        text: 'Ultime 24h',
+        text: this.title,
       },
       chart: {
         alignThresholds: true,
@@ -50,6 +63,7 @@ export class ChartComponent implements OnInit {
       },
       xAxis: {
         type: 'datetime',
+        offset: 40,
         gapGridLineWidth: 0,
       },
       yAxis: [
@@ -67,15 +81,6 @@ export class ChartComponent implements OnInit {
           },
           opposite: true,
         },
-        /*         {
-          title: {
-            text: 'Velocità del vento',
-          },
-          labels: {
-            format: '{value} km/h',
-          },
-          opposite: true,
-        }, */
       ],
       credits: {
         text: 'MeteoMarso',
@@ -110,6 +115,14 @@ export class ChartComponent implements OnInit {
           dashStyle: 'shortdot',
           tooltip: {
             valueSuffix: ' hPa',
+          },
+        },
+        {
+          name: 'Vento',
+          data: this.filterData(windData, 24),
+          type: 'windbarb',
+          tooltip: {
+            valueSuffix: ' m/s',
           },
         },
       ],

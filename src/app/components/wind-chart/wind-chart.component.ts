@@ -36,19 +36,19 @@ export class WindChartComponent implements OnInit {
     for (let i = 0; i < data.length; i += step) {
       filteredData.push(data[i]);
     }
-
     return filteredData;
   }
 
   ngOnInit(): void {
     const windSpeed: any[] = [];
     const windDirection: any[] = [];
-    const timeZoneOffset = 60;
+    const timeZoneOffset = 3600;
     this.data.forEach((element: any) => {
-      const adjustedTimestamp =
-        new Date(element.time).getTime() + timeZoneOffset * 60000;
-      windSpeed.push([adjustedTimestamp, element.windSpeed]);
-      const speed = Math.round((element.windSpeed * 1000) / 3600);
+      const adjustedTimestamp = new Date(
+        (element.time + timeZoneOffset) * 1000
+      ).getTime();
+      windSpeed.push([adjustedTimestamp, element.windGust]);
+      const speed = Math.round((element.windGust * 1000) / 3600);
       windDirection.push([adjustedTimestamp, speed, element.windDirection]);
     });
     this.chartOptions = {
@@ -79,7 +79,7 @@ export class WindChartComponent implements OnInit {
         {
           name: 'Velocità',
           data: windSpeed,
-          type: 'spline',
+          type: 'column',
           tooltip: {
             valueSuffix: ' km/h',
           },

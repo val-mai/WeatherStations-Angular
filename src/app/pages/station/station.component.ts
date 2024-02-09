@@ -89,17 +89,12 @@ import { WindChartComponent } from 'src/app/components/wind-chart/wind-chart.com
             <div class="my-3 row inserted">
               <div>
                 <app-chart
+                  [title]="chartTitle"
                   class="chart my-3"
                   *ngIf="tableData"
                   [height]="'60vh'"
                   [data]="tableData"
                 ></app-chart>
-                <app-wind-chart
-                  class="chart my-3"
-                  *ngIf="tableData"
-                  [height]="'60vh'"
-                  [data]="tableData"
-                ></app-wind-chart>
               </div>
               <div class="mb-3">
                 <mat-expansion-panel>
@@ -150,6 +145,7 @@ export class StationComponent implements OnInit, OnDestroy {
   selectedTabIndex!: number;
 
   deviceId!: any;
+  chartTitle!: string;
 
   constructor(
     private deviceService: DeviceService,
@@ -172,6 +168,7 @@ export class StationComponent implements OnInit, OnDestroy {
       this.infoData = resp;
       this.getDeviceInfo(id);
       this.getHistoryData(id);
+      this.chartTitle = this.infoData.mac ? 'Ultime 24h' : 'Oggi';
     });
   }
 
@@ -196,19 +193,7 @@ export class StationComponent implements OnInit, OnDestroy {
 
   private getHistoryData(id: string) {
     this.dataService.getDailyHistory(id).subscribe((data: any) => {
-      this.tableData = data.temperature.data.map((entry: any) => ({
-        time: entry.time * 1000,
-        temperature: entry.value,
-        pressure: data.pressure.data.find((p: any) => p.time === entry.time)
-          .value,
-        humidity: data.humidity.data.find((p: any) => p.time === entry.time)
-          .value,
-        windSpeed: data.windSpeed.data.find((w: any) => w.time === entry.time)
-          .value,
-        windDirection: data.windDirection.data.find(
-          (w: any) => w.time === entry.time
-        ).value,
-      }));
+      this.tableData = data.observations;
     });
   }
 
