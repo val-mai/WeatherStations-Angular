@@ -14,7 +14,6 @@ import {
 import { circleMarker, latLng, tileLayer } from 'leaflet';
 import { HumidityCardComponent } from 'src/app/components/cards/humidity-card/humidity-card.component';
 import { MetricCardComponent } from 'src/app/components/cards/metric-card/metric-card.component';
-import { PressureCardComponent } from 'src/app/components/cards/pressure-card/pressure-card.component';
 import { VariousCardComponent } from 'src/app/components/cards/various-card/various-card.component';
 import { ChartComponent } from 'src/app/components/chart/chart.component';
 import { FooterComponent } from 'src/app/components/footer/footer.component';
@@ -45,7 +44,6 @@ import { DeviceService } from 'src/app/services/device.service';
     MatExpansionModule,
     WindChartComponent,
     MetricCardComponent,
-    PressureCardComponent,
     VariousCardComponent,
     HumidityCardComponent
   ],
@@ -93,7 +91,11 @@ import { DeviceService } from 'src/app/services/device.service';
               ></app-chart>
             </div>
             <div class="divider">WEBCAM</div>
-            <img class="webcam mt-2 mb-4" src="https://www.meteoregioneabruzzo.it/webcam-roccacerro/webcam.php" alt="">
+            @if (infoData.webcam) {
+              <img class="webcam mt-2 mb-4" src="{{infoData.webcam}}" alt="">
+            } @else {
+              <p class="mt-2 mb-4">Disponibile a breve</p>
+            }
           </mat-tab>
           <mat-tab>
             <ng-template mat-tab-label>

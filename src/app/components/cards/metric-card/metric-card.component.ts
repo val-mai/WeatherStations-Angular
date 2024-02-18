@@ -15,7 +15,6 @@ import { Metric } from 'src/app/interfaces/metric';
       <mat-card-header class="pb-3">
         <div class="card-body">
           <img style="width: 60px;" src="../../assets/celsius.png" alt="" />
-          <!-- <fa-icon [icon]="faTemperature" size="5x"></fa-icon> -->
           <div class="box">
             <h4>TEMPERATURA</h4>
             <div class="main-data">
@@ -28,7 +27,7 @@ import { Metric } from 'src/app/interfaces/metric';
             </div>
             <div class="sub-data">
               <div style="color: blue;">
-                <h3>MIN</h3>
+                <h3><b>MIN</b></h3>
                 @if (min) {
                 <p matTooltip="{{ getDate(min.time) }}">{{ min.value }} °C</p>
                 } @else {
@@ -36,7 +35,7 @@ import { Metric } from 'src/app/interfaces/metric';
                 }
               </div>
               <div style="color: red;">
-                <h3>MAX</h3>
+                <h3><b>MAX</b></h3>
                 @if (max) {
                 <p matTooltip="{{ getDate(max.time) }}">{{ max.value }} °C</p>
                 } @else {
