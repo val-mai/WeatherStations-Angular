@@ -1,22 +1,58 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import HC_exporting from 'highcharts/modules/exporting';
 import windbarb from 'highcharts/modules/windbarb';
-import theme from 'highcharts/themes/grid-light';
+import { DataService } from 'src/app/services/data.service';
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 HC_exporting(Highcharts);
 windbarb(Highcharts);
-theme(Highcharts);
+/* theme(Highcharts); */
 
 @Component({
   selector: 'app-chart',
   standalone: true,
-  imports: [CommonModule, HighchartsChartModule],
+  imports: [
+    CommonModule,
+    HighchartsChartModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatNativeDateModule,
+    SpinnerComponent,
+  ],
   template: `
+    <!--  <mat-form-field>
+      <mat-label>Enter a date range</mat-label>
+      <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+        <input matStartDate formControlName="start" placeholder="Start date" />
+        <input
+          matEndDate
+          formControlName="end"
+          placeholder="End date"
+          (dateChange)="selectRange()"
+        />
+      </mat-date-range-input>
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field> -->
+    @if(render) {
     <highcharts-chart
-      *ngIf="data"
       [Highcharts]="Highcharts"
       [options]="chartOptions"
       style="width: 100%; height: {{
@@ -24,33 +60,78 @@ theme(Highcharts);
       }}; display: block; border-radius: 10px"
     >
     </highcharts-chart>
+    } @else {
+    <app-spinner></app-spinner>
+    }
   `,
   styleUrl: './chart.component.scss',
 })
 export class ChartComponent implements OnInit {
   Highcharts = Highcharts;
   chartOptions = {};
+  render: boolean = true;
 
   @Input() title!: string;
-  @Input() data = [];
+  @Input() deviceId!: string;
+  @Input() data: any[] = [];
   @Input() height: string = '400px';
 
+  range = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl(),
+  });
+
+  temperatureData: any[] = [];
+  pressureData: any[] = [];
+  windData: any[] = [];
+
+  constructor(private dataService: DataService) {}
+
+  selectRange() {
+    this.render = false;
+    const startDateControl = this.range.get('start');
+    const startDate = new Date(startDateControl?.value).toISOString();
+    const endDateControl = this.range.get('end');
+    const endDate = new Date(endDateControl?.value).toISOString();
+    this.dataService
+      .getHistory(this.deviceId, startDate, endDate)
+      .subscribe((data: any) => {
+        this.title =
+          this.range.value.start.toLocaleDateString() +
+          ' - ' +
+          this.range.value.end.toLocaleDateString();
+        this.temperatureData = [];
+        this.pressureData = [];
+        this.windData = [];
+        this.initChart(data.observations);
+      });
+  }
+
+  filterData(data: number[], numberOfPointsToShow: number) {
+    const step = Math.ceil(data.length / numberOfPointsToShow);
+    const filteredData = [];
+    for (let i = 0; i < data.length; i += step) {
+      filteredData.push(data[i]);
+    }
+    return filteredData;
+  }
+
   ngOnInit(): void {
-    const temperatureData: any[] = [];
-    const pressureData: any[] = [];
-    const windData: any[] = [];
-    this.data.forEach((element: any, i: number) => {
+    this.initChart(this.data);
+  }
+
+  private initChart(weatherData: any[]) {
+    weatherData.forEach((element: any, i: number) => {
       const adjustedTimestamp = new Date(element.time * 1000).getTime();
-      temperatureData.push([adjustedTimestamp, element.temperature]);
-      pressureData.push([adjustedTimestamp, element.pressure]);
+      this.temperatureData.push([adjustedTimestamp, element.temperature]);
+      this.pressureData.push([adjustedTimestamp, element.pressure]);
       const speed = Math.round((element.windGust * 1000) / 3600);
-      if (i % 12 === 0) {
-        windData.push([adjustedTimestamp, speed, element.windDirection]);
-      }
+      this.windData.push([adjustedTimestamp, speed, element.windDirection]);
     });
+    this.render = true;
     this.chartOptions = {
       title: {
-        text: this.title,
+        text: null,
       },
       chart: {
         alignThresholds: true,
@@ -76,7 +157,7 @@ export class ChartComponent implements OnInit {
         },
         {
           title: {
-            text: '',
+            text: null,
           },
           labels: {
             enabled: false,
@@ -96,7 +177,7 @@ export class ChartComponent implements OnInit {
       series: [
         {
           name: 'Temperatura',
-          data: temperatureData,
+          data: this.temperatureData,
           type: 'area',
           yAxis: 0,
           marker: {
@@ -110,7 +191,7 @@ export class ChartComponent implements OnInit {
           name: 'Pressione',
           type: 'spline',
           yAxis: 1,
-          data: pressureData,
+          data: this.pressureData,
           marker: {
             enabled: false,
           },
@@ -121,7 +202,7 @@ export class ChartComponent implements OnInit {
         },
         {
           name: 'Vento',
-          data: windData,
+          data: this.filterData(this.windData, 24),
           type: 'windbarb',
           tooltip: {
             valueSuffix: ' m/s',

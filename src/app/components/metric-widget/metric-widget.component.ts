@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SizeProp } from '@fortawesome/fontawesome-svg-core';
@@ -17,7 +17,7 @@ import { faCloudRain, faDroplet, faGaugeHigh, faTemperatureHalf, faWind } from '
       <mat-card-title>
         <fa-icon [icon]="faTemperatureHalf" size="lg"></fa-icon>
         <h3>Temperatura:</h3>
-        <p>{{metric.temperature.value}} <span>°C</span></p>
+        <b><p style="color: {{ this.color }}">{{metric.temperature.value}} <span>°C</span></p></b>
       </mat-card-title>
       <mat-card-title>
         <fa-icon [icon]="faGaugeHigh" size="lg"></fa-icon>
@@ -44,14 +44,24 @@ import { faCloudRain, faDroplet, faGaugeHigh, faTemperatureHalf, faWind } from '
   `,
   styleUrl: './metric-widget.component.scss'
 })
-export class MetricWidgetComponent {
+export class MetricWidgetComponent implements OnInit {
 
   faTemperatureHalf = faTemperatureHalf;
   faGaugeHigh = faGaugeHigh;
   faDroplet = faDroplet;
   faCloudRain = faCloudRain;
   faWind = faWind;
+  color!:string;
 
   @Input() metric!: any
 
+  ngOnInit(): void {
+    this.getColor();
+  }
+
+  getColor() {
+    const normalizedTemperature = (this.metric.temperature.value + 10) / 50;
+    const hue = (1 - normalizedTemperature) * 240;
+    this.color = `hsl(${hue}, 100%, 50%)`;
+  }
 }

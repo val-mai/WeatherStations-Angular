@@ -80,7 +80,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
           <fa-icon
             size="xl"
             [icon]="faCircleExclamation"
-            style="color: yellow"
+            style="color: red"
           ></fa-icon>
           }
         </td>
@@ -219,6 +219,7 @@ export class DeviceTableComponent {
 
   getLastUpdate(timestamp: number): string {
     const date = new Date(timestamp * 1000).toLocaleString();
-    return `Ultimo aggiornamento:${date}`;
+    return `Ultimo aggiornamento:
+    ${date}`;
   }
 }
