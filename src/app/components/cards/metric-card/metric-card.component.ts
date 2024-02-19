@@ -14,7 +14,7 @@ import { Metric } from 'src/app/interfaces/metric';
     <mat-card class="metric-card">
       <mat-card-header class="pb-3">
         <div class="card-body">
-          <img style="width: 60px;" src="../../assets/celsius.png" alt="" />
+          <img style="width: 60px;" src="../../assets/temperature.png" alt="" />
           <div class="box">
             <h4>TEMPERATURA</h4>
             <div class="main-data">

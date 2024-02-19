@@ -18,7 +18,6 @@ import { SpinnerComponent } from '../spinner/spinner.component';
 
 HC_exporting(Highcharts);
 windbarb(Highcharts);
-/* theme(Highcharts); */
 
 @Component({
   selector: 'app-chart',

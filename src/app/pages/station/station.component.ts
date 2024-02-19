@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, type OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, type OnInit } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
@@ -14,6 +14,8 @@ import {
 import { circleMarker, latLng, tileLayer } from 'leaflet';
 import { HumidityCardComponent } from 'src/app/components/cards/humidity-card/humidity-card.component';
 import { MetricCardComponent } from 'src/app/components/cards/metric-card/metric-card.component';
+import { RainCardComponent } from 'src/app/components/cards/rain-card/rain-card.component';
+import { RainLevelsCardComponent } from 'src/app/components/cards/rain-levels-card/rain-levels-card.component';
 import { VariousCardComponent } from 'src/app/components/cards/various-card/various-card.component';
 import { ChartComponent } from 'src/app/components/chart/chart.component';
 import { FooterComponent } from 'src/app/components/footer/footer.component';
@@ -45,7 +47,9 @@ import { DeviceService } from 'src/app/services/device.service';
     WindChartComponent,
     MetricCardComponent,
     VariousCardComponent,
-    HumidityCardComponent
+    HumidityCardComponent,
+    RainCardComponent,
+    RainLevelsCardComponent
   ],
   template: `
     <div class="main mat-app-background">
@@ -67,7 +71,7 @@ import { DeviceService } from 'src/app/services/device.service';
               <fa-icon class="mx-2" [icon]="faIgloo"></fa-icon>
               HOME
             </ng-template>
-            <div class="row inserted mt-2 mb-4 g-2">
+            <div class="row inserted half-h mt-2 mb-4 g-2">
               <app-metric-widget
                 class="col-md-4"
                 [metric]="metrics"
@@ -92,9 +96,9 @@ import { DeviceService } from 'src/app/services/device.service';
             </div>
             <div class="divider">WEBCAM</div>
             @if (infoData.webcam) {
-              <img class="webcam mt-2 mb-4" src="{{infoData.webcam}}" alt="">
+            <img class="webcam mt-2 mb-4" src="{{ infoData.webcam }}" alt="" />
             } @else {
-              <p class="mt-2 mb-4">Disponibile a breve</p>
+            <p class="mt-2 mb-4">Disponibile a breve</p>
             }
           </mat-tab>
           <mat-tab>
@@ -126,6 +130,18 @@ import { DeviceService } from 'src/app/services/device.service';
                   [feelsLike]="metrics?.feelsLike?.value"
                 >
                 </app-various-card>
+              </div>
+            </div>
+            <div class="divider mt-2">DATI PLUVIOMETRO</div>
+            <div class="row inserted mt-2 mb-2 g-2">
+              <div class="col-md-6 my-2">
+                <app-rain-card
+                  [rainFall]="metrics?.rainFall.value"
+                  [rainRate]="metrics?.rainRate.value"
+                ></app-rain-card>
+              </div>
+              <div class="col-md-6 my-2">
+                <app-rain-levels-card></app-rain-levels-card>
               </div>
             </div>
           </mat-tab>
@@ -185,7 +201,7 @@ import { DeviceService } from 'src/app/services/device.service';
   `,
   styleUrl: './station.component.scss',
 })
-export class StationComponent implements OnInit, OnDestroy {
+export class StationComponent implements OnInit, OnDestroy, AfterViewInit {
   metrics!: any;
   min!: any;
   max!: any;
@@ -213,6 +229,9 @@ export class StationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getTab();
     this.deviceId = this.route.snapshot.paramMap.get('id');
+  }
+
+  ngAfterViewInit(): void {
     this.getData(this.deviceId);
   }
 

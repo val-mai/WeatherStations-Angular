@@ -3,14 +3,14 @@
   padding: 5px;
   text-align: center;
   border-radius: 10px;
-  height: 175px;
+  height: 215px;
 }
 
 .card-body {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  min-height: 132px;
+  min-height: 180px;
 }
 
 mat-card-title{
@@ -33,7 +33,7 @@ h4{
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  min-height: 132px;
+  min-height: 180px;
 }
 
 .main-data {
