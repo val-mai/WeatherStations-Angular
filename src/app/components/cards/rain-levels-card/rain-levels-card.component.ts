@@ -13,10 +13,13 @@ import { MatCardModule } from '@angular/material/card';
           <img style="width: 60px;" src="../../assets/rain-sensor.png" alt="" />
           <div class="box">
             <h4>LIVELLI PIOGGIA</h4>
-            <div>
-              <p>Evento: <b>{{event}}</b> mm</p>
-              <p>Oraria: <b>{{hourly}}</b> mm</p>
-              <p>Settimanale: <b>{{weekly}}</b> mm</p>
+            <div class="row">
+              <div class="col-md">
+                <p>Evento: <b>{{event}}</b> mm</p>
+                <p>Oraria: <b>{{hourly}}</b> mm</p>
+                <p>Settimanale: <b>{{weekly}}</b> mm</p>
+                <p>Mensile: <b>{{monthly}}</b> mm</p>
+              </div>
             </div>
           </div>
         </div>
@@ -30,5 +33,7 @@ export class RainLevelsCardComponent {
   @Input() event: any = "-";
   @Input() hourly: any = "-";
   @Input() weekly: any = "-";
+  @Input() monthly: any = "-";
+  @Input() yearly: any = "-";
 
 }

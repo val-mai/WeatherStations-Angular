@@ -141,7 +141,12 @@ import { DeviceService } from 'src/app/services/device.service';
                 ></app-rain-card>
               </div>
               <div class="col-md-6 my-2">
-                <app-rain-levels-card></app-rain-levels-card>
+                <app-rain-levels-card [event]="metrics?.rainEvent.value"
+                [hourly]="metrics?.rainHour.value"
+                [weekly]="metrics?.rainWeek.value"
+                [monthly]="metrics?.rainMonth.value"
+                [yearly]="metrics?.rainYear.value"
+                ></app-rain-levels-card>
               </div>
             </div>
           </mat-tab>

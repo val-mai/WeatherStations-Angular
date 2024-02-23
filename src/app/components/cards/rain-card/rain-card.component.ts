@@ -15,8 +15,8 @@ import { GaugeKpiChartComponent } from '../../gauge-kpi-chart/gauge-kpi-chart.co
           <img style="width: 60px;" src="../../assets/heavy-rain.png" alt="" />
           <div class="box">
             <h4>PIOGGIA ODIERNA</h4>
-            <div class="main-data">
-              <div class="main-data mx-5">
+            <div class="main-data row">
+              <div class="main-data mx-5 col-md">
                 <mat-card-title class="mx-1">
                   <h3>
                     {{ rainFall }}
@@ -24,7 +24,9 @@ import { GaugeKpiChartComponent } from '../../gauge-kpi-chart/gauge-kpi-chart.co
                 </mat-card-title>
                 <mat-card-subtitle>mm</mat-card-subtitle>
               </div>
-              <app-gauge-kpi-chart [data]="rainRate"></app-gauge-kpi-chart>
+              <div class="col-md">
+                <app-gauge-kpi-chart [data]="rainRate"></app-gauge-kpi-chart>
+              </div>
             </div>
           </div>
         </div>
