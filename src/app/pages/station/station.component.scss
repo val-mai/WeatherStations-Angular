@@ -16,9 +16,29 @@
   min-height: 100vh;
 }
 
+.divider{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 25px;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  background-color: #00897b;
+  background-color: #5276b8;
+}
+
 .inserted {
   display: flex;
   margin: 0;
   justify-content: space-around;
-  min-height: 67vh;
+}
+
+.half-h{
+  min-height: 50vh;
+}
+
+.webcam {
+  width: 100%;
+  border-radius: 10px;
 }

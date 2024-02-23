@@ -32,7 +32,7 @@ export class AuthService {
     if (json) {
       const user = JSON.parse(json);
       if (this.helper.isTokenExpired(user.token)) {
-        this.logout();
+        this.removeStoredUser();
         return
       } else {
         this.autSubject.next(user);
@@ -66,8 +66,12 @@ export class AuthService {
   }
 
   logout() {
+    this.removeStoredUser();
+    this.router.navigate(['/home']);
+  }
+
+  removeStoredUser() {
     this.autSubject.next(null);
     localStorage.removeItem(`${environment.localStorage}`);
-    this.router.navigate(['/home']);
   }
 }

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, type OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, type OnInit } from '@angular/core';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -11,6 +12,11 @@ import {
   faTemperatureLow,
 } from '@fortawesome/free-solid-svg-icons';
 import { circleMarker, latLng, tileLayer } from 'leaflet';
+import { HumidityCardComponent } from 'src/app/components/cards/humidity-card/humidity-card.component';
+import { MetricCardComponent } from 'src/app/components/cards/metric-card/metric-card.component';
+import { RainCardComponent } from 'src/app/components/cards/rain-card/rain-card.component';
+import { RainLevelsCardComponent } from 'src/app/components/cards/rain-levels-card/rain-levels-card.component';
+import { VariousCardComponent } from 'src/app/components/cards/various-card/various-card.component';
 import { ChartComponent } from 'src/app/components/chart/chart.component';
 import { FooterComponent } from 'src/app/components/footer/footer.component';
 import { HistoryTableComponent } from 'src/app/components/history-table/history-table.component';
@@ -18,11 +24,9 @@ import { MetricWidgetComponent } from 'src/app/components/metric-widget/metric-w
 import { SpinnerComponent } from 'src/app/components/spinner/spinner.component';
 import { StationInfoComponent } from 'src/app/components/station-info/station-info.component';
 import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
-import { Metric } from 'src/app/interfaces/metric';
-import { DeviceService } from 'src/app/services/device.service';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { DataService } from 'src/app/services/data.service';
 import { WindChartComponent } from 'src/app/components/wind-chart/wind-chart.component';
+import { DataService } from 'src/app/services/data.service';
+import { DeviceService } from 'src/app/services/device.service';
 
 @Component({
   selector: 'app-station',
@@ -41,6 +45,11 @@ import { WindChartComponent } from 'src/app/components/wind-chart/wind-chart.com
     ChartComponent,
     MatExpansionModule,
     WindChartComponent,
+    MetricCardComponent,
+    VariousCardComponent,
+    HumidityCardComponent,
+    RainCardComponent,
+    RainLevelsCardComponent
   ],
   template: `
     <div class="main mat-app-background">
@@ -62,7 +71,7 @@ import { WindChartComponent } from 'src/app/components/wind-chart/wind-chart.com
               <fa-icon class="mx-2" [icon]="faIgloo"></fa-icon>
               HOME
             </ng-template>
-            <div class="row inserted mt-2 mb-4 g-2">
+            <div class="row inserted half-h mt-2 mb-4 g-2">
               <app-metric-widget
                 class="col-md-4"
                 [metric]="metrics"
@@ -74,13 +83,73 @@ import { WindChartComponent } from 'src/app/components/wind-chart/wind-chart.com
                 <img src="{{ infoData.image }}" alt="" />
               </div>
             </div>
+            <div class="divider">GRAFICO GENERALE</div>
+            <div class="row inserted mt-2 mb-2 g-2">
+              <app-chart
+                [title]="chartTitle"
+                [deviceId]="deviceId"
+                class="chart my-3"
+                *ngIf="tableData"
+                [height]="'60vh'"
+                [data]="tableData"
+              ></app-chart>
+            </div>
+            <div class="divider">WEBCAM</div>
+            @if (infoData.webcam) {
+            <img class="webcam mt-2 mb-4" src="{{ infoData.webcam }}" alt="" />
+            } @else {
+            <p class="mt-2 mb-4">Disponibile a breve</p>
+            }
           </mat-tab>
-          <!--           <mat-tab>
+          <mat-tab>
             <ng-template mat-tab-label>
               <fa-icon class="mx-2" [icon]="faTemperatureLow"></fa-icon>
-              DATI
+              DATI COMPLETI
             </ng-template>
-          </mat-tab> -->
+            <div class="divider mt-2">DATI TERMOIGROMETRO</div>
+            <div class="row inserted mt-2 mb-2 g-2">
+              <div class="col-md-4 my-2">
+                <app-metric-card
+                  [temperature]="metrics?.temperature.value"
+                  [min]="min?.temperature"
+                  [max]="max?.temperature"
+                >
+                </app-metric-card>
+              </div>
+              <div class="col-md-4 my-2">
+                <app-humidity-card
+                  [humidity]="metrics?.humidity.value"
+                  [min]="min?.humidity"
+                  [max]="max?.humidity"
+                >
+                </app-humidity-card>
+              </div>
+              <div class="col-md-4 my-2">
+                <app-various-card
+                  [dewPoint]="metrics?.dewPoint?.value"
+                  [feelsLike]="metrics?.feelsLike?.value"
+                >
+                </app-various-card>
+              </div>
+            </div>
+            <div class="divider mt-2">DATI PLUVIOMETRO</div>
+            <div class="row inserted mt-2 mb-2 g-2">
+              <div class="col-md-6 my-2">
+                <app-rain-card
+                  [rainFall]="metrics?.rainFall.value"
+                  [rainRate]="metrics?.rainRate.value"
+                ></app-rain-card>
+              </div>
+              <div class="col-md-6 my-2">
+                <app-rain-levels-card [event]="metrics?.rainEvent.value"
+                [hourly]="metrics?.rainHour.value"
+                [weekly]="metrics?.rainWeek.value"
+                [monthly]="metrics?.rainMonth.value"
+                [yearly]="metrics?.rainYear.value"
+                ></app-rain-levels-card>
+              </div>
+            </div>
+          </mat-tab>
           <mat-tab>
             <ng-template mat-tab-label>
               <fa-icon class="mx-2" [icon]="faChartLine"></fa-icon>
@@ -90,6 +159,7 @@ import { WindChartComponent } from 'src/app/components/wind-chart/wind-chart.com
               <div>
                 <app-chart
                   [title]="chartTitle"
+                  [deviceId]="deviceId"
                   class="chart my-3"
                   *ngIf="tableData"
                   [height]="'60vh'"
@@ -136,8 +206,10 @@ import { WindChartComponent } from 'src/app/components/wind-chart/wind-chart.com
   `,
   styleUrl: './station.component.scss',
 })
-export class StationComponent implements OnInit, OnDestroy {
-  metrics!: Metric[];
+export class StationComponent implements OnInit, OnDestroy, AfterViewInit {
+  metrics!: any;
+  min!: any;
+  max!: any;
   options!: any;
   layer!: any;
   time!: any;
@@ -162,6 +234,9 @@ export class StationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getTab();
     this.deviceId = this.route.snapshot.paramMap.get('id');
+  }
+
+  ngAfterViewInit(): void {
     this.getData(this.deviceId);
   }
 
@@ -200,6 +275,8 @@ export class StationComponent implements OnInit, OnDestroy {
   private getHistoryData(id: string) {
     this.dataService.getDailyHistory(id).subscribe((data: any) => {
       this.tableData = data.observations;
+      this.min = data.min;
+      this.max = data.max;
     });
   }
 
