@@ -147,6 +147,7 @@ export class DeviceModalComponent implements OnInit {
       longitude: [Validators.required],
       image: [''],
       stationImages: [''],
+      webcam: [''],
       stationType: [''],
       hardware: [''],
       gateway: [''],
