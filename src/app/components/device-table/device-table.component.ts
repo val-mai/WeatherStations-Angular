@@ -93,7 +93,6 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
           <button
             mat-icon-button
             [matMenuTriggerFor]="menu"
-            aria-label="Example icon-button with a menu"
           >
             <fa-icon
               size="lg"
