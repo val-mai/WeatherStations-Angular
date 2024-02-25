@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GaugeKpiChartComponent } from '../../gauge-kpi-chart/gauge-kpi-chart.component';
@@ -35,8 +35,14 @@ import { GaugeKpiChartComponent } from '../../gauge-kpi-chart/gauge-kpi-chart.co
   `,
   styleUrl: './rain-card.component.scss',
 })
-export class RainCardComponent {
+export class RainCardComponent implements OnInit{
 
-  @Input() rainFall!:any;
-  @Input() rainRate!:any;
+  @Input() rainFall:any;
+  @Input() rainRate?:any;
+
+  ngOnInit(): void {
+    this.rainFall = this.rainFall != undefined ? this.rainFall : "-";
+    this.rainRate = this.rainRate != undefined ? this.rainRate : "-";
+  }
+
 }

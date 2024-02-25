@@ -136,16 +136,16 @@ import { DeviceService } from 'src/app/services/device.service';
             <div class="row inserted mt-2 mb-2 g-2">
               <div class="col-md-6 my-2">
                 <app-rain-card
-                  [rainFall]="metrics?.rainFall.value"
-                  [rainRate]="metrics?.rainRate.value"
+                  [rainFall]="metrics?.rainFall?.value"
+                  [rainRate]="metrics?.rainRate?.value"
                 ></app-rain-card>
               </div>
               <div class="col-md-6 my-2">
-                <app-rain-levels-card [event]="metrics?.rainEvent.value"
-                [hourly]="metrics?.rainHour.value"
-                [weekly]="metrics?.rainWeek.value"
-                [monthly]="metrics?.rainMonth.value"
-                [yearly]="metrics?.rainYear.value"
+                <app-rain-levels-card [event]="metrics?.rainEvent?.value"
+                [hourly]="metrics?.rainHour?.value"
+                [weekly]="metrics?.rainWeek?.value"
+                [monthly]="metrics?.rainMonth?.value"
+                [yearly]="metrics?.rainYear?.value"
                 ></app-rain-levels-card>
               </div>
             </div>
