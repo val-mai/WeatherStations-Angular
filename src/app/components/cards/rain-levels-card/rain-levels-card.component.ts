@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
@@ -28,12 +28,20 @@ import { MatCardModule } from '@angular/material/card';
   `,
   styleUrl: './rain-levels-card.component.scss'
 })
-export class RainLevelsCardComponent {
+export class RainLevelsCardComponent implements OnInit {
 
-  @Input() event: any = "-";
-  @Input() hourly: any = "-";
-  @Input() weekly: any = "-";
-  @Input() monthly: any = "-";
-  @Input() yearly: any = "-";
+  @Input() event?: any;
+  @Input() hourly?: any;
+  @Input() weekly?: any;
+  @Input() monthly?: any;
+  @Input() yearly?: any;
+
+  ngOnInit(): void {
+    this.event = this.event != undefined ? this.event : "-";
+    this.hourly = this.hourly != undefined ? this.hourly : "-";
+    this.weekly = this.weekly != undefined ? this.weekly : "-";
+    this.monthly = this.monthly != undefined ? this.monthly : "-";
+    this.yearly = this.yearly != undefined ? this.yearly : "-";
+  }
 
 }

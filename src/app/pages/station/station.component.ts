@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnDestroy, type OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  type OnInit,
+} from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
@@ -49,7 +54,7 @@ import { DeviceService } from 'src/app/services/device.service';
     VariousCardComponent,
     HumidityCardComponent,
     RainCardComponent,
-    RainLevelsCardComponent
+    RainLevelsCardComponent,
   ],
   template: `
     <div class="main mat-app-background">
@@ -95,8 +100,8 @@ import { DeviceService } from 'src/app/services/device.service';
               ></app-chart>
             </div>
             <div class="divider">WEBCAM</div>
-            @if (infoData.webcam) {
-            <img class="webcam mt-2 mb-4" src="{{ infoData.webcam }}" alt="" />
+            @if (webcam) {
+            <img class="webcam mt-2 mb-4" src="{{ webcam }}" alt="" />
             } @else {
             <p class="mt-2 mb-4">Disponibile a breve</p>
             }
@@ -136,16 +141,17 @@ import { DeviceService } from 'src/app/services/device.service';
             <div class="row inserted mt-2 mb-2 g-2">
               <div class="col-md-6 my-2">
                 <app-rain-card
-                  [rainFall]="metrics?.rainFall.value"
-                  [rainRate]="metrics?.rainRate.value"
+                  [rainFall]="metrics?.rainFall?.value"
+                  [rainRate]="metrics?.rainRate?.value"
                 ></app-rain-card>
               </div>
               <div class="col-md-6 my-2">
-                <app-rain-levels-card [event]="metrics?.rainEvent.value"
-                [hourly]="metrics?.rainHour.value"
-                [weekly]="metrics?.rainWeek.value"
-                [monthly]="metrics?.rainMonth.value"
-                [yearly]="metrics?.rainYear.value"
+                <app-rain-levels-card
+                  [event]="metrics?.rainEvent?.value"
+                  [hourly]="metrics?.rainHour?.value"
+                  [weekly]="metrics?.rainWeek?.value"
+                  [monthly]="metrics?.rainMonth?.value"
+                  [yearly]="metrics?.rainYear?.value"
                 ></app-rain-levels-card>
               </div>
             </div>
@@ -216,6 +222,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterViewInit {
   tableData!: any;
   chartData!: any;
   infoData!: any;
+  webcam!: any;
   faIgloo = faIgloo;
   faTemperatureLow = faTemperatureLow;
   faChartLine = faChartLine;
@@ -247,6 +254,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterViewInit {
   private getData(id: string): void {
     this.deviceService.getDeviceById(id).subscribe((resp: any) => {
       this.infoData = resp;
+      this.initWebcam();
       this.getDeviceInfo(id);
       this.getHistoryData(id);
       this.chartTitle = this.infoData.mac ? 'Ultime 24h' : 'Oggi';
@@ -278,6 +286,18 @@ export class StationComponent implements OnInit, OnDestroy, AfterViewInit {
       this.min = data.min;
       this.max = data.max;
     });
+  }
+
+  initWebcam() {
+    this.webcam=null;
+    if (this.infoData.webcam.page != null) {
+      this.webcam = this.infoData.webcam.page;
+      setTimeout(() => {
+        this.webcam = null;
+        let date = Date.now();
+        this.webcam = this.infoData.webcam.url+"?"+date;
+      }, 2000);
+    }
   }
 
   initMap(latitude: number, longitude: number) {
