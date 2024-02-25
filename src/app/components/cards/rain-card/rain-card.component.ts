@@ -35,7 +35,7 @@ import { GaugeKpiChartComponent } from '../../gauge-kpi-chart/gauge-kpi-chart.co
   `,
   styleUrl: './rain-card.component.scss',
 })
-export class RainCardComponent implements OnInit{
+export class RainCardComponent implements OnInit {
 
   @Input() rainFall:any;
   @Input() rainRate?:any;
