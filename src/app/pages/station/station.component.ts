@@ -138,7 +138,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterViewInit {
   min!: any;
   max!: any;
   time!: any;
-  chartTitle!: string;
   tableData!: any;
   infoData!: any;
   faIgloo = faIgloo;
@@ -172,7 +171,6 @@ export class StationComponent implements OnInit, OnDestroy, AfterViewInit {
       this.infoData = resp;
       this.getDeviceInfo(id);
       this.getHistoryData(id);
-      this.chartTitle = this.infoData.mac ? 'Ultime 24h' : 'Oggi';
     });
   }
 
