@@ -29,7 +29,7 @@ import { CarouselComponent } from '../carousel/carousel.component';
       </div>
     </div>
     <div>
-      <div class="divider my-3">DESCRIZIONE MORFOLOGiA E CLIMATOLOGA'</div>
+      <div class="divider my-3">DESCRIZIONE MORFOLOGIA E CLIMATOLOGIA</div>
       <div class="row inserted">
         <p class="description">
           {{ infoData.description }}

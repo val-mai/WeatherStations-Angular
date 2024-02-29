@@ -19,6 +19,7 @@ import { ChartComponent } from 'src/app/components/chart/chart.component';
 import { FooterComponent } from 'src/app/components/footer/footer.component';
 import { HistoryTableComponent } from 'src/app/components/history-table/history-table.component';
 import { SpinnerComponent } from 'src/app/components/spinner/spinner.component';
+import { StationChartComponent } from 'src/app/components/station-chart/station-chart.component';
 import { StationDataComponent } from 'src/app/components/station-data/station-data.component';
 import { StationHomeComponent } from 'src/app/components/station-home/station-home.component';
 import { StationInfoComponent } from 'src/app/components/station-info/station-info.component';
@@ -40,6 +41,7 @@ import { DeviceService } from 'src/app/services/device.service';
     StationInfoComponent,
     StationHomeComponent,
     StationDataComponent,
+    StationChartComponent,
     ChartComponent,
     MatExpansionModule,
   ],
@@ -85,7 +87,8 @@ import { DeviceService } from 'src/app/services/device.service';
               <fa-icon class="mx-2" [icon]="faChartLine"></fa-icon>
               STORICO
             </ng-template>
-            <div class="my-3 row inserted">
+            <app-station-chart [chartData]="tableData"></app-station-chart>
+            <!-- <div class="my-3 row inserted">
               <div>
                 <app-chart
                   [title]="chartTitle"
@@ -108,7 +111,7 @@ import { DeviceService } from 'src/app/services/device.service';
                   ></app-history-table>
                 </mat-expansion-panel>
               </div>
-            </div>
+            </div> -->
           </mat-tab>
           <mat-tab>
             <ng-template mat-tab-label>
