@@ -29,9 +29,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
                 <div class="sub-data">
                   <div style="color: blue;">
                     <h3><b>MIN</b></h3>
-                    @if (min) {
-                    <p matTooltip="{{ getDate(min.time) }}">
-                      {{ min.value }}
+                    @if (minRel) {
+                    <p matTooltip="{{ getDate(minRel.time) }}">
+                      {{ minRel.value }}
                     </p>
                     } @else {
                     <p>-</p>
@@ -39,9 +39,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
                   </div>
                   <div style="color: red;">
                     <h3><b>MAX</b></h3>
-                    @if (max) {
-                    <p matTooltip="{{ getDate(max.time) }}">
-                      {{ max.value }}
+                    @if (maxRel) {
+                    <p matTooltip="{{ getDate(maxRel.time) }}">
+                      {{ maxRel.value }}
                     </p>
                     } @else {
                     <p>-</p>
@@ -62,9 +62,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
                 <div class="sub-data">
                   <div style="color: blue;">
                     <h3><b>MIN</b></h3>
-                    @if (min) {
-                    <p matTooltip="{{ getDate(min.time) }}">
-                      {{ min.value }}
+                    @if (minAbs) {
+                    <p matTooltip="{{ getDate(minAbs.time) }}">
+                      {{ minAbs.value }}
                     </p>
                     } @else {
                     <p>-</p>
@@ -72,9 +72,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
                   </div>
                   <div style="color: red;">
                     <h3><b>MAX</b></h3>
-                    @if (max) {
-                    <p matTooltip="{{ getDate(max.time) }}">
-                      {{ max.value }}
+                    @if (maxAbs) {
+                    <p matTooltip="{{ getDate(maxAbs.time) }}">
+                      {{ maxAbs.value }}
                     </p>
                     } @else {
                     <p>-</p>
@@ -93,8 +93,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export class PressureCardComponent {
   @Input() absolute!: number;
   @Input() relative!: number;
-  @Input() max!: any;
-  @Input() min!: any;
+  @Input() maxAbs!: any;
+  @Input() minAbs!: any;
+  @Input() maxRel!: any;
+  @Input() minRel!: any;
 
   mobile: boolean = false;
 

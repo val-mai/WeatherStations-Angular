@@ -79,8 +79,10 @@ import { PressureCardComponent } from '../cards/pressure-card/pressure-card.comp
         <app-pressure-card
           [absolute]="metrics?.pressureAbs?.value"
           [relative]="metrics?.pressure?.value"
-          [max]="max?.pressure"
-          [min]="min?.pressure"
+          [maxAbs]="max?.pressureAbs"
+          [minAbs]="min?.pressureAbs"
+          [minRel]="min?.pressure"
+          [maxRel]="max?.pressure"
         ></app-pressure-card>
       </div>
       <div class="mb-5"></div>
