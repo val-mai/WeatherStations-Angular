@@ -87,7 +87,7 @@ import { DeviceService } from 'src/app/services/device.service';
               <fa-icon class="mx-2" [icon]="faChartLine"></fa-icon>
               STORICO
             </ng-template>
-            <app-station-chart [chartData]="tableData"></app-station-chart>
+            <app-station-chart *ngIf="tableData" [chartData]="tableData"></app-station-chart>
             <!-- <div class="my-3 row inserted">
               <div>
                 <app-chart
