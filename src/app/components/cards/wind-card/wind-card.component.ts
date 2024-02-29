@@ -30,7 +30,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
                   <h3><b>MAX</b></h3>
                   @if (maxGust) {
                   <p matTooltip="{{ getDate(maxGust.time) }}">
-                    {{ maxGust.value }} km/h
+                    {{ maxGust.value }}
                   </p>
                   } @else {
                   <p>-</p>
@@ -44,7 +44,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
                 >
                   <img src="../../assets/direction.png" alt="direction" />
                 </div>
-                <h4 class="mt-2">{{ getDirection(windDirection) }}</h4>
+                <h4 class="mt-3">{{ getDirection(windDirection) }}</h4>
               </div>
               <div class="main-data" *ngIf="!mobile">
                 <h5>VELOCITA'</h5>
@@ -60,7 +60,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
                   <h3><b>MAX</b></h3>
                   @if (maxSpeed) {
                   <p matTooltip="{{ getDate(maxSpeed.time) }}">
-                    {{ maxSpeed.value }} km/h
+                    {{ maxSpeed.value }}
                   </p>
                   } @else {
                   <p>-</p>

@@ -22,7 +22,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
           <div class="box">
             <h4>PIOGGIA ODIERNA</h4>
             <div class="main-data row">
-              <div class="main-data mx-5 col-md">
+              <div class="main-data col">
                 <mat-card-title class="mx-1">
                   <h3>
                     {{ rainFall }}
@@ -30,7 +30,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
                 </mat-card-title>
                 <mat-card-subtitle>mm</mat-card-subtitle>
               </div>
-              <div class="main-data col-md">
+              <div class="main-data col">
                 <app-gauge-kpi-chart [data]="rainRate"></app-gauge-kpi-chart>
               </div>
             </div>
