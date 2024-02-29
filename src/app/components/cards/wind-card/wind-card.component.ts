@@ -44,7 +44,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
                 >
                   <img src="../../assets/direction.png" alt="direction" />
                 </div>
-                <h4>{{ getDirection(windDirection) }}</h4>
+                <h4 class="mt-2">{{ getDirection(windDirection) }}</h4>
               </div>
               <div class="main-data" *ngIf="!mobile">
                 <h5>VELOCITA'</h5>

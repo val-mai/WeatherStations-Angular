@@ -29,15 +29,14 @@ import { CarouselComponent } from '../carousel/carousel.component';
       </div>
     </div>
     <div>
-      <div class="divider my-3">
-        DESCRIZIONE MORFOLOGICA E CLIMATOLOGICA DELLA LOCALITA'
-      </div>
+      <div class="divider my-3">DESCRIZIONE MORFOLOGiA E CLIMATOLOGA'</div>
       <div class="row inserted">
         <p class="description">
           {{ infoData.description }}
         </p>
       </div>
     </div>
+    <div class="mb-5"></div>
   `,
   styleUrl: './station-info.component.scss',
 })
