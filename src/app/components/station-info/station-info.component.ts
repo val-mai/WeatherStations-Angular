@@ -7,8 +7,8 @@ import { CarouselComponent } from '../carousel/carousel.component';
   standalone: true,
   imports: [CommonModule, CarouselComponent],
   template: `
-    <h2 class="mt-4" color="accent">Dettagli Stazione</h2>
-    <div class="row g-3">
+    <div class="divider my-3">DETTAGLI STAZIONE</div>
+    <div class="row inserted">
       <div class="col-md-6 details">
         <p><b>ID stazione meteo Wunderground:</b> {{ infoData.stationId }}</p>
         <p><b>Nome della stazione:</b> {{ infoData.name }}</p>
@@ -26,16 +26,17 @@ import { CarouselComponent } from '../carousel/carousel.component';
       </div>
       <div class="col-md-6">
         <app-carousel [images]="infoData.stationImages"></app-carousel>
-        <!-- <img src="{{ infoData.stationImages[0] }}" alt="" /> -->
       </div>
     </div>
     <div>
-      <h2 class="mt-4" color="accent">
-        Descrizione morfologica e climatologica della località
-      </h2>
-      <p class="description mb-4">
-        {{ infoData.description }}
-      </p>
+      <div class="divider my-3">
+        DESCRIZIONE MORFOLOGICA E CLIMATOLOGICA DELLA LOCALITA'
+      </div>
+      <div class="row inserted">
+        <p class="description">
+          {{ infoData.description }}
+        </p>
+      </div>
     </div>
   `,
   styleUrl: './station-info.component.scss',

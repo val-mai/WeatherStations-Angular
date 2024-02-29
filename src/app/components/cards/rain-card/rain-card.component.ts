@@ -1,15 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GaugeKpiChartComponent } from '../../gauge-kpi-chart/gauge-kpi-chart.component';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-rain-card',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatTooltipModule, GaugeKpiChartComponent],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatTooltipModule,
+    GaugeKpiChartComponent,
+  ],
   template: `
-    <mat-card class="metric-card">
+    <mat-card class="metric-card" [ngClass]="{ mobile: mobile == true }">
       <mat-card-header class="pb-3">
         <div class="card-body">
           <img style="width: 60px;" src="../../assets/heavy-rain.png" alt="" />
@@ -24,7 +30,7 @@ import { GaugeKpiChartComponent } from '../../gauge-kpi-chart/gauge-kpi-chart.co
                 </mat-card-title>
                 <mat-card-subtitle>mm</mat-card-subtitle>
               </div>
-              <div class="col-md">
+              <div class="main-data col-md">
                 <app-gauge-kpi-chart [data]="rainRate"></app-gauge-kpi-chart>
               </div>
             </div>
@@ -35,14 +41,24 @@ import { GaugeKpiChartComponent } from '../../gauge-kpi-chart/gauge-kpi-chart.co
   `,
   styleUrl: './rain-card.component.scss',
 })
-export class RainCardComponent implements OnInit {
+export class RainCardComponent implements OnInit, AfterViewInit {
+  @Input() rainFall: any;
+  @Input() rainRate?: any;
 
-  @Input() rainFall:any;
-  @Input() rainRate?:any;
+  mobile!: boolean;
+
+  constructor(private responsive: BreakpointObserver) {}
 
   ngOnInit(): void {
-    this.rainFall = this.rainFall != undefined ? this.rainFall : "-";
-    this.rainRate = this.rainRate != undefined ? this.rainRate : "-";
+    this.rainFall = this.rainFall != undefined ? this.rainFall : '-';
+    this.rainRate = this.rainRate != undefined ? this.rainRate : '-';
   }
 
+  ngAfterViewInit(): void {
+    this.responsive
+      .observe([Breakpoints.Medium, Breakpoints.Small, Breakpoints.XSmall])
+      .subscribe((result) => {
+        this.mobile = result.matches ? true : false;
+      });
+  }
 }

@@ -1,17 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-humidity-card',
   standalone: true,
-  imports: [CommonModule, MatCardModule],
+  imports: [CommonModule, MatCardModule, MatTooltipModule],
   template: `
     <mat-card class="metric-card">
       <mat-card-header class="pb-3">
         <div class="card-body">
           <img style="width: 60px;" src="../../assets/humidity.png" alt="" />
-          <!-- <fa-icon [icon]="faTemperature" size="5x"></fa-icon> -->
           <div class="box">
             <h4>UMIDITA'</h4>
             <div class="main-data">
@@ -26,7 +26,7 @@ import { MatCardModule } from '@angular/material/card';
               <div style="color: blue;">
                 <h3><b>MIN</b></h3>
                 @if (min) {
-                <p>{{ min.value }} %</p>
+                <p matTooltip="{{ getDate(min.time) }}">{{ min.value }} %</p>
                 } @else {
                 <p>-</p>
                 }
@@ -34,7 +34,7 @@ import { MatCardModule } from '@angular/material/card';
               <div style="color: red;">
                 <h3><b>MAX</b></h3>
                 @if (max) {
-                <p>{{ max.value }} %</p>
+                <p matTooltip="{{ getDate(max.time) }}">{{ max.value }} %</p>
                 } @else {
                 <p>-</p>
                 }
@@ -51,4 +51,12 @@ export class HumidityCardComponent {
   @Input() humidity: number = 35;
   @Input() min: any;
   @Input() max: any;
+
+  getDate(timestamp: number): string {
+    if (timestamp == null) {
+      return '';
+    }
+    const date = new Date(timestamp * 1000).toLocaleString();
+    return date;
+  }
 }
