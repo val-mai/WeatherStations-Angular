@@ -24,6 +24,7 @@ import { StationDataComponent } from 'src/app/components/station-data/station-da
 import { StationHomeComponent } from 'src/app/components/station-home/station-home.component';
 import { StationInfoComponent } from 'src/app/components/station-info/station-info.component';
 import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
+import { IWindDistribution } from 'src/app/interfaces/IWindDistribution';
 import { DataService } from 'src/app/services/data.service';
 import { DeviceService } from 'src/app/services/device.service';
 
@@ -85,9 +86,13 @@ import { DeviceService } from 'src/app/services/device.service';
           <mat-tab>
             <ng-template mat-tab-label>
               <fa-icon class="mx-2" [icon]="faChartLine"></fa-icon>
-              STORICO
+              GRAFICI
             </ng-template>
-            <app-station-chart *ngIf="tableData" [chartData]="tableData"></app-station-chart>
+            <app-station-chart
+              *ngIf="tableData && windDistribution"
+              [chartData]="tableData"
+              [windRose]="windDistribution"
+            ></app-station-chart>
             <!-- <div class="my-3 row inserted">
               <div>
                 <app-chart
@@ -146,6 +151,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterViewInit {
   faCircleInfo = faCircleInfo;
   selectedTabIndex!: number;
   deviceId!: any;
+  windDistribution!: IWindDistribution;
 
   constructor(
     private deviceService: DeviceService,
@@ -181,8 +187,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getTab() {
     const savedTabIndex = localStorage.getItem('selectedTabIndex');
-    this.selectedTabIndex =
-      savedTabIndex != null ? parseInt(savedTabIndex, 10) : 0;
+    this.selectedTabIndex = savedTabIndex != null ? parseInt(savedTabIndex) : 0;
   }
 
   private getDeviceInfo(id: string) {
@@ -197,6 +202,15 @@ export class StationComponent implements OnInit, OnDestroy, AfterViewInit {
       this.tableData = data.observations;
       this.min = data.min;
       this.max = data.max;
+      this.getWindDistribution(data.observations);
     });
+  }
+
+  private getWindDistribution(observations: any) {
+    this.dataService
+      .getDailyWindDistribution(observations)
+      .subscribe((distribution: IWindDistribution) => {
+        this.windDistribution = distribution;
+      });
   }
 }

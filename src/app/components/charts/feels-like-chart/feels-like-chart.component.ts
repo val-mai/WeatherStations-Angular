@@ -1,10 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 
 @Component({
-  selector: 'app-temperature-chart',
+  selector: 'app-feels-like-chart',
   standalone: true,
   imports: [CommonModule, HighchartsChartModule],
   template: `
@@ -17,11 +22,10 @@ import { HighchartsChartModule } from 'highcharts-angular';
     >
     </highcharts-chart>
   `,
-  styleUrl: './temperature-chart.component.scss',
+  styleUrl: './feels-like-chart.component.scss',
 })
-export class TemperatureChartComponent implements OnInit {
-  @Input() temperatureData: any[] = [];
-  @Input() dewData: any[] = [];
+export class FeelsLikeChartComponent implements OnInit {
+  @Input() feelsLike: any[] = [];
   @Input() height: string = '400px';
 
   Highcharts = Highcharts;
@@ -52,7 +56,7 @@ export class TemperatureChartComponent implements OnInit {
             text: null,
           },
           labels: {
-            format: '{value}°',
+            format: '{value} °C',
             style: {
               fontSize: '10px',
             },
@@ -63,9 +67,6 @@ export class TemperatureChartComponent implements OnInit {
       credits: {
         text: 'MeteoMarso',
       },
-      export: {
-        enabled: false,
-      },
       accessibility: {
         enabled: false,
       },
@@ -74,21 +75,10 @@ export class TemperatureChartComponent implements OnInit {
       },
       series: [
         {
-          name: 'Temperatura',
-          data: this.temperatureData,
-          type: 'area',
-          marker: {
-            enabled: false,
-          },
-          tooltip: {
-            valueSuffix: ' °C',
-          },
-        },
-        {
-          name: 'Temp. rugiada',
+          name: 'Temp. percepita',
           type: 'spline',
-          data: this.dewData,
-          color: '#90ee7e',
+          data: this.feelsLike,
+          color: '#00897b',
           marker: {
             enabled: false,
           },

@@ -4,7 +4,7 @@ import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 
 @Component({
-  selector: 'app-temperature-chart',
+  selector: 'app-humidity-chart',
   standalone: true,
   imports: [CommonModule, HighchartsChartModule],
   template: `
@@ -17,11 +17,10 @@ import { HighchartsChartModule } from 'highcharts-angular';
     >
     </highcharts-chart>
   `,
-  styleUrl: './temperature-chart.component.scss',
+  styleUrl: './humidity-chart.component.scss',
 })
-export class TemperatureChartComponent implements OnInit {
-  @Input() temperatureData: any[] = [];
-  @Input() dewData: any[] = [];
+export class HumidityChartComponent implements OnInit {
+  @Input() humidityData: any[] = [];
   @Input() height: string = '400px';
 
   Highcharts = Highcharts;
@@ -52,7 +51,7 @@ export class TemperatureChartComponent implements OnInit {
             text: null,
           },
           labels: {
-            format: '{value}°',
+            format: '{value} %',
             style: {
               fontSize: '10px',
             },
@@ -63,9 +62,6 @@ export class TemperatureChartComponent implements OnInit {
       credits: {
         text: 'MeteoMarso',
       },
-      export: {
-        enabled: false,
-      },
       accessibility: {
         enabled: false,
       },
@@ -74,26 +70,15 @@ export class TemperatureChartComponent implements OnInit {
       },
       series: [
         {
-          name: 'Temperatura',
-          data: this.temperatureData,
-          type: 'area',
-          marker: {
-            enabled: false,
-          },
-          tooltip: {
-            valueSuffix: ' °C',
-          },
-        },
-        {
-          name: 'Temp. rugiada',
+          name: 'Umidità',
           type: 'spline',
-          data: this.dewData,
-          color: '#90ee7e',
+          data: this.humidityData,
+          color: '#7cb5ec',
           marker: {
             enabled: false,
           },
           tooltip: {
-            valueSuffix: ' °C',
+            valueSuffix: ' %',
           },
         },
       ],
