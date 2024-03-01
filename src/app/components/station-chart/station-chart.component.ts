@@ -80,14 +80,14 @@ export class StationChartComponent implements OnInit {
   }
 
   private createDistribution() {
-    this.windDistributionData.push(this.windRose.N);
-    this.windDistributionData.push(this.windRose.NE);
-    this.windDistributionData.push(this.windRose.E);
-    this.windDistributionData.push(this.windRose.SE);
-    this.windDistributionData.push(this.windRose.S);
-    this.windDistributionData.push(this.windRose.SW);
-    this.windDistributionData.push(this.windRose.W);
-    this.windDistributionData.push(this.windRose.NW);
+    this.windDistributionData.push(this.windRose.N ? this.windRose.N : 0);
+    this.windDistributionData.push(this.windRose.NE ? this.windRose.NE : 0);
+    this.windDistributionData.push(this.windRose.E ? this.windRose.E : 0);
+    this.windDistributionData.push(this.windRose.SE ? this.windRose.SE : 0);
+    this.windDistributionData.push(this.windRose.S ? this.windRose.S : 0);
+    this.windDistributionData.push(this.windRose.SW ? this.windRose.SW : 0);
+    this.windDistributionData.push(this.windRose.W ? this.windRose.W : 0);
+    this.windDistributionData.push(this.windRose.NW ? this.windRose.NW : 0);
   }
 
   /*
