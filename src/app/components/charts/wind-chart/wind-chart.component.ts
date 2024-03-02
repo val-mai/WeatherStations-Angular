@@ -1,21 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { HighchartsChartModule } from 'highcharts-angular';
 import * as Highcharts from 'highcharts';
+import { HighchartsChartModule } from 'highcharts-angular';
 import HC_exporting from 'highcharts/modules/exporting';
-import { SpinnerComponent } from '../../spinner/spinner.component';
+import windbarb from 'highcharts/modules/windbarb';
 
-HC_exporting(Highcharts);
+windbarb(Highcharts);
 
 @Component({
-  selector: 'app-rain-chart',
+  selector: 'app-wind-chart',
   standalone: true,
-  imports: [
-    CommonModule, HighchartsChartModule, SpinnerComponent
-  ],
+  imports: [CommonModule, HighchartsChartModule],
   template: `
-
-  @if(render) {
     <highcharts-chart
       [Highcharts]="Highcharts"
       [options]="chartOptions"
@@ -24,30 +20,32 @@ HC_exporting(Highcharts);
       }}; display: block; border-radius: 10px"
     >
     </highcharts-chart>
-    } @else {
-    <app-spinner></app-spinner>
-    }
-
   `,
-  styleUrl: './rain-chart.component.scss'
+  styleUrl: './wind-chart.component.scss',
 })
-
-export class RainChartComponent implements OnInit {
-
-  @Input() rainFall: any[] = [];
-  @Input() rainRate: any[] = [];
+export class WindChartComponent implements OnInit {
+  @Input() windSpeed: any[] = [];
+  @Input() windGust: any[] = [];
+  @Input() windBarb: any[] = [];
   @Input() height: string = '400px';
 
   Highcharts = Highcharts;
   chartOptions = {};
-  render: boolean = false;
+
+  filterData(data: number[], numberOfPointsToShow: number) {
+    const step = Math.ceil(data.length / numberOfPointsToShow);
+    const filteredData = [];
+    for (let i = 0; i < data.length; i += step) {
+      filteredData.push(data[i]);
+    }
+    return filteredData;
+  }
 
   ngOnInit(): void {
     this.initChart();
   }
 
   private initChart() {
-    this.render = true;
     this.chartOptions = {
       title: {
         text: null,
@@ -55,6 +53,7 @@ export class RainChartComponent implements OnInit {
       chart: {
         alignThresholds: true,
         plotShadow: true,
+        zoomType: 'x',
       },
       xAxis: {
         type: 'datetime',
@@ -67,7 +66,7 @@ export class RainChartComponent implements OnInit {
             text: null,
           },
           labels: {
-            format: '{value} mm',
+            format: '{value} km/h',
             style: {
               fontSize: '10px',
             },
@@ -86,31 +85,35 @@ export class RainChartComponent implements OnInit {
       },
       series: [
         {
-          name: 'Accumulo',
-          type: 'spline',
-          data: this.rainFall,
+          name: 'Velocità',
+          data: this.windSpeed,
+          type: 'area',
           marker: {
             enabled: false,
           },
           tooltip: {
-            valueSuffix: ' mm',
+            valueSuffix: ' km/h',
           },
-          zIndex:1
         },
         {
-          name: 'Intensità',
-          data: this.rainRate,
-          type: 'line',
-          color: '#90ee7e',
-          marker: {
-            enabled: false,
-          },
+          name: 'Raffica',
+          type: 'scatter',
+          color: 'orange',
+          data: this.windGust,
           tooltip: {
-            valueSuffix: ' mm/hr',
+            valueSuffix: ' km/h',
           },
-        }
+        },
+        {
+          name: 'Vento',
+          type: 'windbarb',
+          color: '#90ee7e',
+          data: this.filterData(this.windBarb, 12),
+          tooltip: {
+            valueSuffix: ' m/s',
+          },
+        },
       ],
     };
   }
 }
-

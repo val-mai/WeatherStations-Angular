@@ -79,10 +79,19 @@ export class TemperatureChartComponent implements OnInit {
           type: 'area',
           marker: {
             enabled: false,
+            states: {
+              hover: {
+                enabled: true,
+              },
+            },
           },
           tooltip: {
-            valueSuffix: ' °C',
+            pointFormat:
+              '<span style="color:{point.color}">\u25CF</span> ' +
+              '{series.name}: <b>{point.y}°C</b><br/>',
           },
+          color: '#48AFE8',
+          negativeColor: '#FF3333',
         },
         {
           name: 'Temp. rugiada',

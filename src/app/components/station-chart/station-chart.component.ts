@@ -6,6 +6,7 @@ import { HumidityChartComponent } from '../charts/humidity-chart/humidity-chart.
 import { RainChartComponent } from '../charts/rain-chart/rain-chart.component';
 import { TemperatureChartComponent } from '../charts/temperature-chart/temperature-chart.component';
 import { WindDistributionChartComponent } from '../charts/wind-distribution-chart/wind-distribution-chart.component';
+import { WindChartComponent } from '../charts/wind-chart/wind-chart.component';
 
 @Component({
   selector: 'app-station-chart',
@@ -16,6 +17,7 @@ import { WindDistributionChartComponent } from '../charts/wind-distribution-char
     RainChartComponent,
     HumidityChartComponent,
     FeelsLikeChartComponent,
+    WindChartComponent,
     WindDistributionChartComponent,
   ],
   template: `
@@ -45,9 +47,18 @@ import { WindDistributionChartComponent } from '../charts/wind-distribution-char
     </div>
     <div class="divider my-3">GRAFICI ANEMOMETRO</div>
     <div class="row inserted">
-      <app-wind-distribution-chart
-        [windDistribution]="windDistributionData"
-      ></app-wind-distribution-chart>
+      <div class="col-md-6">
+        <app-wind-chart
+          [windSpeed]="windSpeedData"
+          [windGust]="windGustData"
+          [windBarb]="windBarbData"
+        ></app-wind-chart>
+      </div>
+      <div class="col-md-6">
+        <app-wind-distribution-chart
+          [windDistribution]="windDistributionData"
+        ></app-wind-distribution-chart>
+      </div>
     </div>
     <div class="mb-5"></div>
   `,
@@ -63,6 +74,9 @@ export class StationChartComponent implements OnInit {
   feelsLikeData: any[] = [];
   rainFallData: any[] = [];
   rainRateData: any[] = [];
+  windSpeedData: any[] = [];
+  windGustData: any[] = [];
+  windBarbData: any[] = [];
   windDistributionData: any[] = [];
 
   ngOnInit(): void {
@@ -74,12 +88,15 @@ export class StationChartComponent implements OnInit {
       this.rainFallData.push([adjustedTimestamp, element.rainFall]);
       this.rainRateData.push([adjustedTimestamp, element.rainRate]);
       this.humidityData.push([adjustedTimestamp, element.humidity]);
+      this.windSpeedData.push([adjustedTimestamp, element.windSpeed]);
+      this.windGustData.push([adjustedTimestamp, element.windGust]);
+      const speed = Math.round((element.windGust * 1000) / 3600);
+      this.windBarbData.push([adjustedTimestamp, speed, element.windDirection]);
     });
-    this.createDistribution();
-    console.log(this.windDistributionData);
+    this.createWindDistribution();
   }
 
-  private createDistribution() {
+  private createWindDistribution() {
     this.windDistributionData.push(this.windRose.N ? this.windRose.N : 0);
     this.windDistributionData.push(this.windRose.NE ? this.windRose.NE : 0);
     this.windDistributionData.push(this.windRose.E ? this.windRose.E : 0);

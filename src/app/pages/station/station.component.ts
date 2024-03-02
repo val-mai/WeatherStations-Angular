@@ -15,7 +15,6 @@ import {
   faIgloo,
   faTemperatureLow,
 } from '@fortawesome/free-solid-svg-icons';
-import { ChartComponent } from 'src/app/components/chart/chart.component';
 import { FooterComponent } from 'src/app/components/footer/footer.component';
 import { HistoryTableComponent } from 'src/app/components/history-table/history-table.component';
 import { SpinnerComponent } from 'src/app/components/spinner/spinner.component';
@@ -43,7 +42,6 @@ import { DeviceService } from 'src/app/services/device.service';
     StationHomeComponent,
     StationDataComponent,
     StationChartComponent,
-    ChartComponent,
     MatExpansionModule,
   ],
   template: `

@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
-import { MetricWidgetComponent } from '../metric-widget/metric-widget.component';
+import { Component, Input, OnInit } from '@angular/core';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { circleMarker, latLng, tileLayer } from 'leaflet';
-import { ChartComponent } from '../chart/chart.component';
+import { GeneralChartComponent } from '../general-chart/general-chart.component';
+import { MetricWidgetComponent } from '../metric-widget/metric-widget.component';
 
 @Component({
   selector: 'app-station-home',
   standalone: true,
-  imports: [CommonModule, MetricWidgetComponent, LeafletModule, ChartComponent],
+  imports: [CommonModule, MetricWidgetComponent, LeafletModule, GeneralChartComponent],
   template: `
     <div class="divider my-3">PANORAMICA</div>
     <div *ngIf="metrics && infoData" class="row inserted half-h">
