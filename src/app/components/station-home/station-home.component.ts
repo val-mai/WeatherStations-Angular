@@ -13,13 +13,13 @@ import { MetricWidgetComponent } from '../metric-widget/metric-widget.component'
     <div class="divider my-3">PANORAMICA</div>
     <div *ngIf="metrics && infoData" class="row inserted half-h">
       <app-metric-widget
-        class="col-md-4"
+        class="col-md-4 my-2"
         [metric]="metrics"
       ></app-metric-widget>
-      <div class="col-md-4 map" leaflet [leafletOptions]="options">
+      <div class="col-md-4 my-2 map" leaflet [leafletOptions]="options">
         <div *ngIf="layer" [leafletLayer]="layer"></div>
       </div>
-      <div class="image col-md-4">
+      <div class="image col-md-4 my-2">
         <img src="{{ infoData.image }}" alt="" />
       </div>
     </div>
@@ -69,9 +69,6 @@ export class StationHomeComponent implements OnInit {
     };
 
     this.layer = circleMarker([latitude, longitude], { radius: 20 });
-    setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));
-    }, 200);
   }
 
   initWebcam() {
@@ -82,7 +79,7 @@ export class StationHomeComponent implements OnInit {
         this.webcam = null;
         let date = Date.now();
         this.webcam = this.infoData.webcam.url + '?' + date;
-      }, 2000);
+      }, 1000);
     }
   }
 }

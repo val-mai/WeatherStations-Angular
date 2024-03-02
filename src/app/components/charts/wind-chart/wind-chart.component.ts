@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import HC_exporting from 'highcharts/modules/exporting';
@@ -10,16 +11,20 @@ windbarb(Highcharts);
 @Component({
   selector: 'app-wind-chart',
   standalone: true,
-  imports: [CommonModule, HighchartsChartModule],
+  imports: [CommonModule, HighchartsChartModule, MatCardModule],
   template: `
-    <highcharts-chart
-      [Highcharts]="Highcharts"
-      [options]="chartOptions"
-      style="width: 100%; height: {{
-        height
-      }}; display: block; border-radius: 10px"
-    >
-    </highcharts-chart>
+    <mat-card>
+      <mat-card-content>
+        <highcharts-chart
+          [Highcharts]="Highcharts"
+          [options]="chartOptions"
+          style="width: 100%; height: {{
+            height
+          }}; display: block;"
+        >
+        </highcharts-chart>
+      </mat-card-content>
+    </mat-card>
   `,
   styleUrl: './wind-chart.component.scss',
 })
@@ -94,15 +99,20 @@ export class WindChartComponent implements OnInit {
           tooltip: {
             valueSuffix: ' km/h',
           },
+          zIndex: 1,
         },
         {
           name: 'Raffica',
-          type: 'scatter',
+          type: 'spline',
           color: 'orange',
           data: this.windGust,
           tooltip: {
             valueSuffix: ' km/h',
           },
+          marker: {
+            enabled: false,
+          },
+          dashStyle: 'shortdot',
         },
         {
           name: 'Vento',

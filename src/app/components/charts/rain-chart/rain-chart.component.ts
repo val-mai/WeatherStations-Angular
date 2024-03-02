@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { HighchartsChartModule } from 'highcharts-angular';
+import { MatCardModule } from '@angular/material/card';
 import * as Highcharts from 'highcharts';
+import { HighchartsChartModule } from 'highcharts-angular';
 import HC_exporting from 'highcharts/modules/exporting';
-import { SpinnerComponent } from '../../spinner/spinner.component';
 
 HC_exporting(Highcharts);
 
@@ -11,29 +11,27 @@ HC_exporting(Highcharts);
   selector: 'app-rain-chart',
   standalone: true,
   imports: [
-    CommonModule, HighchartsChartModule, SpinnerComponent
+    CommonModule,
+    HighchartsChartModule,
+    MatCardModule,
   ],
   template: `
-
-  @if(render) {
-    <highcharts-chart
-      [Highcharts]="Highcharts"
-      [options]="chartOptions"
-      style="width: 100%; height: {{
-        height
-      }}; display: block; border-radius: 10px"
-    >
-    </highcharts-chart>
-    } @else {
-    <app-spinner></app-spinner>
-    }
-
+    <mat-card>
+      <mat-card-content>
+        <highcharts-chart
+          [Highcharts]="Highcharts"
+          [options]="chartOptions"
+          style="width: 100%; height: {{
+            height
+          }}; display: block;"
+        >
+        </highcharts-chart>
+      </mat-card-content>
+    </mat-card>
   `,
-  styleUrl: './rain-chart.component.scss'
+  styleUrl: './rain-chart.component.scss',
 })
-
 export class RainChartComponent implements OnInit {
-
   @Input() rainFall: any[] = [];
   @Input() rainRate: any[] = [];
   @Input() height: string = '400px';
@@ -95,7 +93,7 @@ export class RainChartComponent implements OnInit {
           tooltip: {
             valueSuffix: ' mm',
           },
-          zIndex:1
+          zIndex: 1,
         },
         {
           name: 'Intensità',
@@ -108,9 +106,8 @@ export class RainChartComponent implements OnInit {
           tooltip: {
             valueSuffix: ' mm/hr',
           },
-        }
+        },
       ],
     };
   }
 }
-

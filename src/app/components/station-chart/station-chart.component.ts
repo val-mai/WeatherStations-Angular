@@ -21,14 +21,14 @@ import { WindChartComponent } from '../charts/wind-chart/wind-chart.component';
     WindDistributionChartComponent,
   ],
   template: `
-    <div class="divider my-3">GRAFICI TERMOIGROMETRO</div>
-    <div class="row inserted">
+    <div class="divider mt-3">GRAFICI TERMOIGROMETRO</div>
+    <div class="row inserted g-3">
       <app-temperature-chart
         [temperatureData]="temperatureData"
         [dewData]="dewData"
       ></app-temperature-chart>
     </div>
-    <div class="row my-3 inserted">
+    <div class="row inserted g-3">
       <div class="col-md-6">
         <app-humidity-chart [humidityData]="humidityData"></app-humidity-chart>
       </div>
@@ -38,15 +38,15 @@ import { WindChartComponent } from '../charts/wind-chart/wind-chart.component';
         ></app-feels-like-chart>
       </div>
     </div>
-    <div class="divider my-3">GRAFICO PLUVIOMETRO</div>
-    <div class="row inserted">
+    <div class="divider mt-3">GRAFICO PLUVIOMETRO</div>
+    <div class="row inserted g-3">
       <app-rain-chart
         [rainFall]="rainFallData"
         [rainRate]="rainRateData"
       ></app-rain-chart>
     </div>
-    <div class="divider my-3">GRAFICI ANEMOMETRO</div>
-    <div class="row inserted">
+    <div class="divider mt-3">GRAFICI ANEMOMETRO</div>
+    <div class="row inserted g-3">
       <div class="col-md-6">
         <app-wind-chart
           [windSpeed]="windSpeedData"

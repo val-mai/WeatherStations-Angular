@@ -5,22 +5,27 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 
 @Component({
   selector: 'app-feels-like-chart',
   standalone: true,
-  imports: [CommonModule, HighchartsChartModule],
+  imports: [CommonModule, HighchartsChartModule, MatCardModule],
   template: `
-    <highcharts-chart
-      [Highcharts]="Highcharts"
-      [options]="chartOptions"
-      style="width: 100%; height: {{
-        height
-      }}; display: block; border-radius: 10px"
-    >
-    </highcharts-chart>
+    <mat-card>
+      <mat-card-content>
+        <highcharts-chart
+          [Highcharts]="Highcharts"
+          [options]="chartOptions"
+          style="width: 100%; height: {{
+            height
+          }}; display: block;"
+        >
+        </highcharts-chart>
+      </mat-card-content>
+    </mat-card>
   `,
   styleUrl: './feels-like-chart.component.scss',
 })

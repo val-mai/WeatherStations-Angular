@@ -181,6 +181,9 @@ export class StationComponent implements OnInit, OnDestroy, AfterViewInit {
   tabChanged(event: any) {
     this.selectedTabIndex = event;
     localStorage.setItem('selectedTabIndex', event);
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 200);
   }
 
   getTab() {
