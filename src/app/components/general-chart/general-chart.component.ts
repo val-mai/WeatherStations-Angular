@@ -63,17 +63,17 @@ windbarb(Highcharts);
     <app-spinner></app-spinner>
     }
   `,
-  styleUrl: './chart.component.scss',
+  styleUrl: './general-chart.component.scss',
 })
-export class ChartComponent implements OnInit {
+export class GeneralChartComponent implements OnInit {
   Highcharts = Highcharts;
   chartOptions = {};
   render: boolean = true;
 
   @Input() title!: string;
-  @Input() deviceId!: string;
   @Input() data: any[] = [];
   @Input() height: string = '400px';
+  /* @Input() deviceId!: string; */
 
   range = new FormGroup({
     start: new FormControl(),
@@ -86,7 +86,7 @@ export class ChartComponent implements OnInit {
 
   constructor(private dataService: DataService) {}
 
-  selectRange() {
+  /* selectRange() {
     this.render = false;
     const startDateControl = this.range.get('start');
     const startDate = new Date(startDateControl?.value).toISOString();
@@ -104,7 +104,7 @@ export class ChartComponent implements OnInit {
         this.windData = [];
         this.initChart(data.observations);
       });
-  }
+  } */
 
   filterData(data: number[], numberOfPointsToShow: number) {
     const step = Math.ceil(data.length / numberOfPointsToShow);

@@ -1,44 +1,9 @@
-.map {
-  border-radius: 10px;
-}
-
-.image{
-  img {
-    border-radius: 10px;
-    width: 100%;
-    min-height:100%;
-    max-height: 360px;
-    object-fit: cover;
-  };
-}
-
 .main {
   min-height: 100vh;
-}
-
-.divider{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 25px;
-  text-align: center;
-  color: white;
-  font-weight: bold;
-  background-color: #00897b;
-  background-color: #5276b8;
 }
 
 .inserted {
   display: flex;
   margin: 0;
   justify-content: space-around;
-}
-
-.half-h{
-  min-height: 50vh;
-}
-
-.webcam {
-  width: 100%;
-  border-radius: 10px;
 }

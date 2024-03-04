@@ -29,7 +29,7 @@ import { Metric } from 'src/app/interfaces/metric';
               <div style="color: blue;">
                 <h3><b>MIN</b></h3>
                 @if (min) {
-                <p matTooltip="{{ getDate(min.time) }}">{{ min.value }} °C</p>
+                <p matTooltip="{{ getDate(min.time) }}">{{ min.value }}</p>
                 } @else {
                 <p>-</p>
                 }
@@ -37,7 +37,7 @@ import { Metric } from 'src/app/interfaces/metric';
               <div style="color: red;">
                 <h3><b>MAX</b></h3>
                 @if (max) {
-                <p matTooltip="{{ getDate(max.time) }}">{{ max.value }} °C</p>
+                <p matTooltip="{{ getDate(max.time) }}">{{ max.value }}</p>
                 } @else {
                 <p>-</p>
                 }

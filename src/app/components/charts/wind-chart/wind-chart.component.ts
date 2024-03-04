@@ -1,36 +1,41 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
-import windbarb from 'highcharts/modules/windbarb';
 import HC_exporting from 'highcharts/modules/exporting';
-import theme from 'highcharts/themes/grid-light';
+import windbarb from 'highcharts/modules/windbarb';
 
-HC_exporting(Highcharts);
 windbarb(Highcharts);
-theme(Highcharts);
 
 @Component({
   selector: 'app-wind-chart',
   standalone: true,
-  imports: [CommonModule, HighchartsChartModule],
-  template: ` <highcharts-chart
-    *ngIf="data"
-    [Highcharts]="Highcharts"
-    [options]="chartOptions"
-    style="width: 100%; height: {{
-      height
-    }}; display: block; border-radius: 10px"
-  >
-  </highcharts-chart>`,
+  imports: [CommonModule, HighchartsChartModule, MatCardModule],
+  template: `
+    <mat-card>
+      <mat-card-content>
+        <highcharts-chart
+          [Highcharts]="Highcharts"
+          [options]="chartOptions"
+          style="width: 100%; height: {{
+            height
+          }}; display: block;"
+        >
+        </highcharts-chart>
+      </mat-card-content>
+    </mat-card>
+  `,
   styleUrl: './wind-chart.component.scss',
 })
 export class WindChartComponent implements OnInit {
+  @Input() windSpeed: any[] = [];
+  @Input() windGust: any[] = [];
+  @Input() windBarb: any[] = [];
+  @Input() height: string = '400px';
+
   Highcharts = Highcharts;
   chartOptions = {};
-
-  @Input() data = [];
-  @Input() height: string = '400px';
 
   filterData(data: number[], numberOfPointsToShow: number) {
     const step = Math.ceil(data.length / numberOfPointsToShow);
@@ -42,22 +47,23 @@ export class WindChartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const windSpeed: any[] = [];
-    const windDirection: any[] = [];
-    console.log(this.data);
-    this.data.forEach((element: any) => {
-      const adjustedTimestamp = new Date(element.time * 1000).getTime();
-      windSpeed.push([adjustedTimestamp, element.windGust]);
-      const speed = Math.round((element.windGust * 1000) / 3600);
-      windDirection.push([adjustedTimestamp, speed, element.windDirection]);
-    });
+    this.initChart();
+  }
+
+  private initChart() {
     this.chartOptions = {
       title: {
-        text: 'Vento',
+        text: null,
+      },
+      chart: {
+        alignThresholds: true,
+        plotShadow: true,
+        zoomType: 'x',
       },
       xAxis: {
         type: 'datetime',
         offset: 40,
+        gapGridLineWidth: 0,
       },
       yAxis: [
         {
@@ -79,41 +85,45 @@ export class WindChartComponent implements OnInit {
       accessibility: {
         enabled: false,
       },
+      tooltip: {
+        shared: true,
+      },
       series: [
         {
-          name: 'Raffica',
-          data: windSpeed,
-          type: 'column',
+          name: 'Velocità',
+          data: this.windSpeed,
+          type: 'area',
+          marker: {
+            enabled: false,
+          },
           tooltip: {
             valueSuffix: ' km/h',
           },
+          zIndex: 1,
+        },
+        {
+          name: 'Raffica',
+          type: 'spline',
+          color: 'orange',
+          data: this.windGust,
+          tooltip: {
+            valueSuffix: ' km/h',
+          },
+          marker: {
+            enabled: false,
+          },
+          dashStyle: 'shortdot',
         },
         {
           name: 'Vento',
-          data: this.filterData(windDirection, 24),
           type: 'windbarb',
-          showInLegend: false,
+          color: '#90ee7e',
+          data: this.filterData(this.windBarb, 12),
           tooltip: {
             valueSuffix: ' m/s',
           },
         },
       ],
-      responsive: {
-        rules: [
-          {
-            condition: {
-              maxWidth: 500,
-            },
-            chartOptions: {
-              yAxis: {
-                title: {
-                  text: '',
-                },
-              },
-            },
-          },
-        ],
-      },
     };
   }
 }
