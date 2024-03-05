@@ -19,8 +19,18 @@ export class DeviceService {
     return this.http.get(`${this.apiUrl}/devices/${id}`);
   }
 
+  getDeviceImages(id: string) {
+    return this.http.get(`${this.apiUrl}/devices/${id}/images`);
+  }
+
   updateDevice(id: string, device: any) {
     return this.http.put(`${this.apiUrl}/devices/${id}`, device, {
+      headers: this.auth.getHeaders(),
+    });
+  }
+
+  updateDeviceImages(id: string, deviceImages: any) {
+    return this.http.put(`${this.apiUrl}/devices/${id}/images`, deviceImages, {
       headers: this.auth.getHeaders(),
     });
   }

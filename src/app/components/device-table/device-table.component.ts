@@ -22,6 +22,7 @@ import {
   ConfirmModalComponent,
 } from '../confirm-modal/confirm-modal.component';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { DeviceImageModalComponent } from '../device-image-modal/device-image-modal.component';
 
 @Component({
   selector: 'app-device-table',
@@ -90,10 +91,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let row">
-          <button
-            mat-icon-button
-            [matMenuTriggerFor]="menu"
-          >
+          <button mat-icon-button [matMenuTriggerFor]="menu">
             <fa-icon
               size="lg"
               [icon]="faEllipsisVertical"
@@ -108,6 +106,14 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
                 style="color:cadetblue"
               ></fa-icon>
               <span class="mx-2">Modifica Info</span>
+            </button>
+            <button mat-menu-item (click)="editDeviceImages(row.id)">
+              <fa-icon
+                size="lg"
+                [icon]="faPenToSquare"
+                style="color:cadetblue"
+              ></fa-icon>
+              <span class="mx-2">Gestisci Immagini</span>
             </button>
             <button mat-menu-item (click)="deleteDevice(row)">
               <fa-icon
@@ -164,6 +170,23 @@ export class DeviceTableComponent {
         this.dialog
           .open(DeviceModalComponent, {
             data: device,
+            width: '70%',
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.entryModified.emit();
+          });
+      },
+    });
+  }
+
+  editDeviceImages(id: string) {
+    this.service.getDeviceImages(id).subscribe({
+      next: (deviceImages) => {
+        console.log(deviceImages);
+        this.dialog
+          .open(DeviceImageModalComponent, {
+            data: deviceImages,
             width: '70%',
           })
           .afterClosed()
