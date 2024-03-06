@@ -10,6 +10,7 @@ import {
   faCircleCheck,
   faCircleExclamation,
   faPenToSquare,
+  faImages,
   faTrashCan,
   faEllipsisVertical,
 } from '@fortawesome/free-solid-svg-icons';
@@ -110,7 +111,7 @@ import { DeviceImageModalComponent } from '../device-image-modal/device-image-mo
             <button mat-menu-item (click)="editDeviceImages(row.id)">
               <fa-icon
                 size="lg"
-                [icon]="faPenToSquare"
+                [icon]="faImages"
                 style="color:cadetblue"
               ></fa-icon>
               <span class="mx-2">Gestisci Immagini</span>
@@ -155,6 +156,7 @@ export class DeviceTableComponent {
   faCircleCheck = faCircleCheck;
   faCircleExclamation = faCircleExclamation;
   faPenToSquare = faPenToSquare;
+  faImages = faImages;
   faTrashCan = faTrashCan;
   faEllipsisVertical = faEllipsisVertical;
 

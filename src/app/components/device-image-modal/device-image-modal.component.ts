@@ -15,7 +15,8 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { AutosizeModule } from 'ngx-autosize';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faMinus } from '@fortawesome/free-solid-svg-icons';
 import { DeviceService } from 'src/app/services/device.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
@@ -29,7 +30,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
-    AutosizeModule,
+    FontAwesomeModule,
   ],
   template: `
     <h2 mat-dialog-title>Gestione immagini {{ editData.stationId }}</h2>
@@ -80,13 +81,26 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
               src="{{ editData.stationImages[i] }}"
               style="height: 57px;"
             />
+            <button
+              style="color: red;"
+              mat-icon-button
+              (click)="removeStationImage(i)"
+            >
+              -
+            </button>
           </div>
+          <button mat-icon-button (click)="addStationImage()">+</button>
         </div>
       </div>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
       <button mat-button mat-dialog-close>Cancel</button>
-      <button mat-button cdkFocusInitial color="primary" (click)="makeAction()">
+      <button
+        mat-button
+        cdkFocusInitial
+        color="primary"
+        (click)="updateDeviceImages(editData.id)"
+      >
         {{ action }}
       </button>
     </mat-dialog-actions>
@@ -96,6 +110,8 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 export class DeviceImageModalComponent {
   deviceImagesForm!: FormGroup;
   action = 'Aggiorna';
+  stationImages!: FormArray;
+  faMinus = faMinus;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -116,7 +132,9 @@ export class DeviceImageModalComponent {
       }),
       stationImages: this.formBuilder.array([new FormControl()]),
     });
-
+    this.stationImages = this.deviceImagesForm.get(
+      'stationImages'
+    ) as FormArray;
     this.deviceImagesForm.patchValue({
       image: this.editData.image,
       webcam: this.editData.webcam,
@@ -134,12 +152,12 @@ export class DeviceImageModalComponent {
     }
   }
 
-  get stationImages() {
-    return this.deviceImagesForm.get('stationImages') as FormArray;
-  }
-
   addStationImage() {
     this.stationImages.push(this.formBuilder.control(''));
+  }
+
+  removeStationImage(i: number) {
+    this.stationImages.removeAt(i);
   }
 
   updateDeviceImages(id: string) {
@@ -163,9 +181,5 @@ export class DeviceImageModalComponent {
     } else {
       this.snackBar.warning('Controlla i dati inseriti', 'Chiudi');
     }
-  }
-
-  makeAction() {
-    this.updateDeviceImages(this.editData.id);
   }
 }
