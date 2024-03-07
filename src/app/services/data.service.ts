@@ -19,6 +19,10 @@ export class DataService {
     return this.http.get(`${this.apiUrl}/history/daily/${id}`);
   }
 
+  getSelectedHistory(id: string, mode:string) {
+    return this.http.get(`${this.apiUrl}/history/${mode}/${id}`);
+  }
+
   getDailyWindDistribution(observations: any) {
     return this.http.post<IWindDistribution>(
       `${this.apiUrl}/history/daily/wind`,

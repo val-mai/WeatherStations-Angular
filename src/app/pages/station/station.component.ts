@@ -26,6 +26,8 @@ import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
 import { IWindDistribution } from 'src/app/interfaces/IWindDistribution';
 import { DataService } from 'src/app/services/data.service';
 import { DeviceService } from 'src/app/services/device.service';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-station',
@@ -43,17 +45,30 @@ import { DeviceService } from 'src/app/services/device.service';
     StationDataComponent,
     StationChartComponent,
     MatExpansionModule,
+    MatButtonToggleModule,
+    ReactiveFormsModule,
   ],
   template: `
     <div class="main mat-app-background">
       <app-toolbar></app-toolbar>
       <div class="container mt-4">
-        <h2 *ngIf="infoData">{{ infoData.name }}</h2>
         @if (metrics) {
-        <p *ngIf="metrics">
-          Ultimo aggiornamento:
-          {{ time | date : "MMM dd, yyyy 'alle' HH:mm:ss" }}
-        </p>
+        <div class="title-box mb-3">
+          <h2 *ngIf="infoData">{{ infoData.name }}</h2>
+          <p *ngIf="metrics">
+            Ultimo aggiornamento:
+            {{ time | date : "MMM dd, yyyy 'alle' HH:mm:ss" }}
+          </p>
+          <mat-button-toggle-group
+            appearance="legacy"
+            [formControl]="historyModeControl"
+            aria-label="History mode"
+          >
+            <mat-button-toggle value="daily" checked>1g</mat-button-toggle>
+            <mat-button-toggle value="weekly">7gg</mat-button-toggle>
+            <mat-button-toggle value="monthly">1m</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
         <mat-tab-group
           color="accent"
           [selectedIndex]="selectedTabIndex"
@@ -65,6 +80,7 @@ import { DeviceService } from 'src/app/services/device.service';
               HOME
             </ng-template>
             <app-station-home
+              *ngIf="tableData"
               [infoData]="infoData"
               [metrics]="metrics"
               [tableData]="tableData"
@@ -76,6 +92,7 @@ import { DeviceService } from 'src/app/services/device.service';
               DATI COMPLETI
             </ng-template>
             <app-station-data
+              *ngIf="tableData"
               [metrics]="metrics"
               [min]="min"
               [max]="max"
@@ -151,6 +168,9 @@ export class StationComponent implements OnInit, OnDestroy, AfterViewInit {
   deviceId!: any;
   windDistribution!: IWindDistribution;
 
+  historyModeControl = new FormControl('');
+  historyMode: string = 'daily';
+
   constructor(
     private deviceService: DeviceService,
     private dataService: DataService,
@@ -160,10 +180,21 @@ export class StationComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.getTab();
     this.deviceId = this.route.snapshot.paramMap.get('id');
+    this.historyModeControl.valueChanges.subscribe(() => {
+      this.historyMode = this.historyModeControl.value
+        ? this.historyModeControl.value
+        : 'daily';
+      this.metrics = null;
+      this.tableData = null;
+      this.getData(this.deviceId);
+    });
   }
 
   ngAfterViewInit(): void {
     this.getData(this.deviceId);
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 200);
   }
 
   ngOnDestroy(): void {
@@ -199,12 +230,16 @@ export class StationComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private getHistoryData(id: string) {
-    this.dataService.getDailyHistory(id).subscribe((data: any) => {
-      this.tableData = data.observations;
-      this.min = data.min;
-      this.max = data.max;
-      this.getWindDistribution(data.observations);
-    });
+    console.log(this.historyMode);
+    this.dataService
+      .getSelectedHistory(id, this.historyMode)
+      .subscribe((data: any) => {
+        this.tableData = data.observations;
+        this.min = data.min;
+        this.max = data.max;
+        console.log(this.min);
+        this.getWindDistribution(data.observations);
+      });
   }
 
   private getWindDistribution(observations: any) {
