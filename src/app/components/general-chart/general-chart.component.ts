@@ -207,23 +207,7 @@ export class GeneralChartComponent implements OnInit {
             valueSuffix: ' m/s',
           },
         },
-      ],
-      responsive: {
-        rules: [
-          {
-            condition: {
-              maxWidth: 500,
-            },
-            chartOptions: {
-              yAxis: {
-                title: {
-                  text: '',
-                },
-              },
-            },
-          },
-        ],
-      },
+      ]
     };
   }
 }
