@@ -10,6 +10,7 @@ import {
   faCircleCheck,
   faCircleExclamation,
   faPenToSquare,
+  faImages,
   faTrashCan,
   faEllipsisVertical,
 } from '@fortawesome/free-solid-svg-icons';
@@ -22,6 +23,7 @@ import {
   ConfirmModalComponent,
 } from '../confirm-modal/confirm-modal.component';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { DeviceImageModalComponent } from '../device-image-modal/device-image-modal.component';
 
 @Component({
   selector: 'app-device-table',
@@ -90,10 +92,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let row">
-          <button
-            mat-icon-button
-            [matMenuTriggerFor]="menu"
-          >
+          <button mat-icon-button [matMenuTriggerFor]="menu">
             <fa-icon
               size="lg"
               [icon]="faEllipsisVertical"
@@ -102,20 +101,40 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
           </button>
           <mat-menu #menu="matMenu">
             <button mat-menu-item (click)="editDevice(row.id)">
-              <fa-icon
-                size="lg"
-                [icon]="faPenToSquare"
-                style="color:cadetblue"
-              ></fa-icon>
-              <span class="mx-2">Modifica Info</span>
+              <div class="menu-item">
+                <div class="icon-box">
+                  <fa-icon
+                    size="lg"
+                    [icon]="faPenToSquare"
+                    style="color:#5276b8"
+                  ></fa-icon>
+                </div>
+                <div class="mx-2">Modifica Info</div>
+              </div>
+            </button>
+            <button mat-menu-item (click)="editDeviceImages(row.id)">
+              <div class="menu-item">
+                <div class="icon-box">
+                  <fa-icon
+                    size="lg"
+                    [icon]="faImages"
+                    style="color:#00897b"
+                  ></fa-icon>
+                </div>
+                <div class="mx-2">Gestisci Immagini</div>
+              </div>
             </button>
             <button mat-menu-item (click)="deleteDevice(row)">
-              <fa-icon
-                size="lg"
-                [icon]="faTrashCan"
-                style="color: red;"
-              ></fa-icon>
-              <span class="mx-2">Elimina</span>
+              <div class="menu-item">
+                <div class="icon-box">
+                  <fa-icon
+                    size="lg"
+                    [icon]="faTrashCan"
+                    style="color: red"
+                  ></fa-icon>
+                </div>
+                <div class="mx-2">Elimina</div>
+              </div>
             </button>
           </mat-menu>
         </td>
@@ -149,6 +168,7 @@ export class DeviceTableComponent {
   faCircleCheck = faCircleCheck;
   faCircleExclamation = faCircleExclamation;
   faPenToSquare = faPenToSquare;
+  faImages = faImages;
   faTrashCan = faTrashCan;
   faEllipsisVertical = faEllipsisVertical;
 
@@ -164,6 +184,23 @@ export class DeviceTableComponent {
         this.dialog
           .open(DeviceModalComponent, {
             data: device,
+            width: '70%',
+          })
+          .afterClosed()
+          .subscribe(() => {
+            this.entryModified.emit();
+          });
+      },
+    });
+  }
+
+  editDeviceImages(id: string) {
+    this.service.getDeviceImages(id).subscribe({
+      next: (deviceImages) => {
+        console.log(deviceImages);
+        this.dialog
+          .open(DeviceImageModalComponent, {
+            data: deviceImages,
             width: '70%',
           })
           .afterClosed()

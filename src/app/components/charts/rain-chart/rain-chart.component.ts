@@ -53,6 +53,7 @@ export class RainChartComponent implements OnInit {
       chart: {
         alignThresholds: true,
         plotShadow: true,
+        zoomType: 'x'
       },
       xAxis: {
         type: 'datetime',

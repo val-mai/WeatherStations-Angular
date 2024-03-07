@@ -95,8 +95,7 @@ export class TemperatureChartComponent implements OnInit {
               '<span style="color:{point.color}">\u25CF</span> ' +
               '{series.name}: <b>{point.y}°C</b><br/>',
           },
-          color: '#48AFE8',
-          negativeColor: '#FF3333',
+          color: '#48AFE8'
         },
         {
           name: 'Temp. rugiada',
