@@ -16,7 +16,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faCircleMinus } from '@fortawesome/free-solid-svg-icons';
 import { DeviceService } from 'src/app/services/device.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
@@ -83,10 +83,10 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
             />
             <button
               style="color: red;"
-              mat-icon-button
+              mat-button
               (click)="removeStationImage(i)"
             >
-              -
+              <fa-icon size="lg" [icon]="faMinus" style="color: red;"></fa-icon>
             </button>
           </div>
           <button mat-icon-button (click)="addStationImage()">+</button>
@@ -97,7 +97,6 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
       <button mat-button mat-dialog-close>Cancel</button>
       <button
         mat-button
-        cdkFocusInitial
         color="primary"
         (click)="updateDeviceImages(editData.id)"
       >
@@ -111,7 +110,7 @@ export class DeviceImageModalComponent {
   deviceImagesForm!: FormGroup;
   action = 'Aggiorna';
   stationImages!: FormArray;
-  faMinus = faMinus;
+  faMinus = faCircleMinus;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -142,7 +141,7 @@ export class DeviceImageModalComponent {
       id: this.editData.id,
     });
     for (let index in this.editData.stationImages) {
-      if (index == '0' && this.editData.stationImages.length > 1) {
+      if (index == '0' && this.editData.stationImages.length > 0) {
         this.stationImages.patchValue([this.editData.stationImages[index]]);
       } else {
         (

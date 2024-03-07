@@ -101,28 +101,40 @@ import { DeviceImageModalComponent } from '../device-image-modal/device-image-mo
           </button>
           <mat-menu #menu="matMenu">
             <button mat-menu-item (click)="editDevice(row.id)">
-              <fa-icon
-                size="lg"
-                [icon]="faPenToSquare"
-                style="color:cadetblue"
-              ></fa-icon>
-              <span class="mx-2">Modifica Info</span>
+              <div class="menu-item">
+                <div class="icon-box">
+                  <fa-icon
+                    size="lg"
+                    [icon]="faPenToSquare"
+                    style="color:#5276b8"
+                  ></fa-icon>
+                </div>
+                <div class="mx-2">Modifica Info</div>
+              </div>
             </button>
             <button mat-menu-item (click)="editDeviceImages(row.id)">
-              <fa-icon
-                size="lg"
-                [icon]="faImages"
-                style="color:cadetblue"
-              ></fa-icon>
-              <span class="mx-2">Gestisci Immagini</span>
+              <div class="menu-item">
+                <div class="icon-box">
+                  <fa-icon
+                    size="lg"
+                    [icon]="faImages"
+                    style="color:#00897b"
+                  ></fa-icon>
+                </div>
+                <div class="mx-2">Gestisci Immagini</div>
+              </div>
             </button>
             <button mat-menu-item (click)="deleteDevice(row)">
-              <fa-icon
-                size="lg"
-                [icon]="faTrashCan"
-                style="color: red;"
-              ></fa-icon>
-              <span class="mx-2">Elimina</span>
+              <div class="menu-item">
+                <div class="icon-box">
+                  <fa-icon
+                    size="lg"
+                    [icon]="faTrashCan"
+                    style="color: red"
+                  ></fa-icon>
+                </div>
+                <div class="mx-2">Elimina</div>
+              </div>
             </button>
           </mat-menu>
         </td>
