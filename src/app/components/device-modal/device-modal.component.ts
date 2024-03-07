@@ -110,7 +110,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
     </mat-dialog-content>
     <mat-dialog-actions align="end">
       <button mat-button mat-dialog-close>Cancel</button>
-      <button mat-button cdkFocusInitial color="primary" (click)="makeAction()">
+      <button mat-button color="primary" (click)="makeAction()">
         {{ action }}
       </button>
     </mat-dialog-actions>
