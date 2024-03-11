@@ -73,7 +73,7 @@ export class StationHomeComponent implements OnInit {
 
   initWebcam() {
     this.webcam = null;
-    if (this.infoData.webcam.page != null) {
+    if (this.infoData.webcam.page != null && this.infoData.webcam.page != "") {
       this.webcam = this.infoData.webcam.page;
       setTimeout(() => {
         this.webcam = null;
