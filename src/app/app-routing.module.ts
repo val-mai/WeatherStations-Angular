@@ -7,10 +7,12 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { HomeComponent } from './pages/home/home.component';
 import { MapPageComponent } from './pages/map-page/map-page.component';
 import { StationComponent } from './pages/station/station.component';
+import { StatisticsComponent } from './pages/statistics/statistics.component';
 
 let routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'map', component: MapPageComponent },
+  { path: 'stats', component: StatisticsComponent },
   { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
   { path: 'stations/:id', component: StationComponent },
   { path: 'login', component: LoginComponent },
