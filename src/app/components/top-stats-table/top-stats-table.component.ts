@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 
 @Component({
@@ -34,7 +34,6 @@ import { MatTableModule } from '@angular/material/table';
     </table>
   `,
   styleUrl: './top-stats-table.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TopStatsTableComponent {
   @Input() data!: any;

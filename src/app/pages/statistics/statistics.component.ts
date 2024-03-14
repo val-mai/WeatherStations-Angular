@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import {
   MatDatepickerInputEvent,
@@ -12,6 +17,7 @@ import { FooterComponent } from 'src/app/components/footer/footer.component';
 import { SpinnerComponent } from 'src/app/components/spinner/spinner.component';
 import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
 import { TopStatsTableComponent } from 'src/app/components/top-stats-table/top-stats-table.component';
+import { DataService } from 'src/app/services/data.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { StatisticsService } from 'src/app/services/statistics.service';
 
@@ -34,25 +40,32 @@ import { StatisticsService } from 'src/app/services/statistics.service';
     <div class="main mat-app-background">
       <app-toolbar></app-toolbar>
       <div class="container">
-        <h2 class="my-3">Statistiche della nostra rete di stazioni</h2>
+        <div class="heading">
+          <h2 class="my-3">
+            Statistiche della nostra rete di stazioni
+            {{ date | date : 'dd-MM-yyyy' }}
+          </h2>
+          <mat-form-field class="mt-3">
+            <mat-label>Seleziona data</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              (dateChange)="selectDate($event)"
+            />
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
 
-        <mat-form-field>
-          <mat-label>Seleziona data</mat-label>
-          <input
-            matInput
-            [matDatepicker]="picker"
-            (dateChange)="selectDate($event)"
-          />
-          <mat-hint>MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle
-            matIconSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-
-        @if (render==true) {
-        <h3 class="mt-3">Località più fredde:</h3>
+        @if (message) {
+        <p>Dati del {{ date | date : 'dd-MM-yyyy' }} non disponibili</p>
+        } @if (render==true) {
+        <div class="mb-5"></div>
+        <h3 class="my-3">Località più fredde:</h3>
         <app-top-stats-table
           [data]="data.mostCold"
           [unit]="'°C'"
@@ -72,37 +85,49 @@ import { StatisticsService } from 'src/app/services/statistics.service';
           [data]="data.mostWindy"
           [unit]="'km/h'"
         ></app-top-stats-table>
-        <h3 class="my-5"></h3>
         } @else if (render==false) {
+        <div class="mb-5"></div>
         <app-spinner></app-spinner>
         }
       </div>
+      <div class="spacer"></div>
       <app-footer></app-footer>
     </div>
   `,
   styleUrl: './statistics.component.scss',
 })
-export class StatisticsComponent {
+export class StatisticsComponent implements OnInit {
   data!: any;
   render!: boolean | null;
+  date!: any;
+  message!: string;
 
-  constructor(
-    private service: StatisticsService,
-    private snackBar: SnackbarService
-  ) {}
+  constructor(private service: StatisticsService) {}
+
+  ngOnInit(): void {
+    this.date = new Date();
+    this.date.setDate(this.date.getDate() - 1);
+    this.getStats(this.date);
+  }
 
   selectDate(event: MatDatepickerInputEvent<Date>) {
-    console.log(event.value?.toLocaleDateString());
-    let date = event.value?.toLocaleDateString().replaceAll('/', '-');
+    this.date = event.value;
     this.render = false;
-    this.service.getNetworkStatistics(date).subscribe({
+    this.getStats(this.date);
+  }
+
+  private getStats(date: any) {
+    let dateString = date.toLocaleDateString().replaceAll('/', '-');
+    this.render = false;
+    this.service.getNetworkStatistics(dateString).subscribe({
       next: (resp: any) => {
         this.data = resp;
         this.render = true;
+        this.message = '';
       },
       error: (e) => {
         this.render = null;
-        this.snackBar.warning(e.error.message, 'Chiudi');
+        this.message = 'Dati non disponibili';
       },
     });
   }

@@ -1,3 +1,8 @@
-:host {
-  display: block;
+.spacer {
+  height: 5vh;
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
 }
