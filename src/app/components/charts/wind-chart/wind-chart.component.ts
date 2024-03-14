@@ -1,9 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
-import HC_exporting from 'highcharts/modules/exporting';
 import windbarb from 'highcharts/modules/windbarb';
 
 windbarb(Highcharts);
@@ -12,15 +16,14 @@ windbarb(Highcharts);
   selector: 'app-wind-chart',
   standalone: true,
   imports: [CommonModule, HighchartsChartModule, MatCardModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <mat-card>
       <mat-card-content>
         <highcharts-chart
           [Highcharts]="Highcharts"
           [options]="chartOptions"
-          style="width: 100%; height: {{
-            height
-          }}; display: block;"
+          style="width: 100%; height: {{ height }}; display: block;"
         >
         </highcharts-chart>
       </mat-card-content>
@@ -28,7 +31,7 @@ windbarb(Highcharts);
   `,
   styleUrl: './wind-chart.component.scss',
 })
-export class WindChartComponent implements OnInit {
+export class WindChartComponent implements OnChanges {
   @Input() windSpeed: any[] = [];
   @Input() windGust: any[] = [];
   @Input() windBarb: any[] = [];
@@ -46,7 +49,7 @@ export class WindChartComponent implements OnInit {
     return filteredData;
   }
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.initChart();
   }
 

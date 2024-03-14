@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
@@ -7,6 +13,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
 @Component({
   selector: 'app-humidity-chart',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, HighchartsChartModule, MatCardModule],
   template: `
     <mat-card>
@@ -14,9 +21,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
         <highcharts-chart
           [Highcharts]="Highcharts"
           [options]="chartOptions"
-          style="width: 100%; height: {{
-            height
-          }}; display: block;"
+          style="width: 100%; height: {{ height }}; display: block;"
         >
         </highcharts-chart>
       </mat-card-content>
@@ -24,14 +29,14 @@ import { HighchartsChartModule } from 'highcharts-angular';
   `,
   styleUrl: './humidity-chart.component.scss',
 })
-export class HumidityChartComponent implements OnInit {
+export class HumidityChartComponent implements OnChanges {
   @Input() humidityData: any[] = [];
   @Input() height: string = '400px';
 
   Highcharts = Highcharts;
   chartOptions = {};
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.initChart();
   }
 

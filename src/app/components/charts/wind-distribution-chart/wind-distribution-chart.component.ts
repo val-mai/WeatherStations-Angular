@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit,
+  OnChanges,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import * as Highcharts from 'highcharts';
@@ -12,6 +12,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
 @Component({
   selector: 'app-wind-distribution-chart',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, HighchartsChartModule, MatCardModule],
   template: `
     <mat-card>
@@ -19,9 +20,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
         <highcharts-chart
           [Highcharts]="Highcharts"
           [options]="chartOptions"
-          style="width: 100%; height: {{
-            height
-          }}; display: block;"
+          style="width: 100%; height: {{ height }}; display: block;"
         >
         </highcharts-chart>
       </mat-card-content>
@@ -29,14 +28,14 @@ import { HighchartsChartModule } from 'highcharts-angular';
   `,
   styleUrl: './wind-distribution-chart.component.scss',
 })
-export class WindDistributionChartComponent implements OnInit {
+export class WindDistributionChartComponent implements OnChanges {
   @Input() windDistribution: any[] = [];
   @Input() height: string = '400px';
 
   Highcharts = Highcharts;
   chartOptions = {};
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.initChart();
   }
 

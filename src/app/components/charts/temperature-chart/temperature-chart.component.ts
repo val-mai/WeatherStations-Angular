@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
@@ -8,15 +13,14 @@ import { HighchartsChartModule } from 'highcharts-angular';
   selector: 'app-temperature-chart',
   standalone: true,
   imports: [CommonModule, HighchartsChartModule, MatCardModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <mat-card>
       <mat-card-content>
         <highcharts-chart
           [Highcharts]="Highcharts"
           [options]="chartOptions"
-          style="width: 100%; height: {{
-            height
-          }}; display: block;"
+          style="width: 100%; height: {{ height }}; display: block;"
         >
         </highcharts-chart>
       </mat-card-content>
@@ -24,7 +28,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
   `,
   styleUrl: './temperature-chart.component.scss',
 })
-export class TemperatureChartComponent implements OnInit {
+export class TemperatureChartComponent implements OnChanges {
   @Input() temperatureData: any[] = [];
   @Input() dewData: any[] = [];
   @Input() height: string = '400px';
@@ -32,7 +36,7 @@ export class TemperatureChartComponent implements OnInit {
   Highcharts = Highcharts;
   chartOptions = {};
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.initChart();
   }
 
@@ -95,7 +99,7 @@ export class TemperatureChartComponent implements OnInit {
               '<span style="color:{point.color}">\u25CF</span> ' +
               '{series.name}: <b>{point.y}°C</b><br/>',
           },
-          color: '#48AFE8'
+          color: '#48AFE8',
         },
         {
           name: 'Temp. rugiada',

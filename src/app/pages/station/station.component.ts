@@ -2,7 +2,9 @@ import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
+  DestroyRef,
   OnDestroy,
+  inject,
   type OnInit,
 } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -15,6 +17,7 @@ import {
   faIgloo,
   faTemperatureLow,
 } from '@fortawesome/free-solid-svg-icons';
+import { delay, repeat } from 'rxjs';
 import { FooterComponent } from 'src/app/components/footer/footer.component';
 import { HistoryTableComponent } from 'src/app/components/history-table/history-table.component';
 import { SpinnerComponent } from 'src/app/components/spinner/spinner.component';
@@ -26,6 +29,7 @@ import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
 import { IWindDistribution } from 'src/app/interfaces/IWindDistribution';
 import { DataService } from 'src/app/services/data.service';
 import { DeviceService } from 'src/app/services/device.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-station',
@@ -150,6 +154,7 @@ export class StationComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedTabIndex!: number;
   deviceId!: any;
   windDistribution!: IWindDistribution;
+  private readonly destroy: DestroyRef = inject(DestroyRef);
 
   constructor(
     private deviceService: DeviceService,
@@ -192,19 +197,25 @@ export class StationComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private getDeviceInfo(id: string) {
-    this.dataService.getRealtimeData(id).subscribe((resp: any) => {
-      this.time = new Date(resp.time * 1000);
-      this.metrics = resp;
-    });
+    this.dataService
+      .getRealtimeData(id)
+      .pipe(repeat({ delay: 60000 }), takeUntilDestroyed(this.destroy))
+      .subscribe((resp: any) => {
+        this.time = new Date(resp.time * 1000);
+        this.metrics = resp;
+      });
   }
 
   private getHistoryData(id: string) {
-    this.dataService.getDailyHistory(id).subscribe((data: any) => {
-      this.tableData = data.observations;
-      this.min = data.min;
-      this.max = data.max;
-      this.getWindDistribution(data.observations);
-    });
+    this.dataService
+      .getDailyHistory(id)
+      .pipe(repeat({ delay: 300000 }), takeUntilDestroyed(this.destroy))
+      .subscribe((data: any) => {
+        this.tableData = data.observations;
+        this.min = data.min;
+        this.max = data.max;
+        this.getWindDistribution(data.observations);
+      });
   }
 
   private getWindDistribution(observations: any) {
