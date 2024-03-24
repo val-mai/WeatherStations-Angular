@@ -1,33 +1,21 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AuthService } from '../auth/auth.service';
+import { environment } from '../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StatisticsService {
+  constructor(private http: HttpClient, private auth: AuthService) {}
 
-  constructor() { }
+  private apiUrl: String = environment.apiURL;
 
-  getNetworkStatistics() {
-    return {
-      "date": "12-03-2024",
-      "mostCold" : [
-        {
-          "device":"6582c9e1a6eeb83915b4ceab",
-          "time": 1710245558000,
-          "value" : 1.2
-        },
-        {
-          "device":"6582c9e1a6eeb83915b4ceab",
-          "time": 1710274358000,
-          "value" : 2.4
-        },
-        {
-          "device":"6582c9e1a6eeb83915b4ceab",
-          "time": 1710274358000,
-          "value" : 2.6
-        },
-      ]
-    }
+  getNetworkStatistics(date: any) {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append('date', date);
+    return this.http.get(`${this.apiUrl}/stats/network`, {
+      params: queryParams,
+    });
   }
-
 }

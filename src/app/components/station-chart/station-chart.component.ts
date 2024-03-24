@@ -1,12 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+} from '@angular/core';
 import { IWindDistribution } from 'src/app/interfaces/IWindDistribution';
 import { FeelsLikeChartComponent } from '../charts/feels-like-chart/feels-like-chart.component';
 import { HumidityChartComponent } from '../charts/humidity-chart/humidity-chart.component';
 import { RainChartComponent } from '../charts/rain-chart/rain-chart.component';
 import { TemperatureChartComponent } from '../charts/temperature-chart/temperature-chart.component';
-import { WindDistributionChartComponent } from '../charts/wind-distribution-chart/wind-distribution-chart.component';
 import { WindChartComponent } from '../charts/wind-chart/wind-chart.component';
+import { WindDistributionChartComponent } from '../charts/wind-distribution-chart/wind-distribution-chart.component';
 
 @Component({
   selector: 'app-station-chart',
@@ -20,6 +25,7 @@ import { WindChartComponent } from '../charts/wind-chart/wind-chart.component';
     WindChartComponent,
     WindDistributionChartComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="divider mt-3">GRAFICI TERMOIGROMETRO</div>
     <div class="row inserted g-3">
@@ -64,7 +70,7 @@ import { WindChartComponent } from '../charts/wind-chart/wind-chart.component';
   `,
   styleUrl: './station-chart.component.scss',
 })
-export class StationChartComponent implements OnInit {
+export class StationChartComponent implements OnChanges {
   @Input() chartData!: any;
   @Input() windRose!: IWindDistribution;
 
@@ -79,9 +85,10 @@ export class StationChartComponent implements OnInit {
   windBarbData: any[] = [];
   windDistributionData: any[] = [];
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
+    this.initChartData();
     this.chartData.forEach((element: any) => {
-      const adjustedTimestamp = new Date(element.time * 1000).getTime();
+      const adjustedTimestamp = new Date((element.time + 3600) * 1000).getTime();
       this.temperatureData.push([adjustedTimestamp, element.temperature]);
       this.dewData.push([adjustedTimestamp, element.dewPoint]);
       this.feelsLikeData.push([adjustedTimestamp, element.feelsLike]);
@@ -94,6 +101,19 @@ export class StationChartComponent implements OnInit {
       this.windBarbData.push([adjustedTimestamp, speed, element.windDirection]);
     });
     this.createWindDistribution();
+  }
+
+  private initChartData() {
+    this.temperatureData = [];
+    this.humidityData = [];
+    this.dewData = [];
+    this.feelsLikeData = [];
+    this.rainFallData = [];
+    this.rainRateData = [];
+    this.windSpeedData = [];
+    this.windGustData = [];
+    this.windBarbData = [];
+    this.windDistributionData = [];
   }
 
   private createWindDistribution() {

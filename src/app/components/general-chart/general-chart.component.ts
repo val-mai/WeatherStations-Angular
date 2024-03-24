@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -13,7 +18,6 @@ import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import HC_exporting from 'highcharts/modules/exporting';
 import windbarb from 'highcharts/modules/windbarb';
-import { DataService } from 'src/app/services/data.service';
 import { SpinnerComponent } from '../spinner/spinner.component';
 
 HC_exporting(Highcharts);
@@ -22,6 +26,7 @@ windbarb(Highcharts);
 @Component({
   selector: 'app-chart',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     HighchartsChartModule,
@@ -65,7 +70,7 @@ windbarb(Highcharts);
   `,
   styleUrl: './general-chart.component.scss',
 })
-export class GeneralChartComponent implements OnInit {
+export class GeneralChartComponent implements OnChanges {
   Highcharts = Highcharts;
   chartOptions = {};
   render: boolean = true;
@@ -73,7 +78,6 @@ export class GeneralChartComponent implements OnInit {
   @Input() title!: string;
   @Input() data: any[] = [];
   @Input() height: string = '400px';
-  /* @Input() deviceId!: string; */
 
   range = new FormGroup({
     start: new FormControl(),
@@ -84,7 +88,7 @@ export class GeneralChartComponent implements OnInit {
   pressureData: any[] = [];
   windData: any[] = [];
 
-  constructor(private dataService: DataService) {}
+  constructor() {}
 
   /* selectRange() {
     this.render = false;
@@ -115,11 +119,14 @@ export class GeneralChartComponent implements OnInit {
     return filteredData;
   }
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.initChart(this.data);
   }
 
   private initChart(weatherData: any[]) {
+    this.temperatureData = [];
+    this.pressureData = [];
+    this.windData = [];
     weatherData.forEach((element: any, i: number) => {
       const adjustedTimestamp = new Date(element.time * 1000).getTime();
       this.temperatureData.push([adjustedTimestamp, element.temperature]);
@@ -207,7 +214,7 @@ export class GeneralChartComponent implements OnInit {
             valueSuffix: ' m/s',
           },
         },
-      ]
+      ],
     };
   }
 }

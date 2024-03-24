@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
+  OnChanges,
   OnInit,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
@@ -12,6 +13,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
 @Component({
   selector: 'app-feels-like-chart',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, HighchartsChartModule, MatCardModule],
   template: `
     <mat-card>
@@ -19,9 +21,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
         <highcharts-chart
           [Highcharts]="Highcharts"
           [options]="chartOptions"
-          style="width: 100%; height: {{
-            height
-          }}; display: block;"
+          style="width: 100%; height: {{ height }}; display: block;"
         >
         </highcharts-chart>
       </mat-card-content>
@@ -29,14 +29,14 @@ import { HighchartsChartModule } from 'highcharts-angular';
   `,
   styleUrl: './feels-like-chart.component.scss',
 })
-export class FeelsLikeChartComponent implements OnInit {
+export class FeelsLikeChartComponent implements OnChanges {
   @Input() feelsLike: any[] = [];
   @Input() height: string = '400px';
 
   Highcharts = Highcharts;
   chartOptions = {};
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.initChart();
   }
 

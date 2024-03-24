@@ -32,15 +32,10 @@ import { environment } from 'src/app/environments/environment';
         </button>
         <span class="example-spacer"></span>
         <div *ngIf="mobile == false && comingSoon == false">
-          <button
-            routerLink="/map"
-            routerLinkActive="active"
-            mat-button
-            class="example-icon"
-          >
+          <button routerLink="/map" routerLinkActive="active" mat-button>
             Mappa Live
           </button>
-          <button mat-button class="example-icon favorite-icon">
+          <button mat-button routerLink="/stats" routerLinkActive="active">
             Statistiche
           </button>
           <button mat-button class="example-icon">Chi siamo</button>

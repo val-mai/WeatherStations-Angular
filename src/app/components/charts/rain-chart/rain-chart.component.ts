@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
@@ -10,20 +16,15 @@ HC_exporting(Highcharts);
 @Component({
   selector: 'app-rain-chart',
   standalone: true,
-  imports: [
-    CommonModule,
-    HighchartsChartModule,
-    MatCardModule,
-  ],
+  imports: [CommonModule, HighchartsChartModule, MatCardModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <mat-card>
       <mat-card-content>
         <highcharts-chart
           [Highcharts]="Highcharts"
           [options]="chartOptions"
-          style="width: 100%; height: {{
-            height
-          }}; display: block;"
+          style="width: 100%; height: {{ height }}; display: block;"
         >
         </highcharts-chart>
       </mat-card-content>
@@ -31,7 +32,7 @@ HC_exporting(Highcharts);
   `,
   styleUrl: './rain-chart.component.scss',
 })
-export class RainChartComponent implements OnInit {
+export class RainChartComponent implements OnChanges {
   @Input() rainFall: any[] = [];
   @Input() rainRate: any[] = [];
   @Input() height: string = '400px';
@@ -40,7 +41,7 @@ export class RainChartComponent implements OnInit {
   chartOptions = {};
   render: boolean = false;
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.initChart();
   }
 
@@ -53,7 +54,7 @@ export class RainChartComponent implements OnInit {
       chart: {
         alignThresholds: true,
         plotShadow: true,
-        zoomType: 'x'
+        zoomType: 'x',
       },
       xAxis: {
         type: 'datetime',
