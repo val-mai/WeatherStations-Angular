@@ -65,22 +65,34 @@ import { StatisticsService } from 'src/app/services/statistics.service';
         <p>Dati del {{ date | date : 'dd-MM-yyyy' }} non disponibili</p>
         } @if (render==true) {
         <div class="mb-5"></div>
-        <h3 class="my-3">Località più fredde:</h3>
+        <div class="d-flex mb-3">
+          <img style="width: 60px;" src="../../assets/cold.png" alt="" />
+          <h3 class="my-3 mx-3">Località più fredde:</h3>
+        </div>
         <app-top-stats-table
           [data]="data.mostCold"
           [unit]="'°C'"
         ></app-top-stats-table>
-        <h3 class="my-3">Località più calde:</h3>
+        <div class="d-flex mb-3">
+          <img style="width: 60px;" src="../../assets/hot.png" alt="" />
+          <h3 class="my-3 mx-3">Località più calde:</h3>
+        </div>
         <app-top-stats-table
           [data]="data.mostWarm"
           [unit]="'°C'"
         ></app-top-stats-table>
-        <h3 class="my-3">Località più piovose:</h3>
+        <div class="d-flex mb-3">
+          <img style="width: 60px;" src="../../assets/raincoat.png" alt="" />
+          <h3 class="my-3 mx-3">Località più piovose:</h3>
+        </div>
         <app-top-stats-table
           [data]="data.mostRainy"
           [unit]="'mm'"
         ></app-top-stats-table>
-        <h3 class="my-3">Località più ventose:</h3>
+        <div class="d-flex mb-3">
+          <img style="width: 60px;" src="../../assets/tree.png" alt="" />
+          <h3 class="my-3 mx-3">Località più ventose:</h3>
+        </div>
         <app-top-stats-table
           [data]="data.mostWindy"
           [unit]="'km/h'"

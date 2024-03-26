@@ -83,7 +83,7 @@ export class FeelsLikeChartComponent implements OnChanges {
           name: 'Temp. percepita',
           type: 'spline',
           data: this.feelsLike,
-          color: '#00897b',
+          color: '#90ee7e',
           marker: {
             enabled: false,
           },

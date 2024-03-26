@@ -24,15 +24,17 @@ import { PressureCardComponent } from '../cards/pressure-card/pressure-card.comp
   template: `
     <div class="divider my-3">DATI TERMOIGROMETRO</div>
     <div class="row inserted">
-      <div class="col-md-4 my-2">
+      <div class="col-md-6 my-2">
         <app-metric-card
           [temperature]="metrics?.temperature.value"
+          [feelsLike]="metrics?.feelsLike.value"
+          [dewPoint]="metrics?.dewPoint.value"
           [min]="min?.temperature"
           [max]="max?.temperature"
         >
         </app-metric-card>
       </div>
-      <div class="col-md-4 my-2">
+      <div class="col-md-6 my-2">
         <app-humidity-card
           [humidity]="metrics?.humidity.value"
           [min]="min?.humidity"
@@ -40,13 +42,13 @@ import { PressureCardComponent } from '../cards/pressure-card/pressure-card.comp
         >
         </app-humidity-card>
       </div>
-      <div class="col-md-4 my-2">
+      <!--       <div class="col-md-4 my-2">
         <app-various-card
           [dewPoint]="metrics?.dewPoint?.value"
           [feelsLike]="metrics?.feelsLike?.value"
         >
         </app-various-card>
-      </div>
+      </div> -->
     </div>
     <div class="divider my-3">DATI PLUVIOMETRO</div>
     <div class="row inserted">

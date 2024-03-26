@@ -14,30 +14,32 @@ import { MatTooltipModule } from '@angular/material/tooltip';
           <img style="width: 60px;" src="../../assets/humidity.png" alt="" />
           <div class="box">
             <h4>UMIDITA'</h4>
-            <div class="main-data">
-              <mat-card-title class="mx-1">
-                <h3>
-                  {{ humidity }}
-                </h3>
-              </mat-card-title>
-              <mat-card-subtitle>%</mat-card-subtitle>
-            </div>
-            <div class="sub-data">
-              <div style="color: blue;">
-                <h3><b>MIN</b></h3>
-                @if (min) {
-                <p matTooltip="{{ getDate(min.time) }}">{{ min.value }}</p>
-                } @else {
-                <p>-</p>
-                }
+            <div class="row">
+              <div class="main-data">
+                <mat-card-title class="mx-1">
+                  <h3>
+                    {{ humidity }}
+                  </h3>
+                </mat-card-title>
+                <mat-card-subtitle>%</mat-card-subtitle>
               </div>
-              <div style="color: red;">
-                <h3><b>MAX</b></h3>
-                @if (max) {
-                <p matTooltip="{{ getDate(max.time) }}">{{ max.value }}</p>
-                } @else {
-                <p>-</p>
-                }
+              <div class="sub-data">
+                <div style="color: blue;">
+                  <h3><b>MIN</b></h3>
+                  @if (min) {
+                  <p matTooltip="{{ getDate(min.time) }}">{{ min.value }}</p>
+                  } @else {
+                  <p>-</p>
+                  }
+                </div>
+                <div style="color: red;">
+                  <h3><b>MAX</b></h3>
+                  @if (max) {
+                  <p matTooltip="{{ getDate(max.time) }}">{{ max.value }}</p>
+                  } @else {
+                  <p>-</p>
+                  }
+                </div>
               </div>
             </div>
           </div>
