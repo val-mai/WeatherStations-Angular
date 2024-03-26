@@ -1,9 +1,9 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faTemperatureHalf } from '@fortawesome/free-solid-svg-icons';
 import { Metric } from 'src/app/interfaces/metric';
 
 @Component({
@@ -17,30 +17,46 @@ import { Metric } from 'src/app/interfaces/metric';
           <img style="width: 60px;" src="../../assets/temperature.png" alt="" />
           <div class="box">
             <h4>TEMPERATURA</h4>
-            <div class="main-data">
-              <mat-card-title class="mx-1">
-                <h3 style="color: {{ this.color }}">
-                  {{ temperature }}
-                </h3>
-              </mat-card-title>
-              <mat-card-subtitle>°C</mat-card-subtitle>
-            </div>
-            <div class="sub-data">
-              <div style="color: blue;">
-                <h3><b>MIN</b></h3>
-                @if (min) {
-                <p matTooltip="{{ getDate(min.time) }}">{{ min.value }}</p>
-                } @else {
-                <p>-</p>
-                }
+            <div class="row">
+              <div class="col column">
+                <div class="main-data">
+                  <mat-card-title class="mx-1">
+                    <h3 style="color: {{ this.color }}">
+                      {{ temperature }}
+                    </h3>
+                  </mat-card-title>
+                  <mat-card-subtitle>°C</mat-card-subtitle>
+                </div>
+                <div class="sub-data">
+                  <div style="color: blue;">
+                    <h3><b>MIN</b></h3>
+                    @if (min) {
+                    <p matTooltip="{{ getDate(min.time) }}">{{ min.value }}</p>
+                    } @else {
+                    <p>-</p>
+                    }
+                  </div>
+                  <div style="color: red;">
+                    <h3><b>MAX</b></h3>
+                    @if (max) {
+                    <p matTooltip="{{ getDate(max.time) }}">{{ max.value }}</p>
+                    } @else {
+                    <p>-</p>
+                    }
+                  </div>
+                </div>
               </div>
-              <div style="color: red;">
-                <h3><b>MAX</b></h3>
-                @if (max) {
-                <p matTooltip="{{ getDate(max.time) }}">{{ max.value }}</p>
-                } @else {
-                <p>-</p>
-                }
+              <div class="col column" *ngIf="!mobile">
+                <p>
+                  <mat-card-subtitle
+                    >Percepita: {{ feelsLike }} °C</mat-card-subtitle
+                  >
+                </p>
+                <p>
+                  <mat-card-subtitle
+                    >Rugiada: {{ dewPoint }} °C</mat-card-subtitle
+                  >
+                </p>
               </div>
             </div>
           </div>
@@ -55,15 +71,25 @@ export class MetricCardComponent implements OnInit {
 
   color!: string;
   @Input() temperature: number = 35;
+  @Input() feelsLike: number = 35;
+  @Input() dewPoint: number = 35;
   @Input() min: any;
   @Input() max: any;
 
-  constructor() {}
+  mobile: boolean = false;
 
-  faTemperature = faTemperatureHalf;
+  constructor(private responsive: BreakpointObserver) {}
 
   ngOnInit(): void {
     this.getColor();
+  }
+
+  ngAfterViewInit(): void {
+    this.responsive
+      .observe([Breakpoints.Medium, Breakpoints.Small, Breakpoints.XSmall])
+      .subscribe((result) => {
+        this.mobile = result.matches ? true : false;
+      });
   }
 
   getColor() {

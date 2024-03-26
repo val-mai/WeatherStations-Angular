@@ -12,14 +12,14 @@
   align-items: center;
 }
 
-mat-card-title{
+mat-card-title {
   h3 {
     font-size: 2rem;
     font-weight: bold;
   }
 }
 
-h4{
+h4 {
   text-align: center;
   font-weight: bold;
   font-size: 1rem;
@@ -45,11 +45,15 @@ h4{
   display: flex;
   align-items: center;
   justify-content: space-around;
-  h3, p {
+  h3,
+  p {
     margin: 0;
   }
-  p{
+  p {
     color: #333;
   }
 }
 
+.column {
+  min-width: 180px;
+}
