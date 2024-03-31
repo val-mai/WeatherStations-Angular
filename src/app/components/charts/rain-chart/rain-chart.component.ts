@@ -48,6 +48,9 @@ export class RainChartComponent implements OnChanges {
   private initChart() {
     this.render = true;
     this.chartOptions = {
+      time: {
+        useUTC: false,
+      },
       title: {
         text: null,
       },

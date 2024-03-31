@@ -55,6 +55,9 @@ export class WindChartComponent implements OnChanges {
 
   private initChart() {
     this.chartOptions = {
+      time: {
+        useUTC: false,
+      },
       title: {
         text: null,
       },

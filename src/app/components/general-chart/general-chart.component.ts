@@ -128,9 +128,7 @@ export class GeneralChartComponent implements OnChanges {
     this.pressureData = [];
     this.windData = [];
     weatherData.forEach((element: any, i: number) => {
-      const adjustedTimestamp = new Date(
-        (element.time + 3600) * 1000
-      ).getTime();
+      const adjustedTimestamp = new Date(element.time * 1000).getTime();
       this.temperatureData.push([adjustedTimestamp, element.temperature]);
       this.pressureData.push([adjustedTimestamp, element.pressure]);
       const speed = Math.round((element.windGust * 1000) / 3600);
@@ -138,6 +136,9 @@ export class GeneralChartComponent implements OnChanges {
     });
     this.render = true;
     this.chartOptions = {
+      time: {
+        useUTC: false,
+      },
       title: {
         text: null,
       },
