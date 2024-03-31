@@ -10,6 +10,8 @@ import { MatCardModule } from '@angular/material/card';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import HC_exporting from 'highcharts/modules/exporting';
+import * as moment_timezone from "moment-timezone";
+(window as any).moment = moment_timezone;
 
 HC_exporting(Highcharts);
 
@@ -49,7 +51,7 @@ export class RainChartComponent implements OnChanges {
     this.render = true;
     this.chartOptions = {
       time: {
-        useUTC: false,
+        timezone: 'Europe/Rome',
       },
       title: {
         text: null,

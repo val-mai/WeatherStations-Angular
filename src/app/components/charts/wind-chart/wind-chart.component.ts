@@ -9,6 +9,8 @@ import { MatCardModule } from '@angular/material/card';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import windbarb from 'highcharts/modules/windbarb';
+import * as moment_timezone from "moment-timezone";
+(window as any).moment = moment_timezone;
 
 windbarb(Highcharts);
 
@@ -56,7 +58,7 @@ export class WindChartComponent implements OnChanges {
   private initChart() {
     this.chartOptions = {
       time: {
-        useUTC: false,
+        timezone: 'Europe/Rome',
       },
       title: {
         text: null,
