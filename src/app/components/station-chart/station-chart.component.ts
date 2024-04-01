@@ -88,7 +88,7 @@ export class StationChartComponent implements OnChanges {
   ngOnChanges(): void {
     this.initChartData();
     this.chartData.forEach((element: any) => {
-      const adjustedTimestamp = new Date((element.time) * 1000).getTime();
+      const adjustedTimestamp = new Date((element.time + 3600) * 1000).getTime();
       this.temperatureData.push([adjustedTimestamp, element.temperature]);
       this.dewData.push([adjustedTimestamp, element.dewPoint]);
       this.feelsLikeData.push([adjustedTimestamp, element.feelsLike]);

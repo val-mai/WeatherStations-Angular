@@ -138,6 +138,7 @@ export class GeneralChartComponent implements OnChanges {
     this.chartOptions = {
       time: {
         timezone: 'America/Lima',
+        useUTC : false
       },
       title: {
         text: null,
