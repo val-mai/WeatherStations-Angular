@@ -11,7 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   template: ` <mat-card class="metric-card">
     <mat-card-header class="pb-3">
       <div class="card-body">
-        <img style="width: 60px;" src="../../assets/windsock.png" alt="" />
+        <img style="width: 60px;" src="../../assets/uv-index.png" alt="" />
         <div class="box">
           <h4>RADIAZIONE SOLARE</h4>
           <div class="data-container">
@@ -23,7 +23,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
                     {{ solarRadiation }}
                   </h3>
                 </mat-card-title>
-                <mat-card-subtitle>km/h</mat-card-subtitle>
+                <mat-card-subtitle>W/mq</mat-card-subtitle>
               </div>
               <div class="sub-data" style="color: red;">
                 <h3><b>MAX</b></h3>

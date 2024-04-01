@@ -87,7 +87,7 @@ import { StatisticsService } from 'src/app/services/statistics.service';
         <div class="row">
           <div class="col-md-6">
             <div class="d-flex mb-3">
-              <img style="width: 60px;" src="../../assets/raincoat.png" alt="" />
+              <img style="width: 60px;" src="../../assets/stormy.png" alt="" />
               <h3 class="my-3 mx-3">Località più piovose:</h3>
             </div>
             <app-top-stats-table
