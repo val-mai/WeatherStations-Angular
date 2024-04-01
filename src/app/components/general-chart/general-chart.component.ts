@@ -19,8 +19,6 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import HC_exporting from 'highcharts/modules/exporting';
 import windbarb from 'highcharts/modules/windbarb';
 import { SpinnerComponent } from '../spinner/spinner.component';
-import * as moment_timezone from "moment-timezone";
-(window as any).moment = moment_timezone;
 
 HC_exporting(Highcharts);
 windbarb(Highcharts);
@@ -139,7 +137,7 @@ export class GeneralChartComponent implements OnChanges {
     this.render = true;
     this.chartOptions = {
       time: {
-        timezone: 'Europe/Rome',
+        timezone: 'America/Lima',
       },
       title: {
         text: null,
