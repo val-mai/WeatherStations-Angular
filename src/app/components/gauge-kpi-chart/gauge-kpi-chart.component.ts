@@ -71,7 +71,7 @@ export class GaugeKpiChartComponent implements OnInit {
           y: 16,
         },
         min: 0,
-        max: 20,
+        max: 30,
       },
       credits: {
         enabled: false,
