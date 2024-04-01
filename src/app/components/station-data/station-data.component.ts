@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { MetricCardComponent } from '../cards/metric-card/metric-card.component';
+import { Component, Input } from '@angular/core';
 import { HumidityCardComponent } from '../cards/humidity-card/humidity-card.component';
-import { VariousCardComponent } from '../cards/various-card/various-card.component';
+import { MetricCardComponent } from '../cards/metric-card/metric-card.component';
+import { PressureCardComponent } from '../cards/pressure-card/pressure-card.component';
 import { RainCardComponent } from '../cards/rain-card/rain-card.component';
 import { RainLevelsCardComponent } from '../cards/rain-levels-card/rain-levels-card.component';
+import { SolarCardComponent } from '../cards/solar-card/solar-card.component';
+import { VariousCardComponent } from '../cards/various-card/various-card.component';
 import { WindCardComponent } from '../cards/wind-card/wind-card.component';
-import { PressureCardComponent } from '../cards/pressure-card/pressure-card.component';
 
 @Component({
   selector: 'app-station-data',
@@ -20,6 +21,7 @@ import { PressureCardComponent } from '../cards/pressure-card/pressure-card.comp
     RainLevelsCardComponent,
     WindCardComponent,
     PressureCardComponent,
+    SolarCardComponent,
   ],
   template: `
     <div class="divider my-3">DATI TERMOIGROMETRO</div>
@@ -42,13 +44,6 @@ import { PressureCardComponent } from '../cards/pressure-card/pressure-card.comp
         >
         </app-humidity-card>
       </div>
-      <!--       <div class="col-md-4 my-2">
-        <app-various-card
-          [dewPoint]="metrics?.dewPoint?.value"
-          [feelsLike]="metrics?.feelsLike?.value"
-        >
-        </app-various-card>
-      </div> -->
     </div>
     <div class="divider my-3">DATI PLUVIOMETRO</div>
     <div class="row inserted">
@@ -86,6 +81,20 @@ import { PressureCardComponent } from '../cards/pressure-card/pressure-card.comp
           [minRel]="min?.pressure"
           [maxRel]="max?.pressure"
         ></app-pressure-card>
+      </div>
+      <div class="divider my-3">DATI PIRANOMETRO / VARIE</div>
+      <div class="col-md-6 my-2">
+        <app-solar-card
+          [solarRadiation]="metrics?.solarRadiation?.value"
+          [index]="metrics?.uvIndex?.value"
+        ></app-solar-card>
+      </div>
+      <div class="col-md-6 my-2">
+        <app-various-card
+          [dewPoint]="metrics?.dewPoint?.value"
+          [feelsLike]="metrics?.feelsLike?.value"
+        >
+        </app-various-card>
       </div>
       <div class="mb-5"></div>
     </div>
