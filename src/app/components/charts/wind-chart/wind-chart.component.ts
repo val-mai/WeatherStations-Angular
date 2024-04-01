@@ -59,6 +59,7 @@ export class WindChartComponent implements OnChanges {
     this.chartOptions = {
       time: {
         timezone: 'Europe/Rome',
+        useUTC: false
       },
       title: {
         text: null,
