@@ -8,7 +8,7 @@ import { MatCardModule } from '@angular/material/card';
   standalone: true,
   imports: [CommonModule, MatCardModule],
   template: `
-    <mat-card class="metric-card">
+    <mat-card class="metric-card" [ngClass]="{ mobile: mobile == true }">
       <mat-card-header class="pb-3">
         <div class="card-body">
           <img style="width: 60px;" src="../../assets/flood.png" alt="" />
