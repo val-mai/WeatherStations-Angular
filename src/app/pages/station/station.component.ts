@@ -7,6 +7,7 @@ import {
   inject,
   type OnInit,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
@@ -17,7 +18,7 @@ import {
   faIgloo,
   faTemperatureLow,
 } from '@fortawesome/free-solid-svg-icons';
-import { delay, repeat } from 'rxjs';
+import { repeat } from 'rxjs';
 import { FooterComponent } from 'src/app/components/footer/footer.component';
 import { HistoryTableComponent } from 'src/app/components/history-table/history-table.component';
 import { SpinnerComponent } from 'src/app/components/spinner/spinner.component';
@@ -29,7 +30,6 @@ import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
 import { IWindDistribution } from 'src/app/interfaces/IWindDistribution';
 import { DataService } from 'src/app/services/data.service';
 import { DeviceService } from 'src/app/services/device.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-station',

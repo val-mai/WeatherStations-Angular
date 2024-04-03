@@ -87,6 +87,8 @@ import { WindCardComponent } from '../cards/wind-card/wind-card.component';
         <app-solar-card
           [solarRadiation]="metrics?.solarRadiation?.value"
           [index]="metrics?.uvIndex?.value"
+          [maxRadiation]="max?.solarRadiation"
+          [maxIndex]="max?.uvIndex"
         ></app-solar-card>
       </div>
       <div class="col-md-6 my-2">

@@ -13,7 +13,7 @@ import { MatCardModule } from '@angular/material/card';
           <img style="width: 60px;" src="../../assets/cloudy.png" alt="" />
           <div class="box">
             <h4>VARIE</h4>
-            <div>
+            <div class="main-data">
               <p>
                 Temp. percepita: <b>{{ feelsLike }}</b> °C
               </p>

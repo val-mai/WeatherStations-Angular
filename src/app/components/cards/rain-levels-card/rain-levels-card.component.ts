@@ -13,7 +13,7 @@ import { MatCardModule } from '@angular/material/card';
         <div class="card-body">
           <img style="width: 60px;" src="../../assets/flood.png" alt="" />
           <div class="box">
-            <h4 [ngClass]="{ spacer: !mobile }">LIVELLI PIOGGIA</h4>
+            <h4 class="spacer">LIVELLI PIOGGIA</h4>
             <div class="row main-data">
               <div class="col-md column">
                 <p>

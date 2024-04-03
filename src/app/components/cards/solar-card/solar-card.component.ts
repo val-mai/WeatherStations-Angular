@@ -36,15 +36,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
                 }
               </div>
             </div>
-<!--             <div class="main-data">
-              <div
-                class="arrow"
-                [style.transform]="'rotate(' + (windDirection + 180) + 'deg)'"
-              >
-                <img src="../../assets/direction.png" alt="direction" />
-              </div>
-              <h4 class="mt-3">{{ getDirection(windDirection) }}</h4>
-            </div> -->
             <div class="main-data" *ngIf="!mobile">
               <h5>INDICE UV</h5>
               <div>
