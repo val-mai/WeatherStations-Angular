@@ -46,18 +46,6 @@ import { Metric } from 'src/app/interfaces/metric';
                   </div>
                 </div>
               </div>
-              <div class="col column" *ngIf="!mobile">
-                <p>
-                  <mat-card-subtitle
-                    >Percepita: {{ feelsLike }} °C</mat-card-subtitle
-                  >
-                </p>
-                <p>
-                  <mat-card-subtitle
-                    >Rugiada: {{ dewPoint }} °C</mat-card-subtitle
-                  >
-                </p>
-              </div>
             </div>
           </div>
         </div>

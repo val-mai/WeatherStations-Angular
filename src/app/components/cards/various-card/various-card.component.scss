@@ -33,11 +33,13 @@ h4{
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  min-height: 132px;
+  min-height: 164px;
 }
 
 .main-data {
   display: flex;
+  flex-direction: column;
+  min-height: 100px;
   align-items: center;
   justify-content: center;
 }
