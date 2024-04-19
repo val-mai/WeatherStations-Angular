@@ -12,6 +12,7 @@ import { RainChartComponent } from '../charts/rain-chart/rain-chart.component';
 import { TemperatureChartComponent } from '../charts/temperature-chart/temperature-chart.component';
 import { WindChartComponent } from '../charts/wind-chart/wind-chart.component';
 import { WindDistributionChartComponent } from '../charts/wind-distribution-chart/wind-distribution-chart.component';
+import { RadiationChartComponent } from '../charts/radiation-chart/radiation-chart.component';
 
 @Component({
   selector: 'app-station-chart',
@@ -24,6 +25,7 @@ import { WindDistributionChartComponent } from '../charts/wind-distribution-char
     FeelsLikeChartComponent,
     WindChartComponent,
     WindDistributionChartComponent,
+    RadiationChartComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -66,6 +68,13 @@ import { WindDistributionChartComponent } from '../charts/wind-distribution-char
         ></app-wind-distribution-chart>
       </div>
     </div>
+    <div class="divider mt-3">GRAFICO PIRANOMETRO</div>
+    <div class="row inserted g-3">
+      <app-radiation-chart
+        [solarRadiationData]="solarRadiationData"
+        [uvIndexData]="uvIndexData"
+      ></app-radiation-chart>
+    </div>
     <div class="mb-5"></div>
   `,
   styleUrl: './station-chart.component.scss',
@@ -83,12 +92,14 @@ export class StationChartComponent implements OnChanges {
   windSpeedData: any[] = [];
   windGustData: any[] = [];
   windBarbData: any[] = [];
+  solarRadiationData: any[] = [];
+  uvIndexData: any[] = [];
   windDistributionData: any[] = [];
 
   ngOnChanges(): void {
     this.initChartData();
     this.chartData.forEach((element: any) => {
-      const adjustedTimestamp = new Date((element.time) * 1000).getTime();
+      const adjustedTimestamp = new Date(element.time * 1000).getTime();
       this.temperatureData.push([adjustedTimestamp, element.temperature]);
       this.dewData.push([adjustedTimestamp, element.dewPoint]);
       this.feelsLikeData.push([adjustedTimestamp, element.feelsLike]);
@@ -97,6 +108,8 @@ export class StationChartComponent implements OnChanges {
       this.humidityData.push([adjustedTimestamp, element.humidity]);
       this.windSpeedData.push([adjustedTimestamp, element.windSpeed]);
       this.windGustData.push([adjustedTimestamp, element.windGust]);
+      this.solarRadiationData.push([adjustedTimestamp, element.solarRadiation]);
+      this.uvIndexData.push([adjustedTimestamp, element.uvIndex]);
       const speed = Math.round((element.windGust * 1000) / 3600);
       this.windBarbData.push([adjustedTimestamp, speed, element.windDirection]);
     });
@@ -113,6 +126,8 @@ export class StationChartComponent implements OnChanges {
     this.windSpeedData = [];
     this.windGustData = [];
     this.windBarbData = [];
+    this.solarRadiationData = [];
+    this.uvIndexData = [];
     this.windDistributionData = [];
   }
 

@@ -4,12 +4,11 @@ import {
   Component,
   Input,
   OnChanges,
-  OnInit,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
-import * as moment_timezone from "moment-timezone";
+import * as moment_timezone from 'moment-timezone';
 (window as any).moment = moment_timezone;
 
 @Component({
@@ -46,7 +45,7 @@ export class HumidityChartComponent implements OnChanges {
     this.chartOptions = {
       time: {
         timezone: 'Europe/Rome',
-        useUTC: false
+        useUTC: false,
       },
       title: {
         text: null,

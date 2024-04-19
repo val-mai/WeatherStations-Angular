@@ -1,24 +1,15 @@
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnChanges,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
-import windbarb from 'highcharts/modules/windbarb';
 import * as moment_timezone from 'moment-timezone';
 (window as any).moment = moment_timezone;
 
-windbarb(Highcharts);
-
 @Component({
-  selector: 'app-wind-chart',
+  selector: 'app-radiation-chart',
   standalone: true,
   imports: [CommonModule, HighchartsChartModule, MatCardModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <mat-card>
       <mat-card-content>
@@ -31,25 +22,16 @@ windbarb(Highcharts);
       </mat-card-content>
     </mat-card>
   `,
-  styleUrl: './wind-chart.component.scss',
+  styleUrl: './radiation-chart.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WindChartComponent implements OnChanges {
-  @Input() windSpeed: any[] = [];
-  @Input() windGust: any[] = [];
-  @Input() windBarb: any[] = [];
+export class RadiationChartComponent {
+  @Input() solarRadiationData: any[] = [];
+  @Input() uvIndexData: any[] = [];
   @Input() height: string = '400px';
 
   Highcharts = Highcharts;
   chartOptions = {};
-
-  filterData(data: number[], numberOfPointsToShow: number) {
-    const step = Math.ceil(data.length / numberOfPointsToShow);
-    const filteredData = [];
-    for (let i = 0; i < data.length; i += step) {
-      filteredData.push(data[i]);
-    }
-    return filteredData;
-  }
 
   ngOnChanges(): void {
     this.initChart();
@@ -80,12 +62,21 @@ export class WindChartComponent implements OnChanges {
             text: null,
           },
           labels: {
-            format: '{value} km/h',
+            format: '{value} W/mq',
             style: {
               fontSize: '10px',
             },
             x: -3,
           },
+        },
+        {
+          title: {
+            text: null,
+          },
+          labels: {
+            enabled: false,
+          },
+          opposite: true,
         },
       ],
       credits: {
@@ -99,38 +90,31 @@ export class WindChartComponent implements OnChanges {
       },
       series: [
         {
-          name: 'Velocità',
-          data: this.windSpeed,
+          name: 'Radiazione Solare',
           type: 'area',
+          data: this.solarRadiationData,
+          yAxis: 0,
+          color: '#FFCB47',
           marker: {
             enabled: false,
           },
           tooltip: {
-            valueSuffix: ' km/h',
+            valueSuffix: ' W/mq',
           },
-          zIndex: 1,
         },
         {
-          name: 'Raffica',
-          type: 'spline',
-          color: '#FFCB47',
-          data: this.windGust,
-          tooltip: {
-            valueSuffix: ' km/h',
-          },
+          name: 'Indice UV',
+          type: 'line',
+          data: this.uvIndexData,
+          yAxis: 1,
+          color: '#E4572E',
           marker: {
             enabled: false,
+          },
+          tooltip: {
+            valueSuffix: '',
           },
           dashStyle: 'shortdot',
-        },
-        {
-          name: 'Vento',
-          type: 'windbarb',
-          color: '#90ee7e',
-          data: this.filterData(this.windBarb, 12),
-          tooltip: {
-            valueSuffix: ' m/s',
-          },
         },
       ],
     };
